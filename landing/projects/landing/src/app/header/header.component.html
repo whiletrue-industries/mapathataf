@@ -1,0 +1,16 @@
+<div class='container'>
+    <div class='menu-button layout-mobile' (click)='active = true'></div>
+    <div class='logo'></div>
+    <div class='links layout-desktop'>
+        <a href='#challenges'>אתגרים</a>
+        <a href='#interface'>ממשק רשותי</a>
+        <a href='#join-us'>הצטרפו אלינו</a>
+    </div>
+    <a class='pkw layout-desktop' href='https://www.hasadna.org.il/' target='_blank'></a>    
+</div>
+<div class='menu layout-mobile' [class.active]='active' (click)='active=false; true'>
+    <a href='#challenges'>אתגרים</a>
+    <a href='#interface'>ממשק רשותי</a>
+    <a href='#join-us'>הצטרפו אלינו</a>
+    <div class='close'></div>
+</div>

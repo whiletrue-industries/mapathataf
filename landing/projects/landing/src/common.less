@@ -1,0 +1,118 @@
+.font-noto {
+    font-family: 'Noto Sans Hebrew', sans-serif;
+}
+
+@color-text: #383838;
+@color-white: #FFFFFF;
+@color-green-100: #97D6BE;
+@color-d-tara: #B8390F;
+@color-medium-orange: #EF703C;
+@color-night: #053856;
+@color-m-tree: #848C43;
+@color-l-sun: #FFB812;
+@color-l-nude: #E4A28F;
+@color-off-white: #F0EBE9;
+@color-green-500: #204E37;
+@color-green-50: #EAF5E9;
+@color-green-300: #1AA23E;
+@color-green-400: #64B883;
+@color-grey-200: #D1CFCF;
+
+/* Effect styles */
+@button-shadow:  0px 4px 24px rgba(0, 0, 0, 0.25);
+
+* {
+    .font-noto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 142%;    
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+}
+
+// Utils
+.background-image {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.button-image {
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.no-scrollbars {
+    /*FireFox*/
+    scrollbar-width: none;
+    /*IE10+*/
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    &::-webkit-scrollbar {
+    /*Chrome, Safari, Edge*/
+        display: none;
+    }
+}
+
+@mobile-threshold: 1000px;
+
+.mobile(@rules) {
+    @media only screen and (max-width: (@mobile-threshold - 1px)) {
+        @rules();
+    }
+}
+
+.desktop(@rules) {
+    @media only screen and (min-width: @mobile-threshold) {
+        @rules();
+    }
+}
+
+.mobile({
+    ::ng-deep .layout-desktop {
+        display: none !important;
+    }
+});
+
+.desktop({
+    ::ng-deep .layout-mobile {
+        display: none !important;
+    }
+});
+
+::ng-deep .display-none {
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.btn {
+    display: flex;
+    height: 64px;
+    padding: 0px 46px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 9px;
+    background: @color-green-100;
+    cursor: pointer;
+    color: @color-text;
+    font-size: 24px;
+    font-weight: 700;
+    box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.25);
+    
+    &:hover {
+        background: @color-l-nude;
+        color: @color-white;
+    }
+}
+
+.btn-s {
+    .btn;
+    font-weight: 500;
+}
