@@ -6,10 +6,11 @@
     "start:landing": "ng serve landing",
     "build:landing": "ng build landing",
     "start:app": "ng serve app",
-    "build:app": "ng build app",
+    "build:app": "ng build app --base-href /a/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:landing": "node dist/landing/server/server.mjs"
+    "serve:ssr:landing": "node dist/landing/server/server.mjs",
+    "serve:ssr:app": "node dist/app/server/server.mjs"
   },
   "private": true,
   "dependencies": {
