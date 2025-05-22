@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start:landing": "ng serve landing",
+    "build:landing": "ng build landing",
+    "start:app": "ng serve app",
+    "build:app": "ng build app",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:landing": "node dist/landing/server/server.mjs"
