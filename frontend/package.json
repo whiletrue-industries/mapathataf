@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start:landing": "ng serve landing",
-    "build:landing": "ng build landing",
+    "build:landing": "projects/landing/fetch-fonts.sh projects/landing/src ; ng build landing",
     "start:app": "ng serve app",
     "build:app": "ng build app --base-href /a/",
     "watch": "ng build --watch --configuration development",
