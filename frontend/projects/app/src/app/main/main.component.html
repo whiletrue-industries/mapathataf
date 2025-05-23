@@ -2,4 +2,10 @@
     @if (showMap) {
         <app-map></app-map>
     }
+    @if (api.workspace().logo_url) {
+        <div class='logo'>
+            <img [src]='api.workspace().logo_url' />
+        </div>
+    }
+    <app-item-list></app-item-list>
 </div>

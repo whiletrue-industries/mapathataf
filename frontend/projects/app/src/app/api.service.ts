@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, NgZone, signal } from '@angular/core';
+import { computed, Injectable, NgZone, signal } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { map, Observable, switchMap, tap } from 'rxjs';
 
@@ -14,117 +14,65 @@ export type DiscussResult = {
 })
 export class ApiService {
 
-  CHRONOMAPS_API_URL = 'https://chronomaps-api-qjzuw7ypfq-ez.a.run.app';
-  SCREENSHOT_HANDLER_URL = 'https://screenshot-handler-qjzuw7ypfq-ez.a.run.app';
-  ITEM_INGRES_AGENT_URL = 'https://item-ingress-agent-qjzuw7ypfq-ez.a.run.app';
+  BASE_URL = 'https://api-m5crpfzdeq-ez.a.run.app';
 
-  // WORKSPACE = '4d2c04b0-51b7-4aa2-a234-0e4be53447de';
-  // API_KEY = 'f290c30a-8819-42a0-aa0b-77f5582b4a2f';
-
-  item = signal<any>(null);
-  api_key = signal<string>('a356977d-219f-4d65-ae18-d8e98280bca1');
-  workspace = signal<string>('03da8ede-395b-4fd2-b46e-bc2bc7f4035c');
-  automatic = signal<boolean>(false);
-
-  constructor(private http: HttpClient, private zone: NgZone) { }
-
-  updateFromRoute(route: ActivatedRouteSnapshot) {
-    const workspace = route.queryParams['workspace'] || this.workspace();
-    const api_key = route.queryParams['api_key'] || this.api_key();
-    const automatic = route.queryParams['automatic'] || this.automatic();
-    if (automatic) {
-      this.automatic.set(automatic === 'true');
+  items = signal<any[]>([]);
+  selectedId = signal<string | null>(null);
+  selectedItem = computed(() => {
+    const id = this.selectedId();
+    const items = this.items();
+    if (id) {
+      return items.find((item) => item.info._id === id);
     }
-    if (workspace) {
-      this.workspace.set(workspace);
-    }
-    if (api_key) {
-      this.api_key.set(api_key);
+    return null;
+  });
+  workspace = signal<any>({});
+  mapPaddingBottom = signal<number>(0);
+
+  constructor(private http: HttpClient) { }
+
+  resolve(item: any, field: string): any {
+    const tries = [item.user, item.admin, ...(item.official || [])];
+    for (const tryItem of tries) {
+      if (tryItem && tryItem[field]) {
+        return tryItem[field];
+      }
     }
   }
 
-  fetchItem(item_id: string, item_key: string): Observable<any> { 
+  fetchData(workspaceId: string): Observable<any[]> {
     const params = {
-      item_key: item_key,
+      page_size: 100000,
     };
-    const headers = {
-      'Authorization': this.api_key(),
-    };
-    return this.http.get(`${this.CHRONOMAPS_API_URL}/${this.workspace()}/${item_id}`, {params, headers}).pipe(
-      map((response: any) => {
-        response.item_id = item_id;
-        response.item_key = item_key;
-        this.item.set(response);
-        return response;
+    return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}`).pipe(
+      switchMap((data) => {
+        this.workspace.set(data);
+        console.log('WORKSPACE:', data);
+        return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}/items`, {params})
+      }),
+      tap((data) => {
+        data = data.filter((item) => {
+          return item.info && item.info.lng && item.info.lat && item.info._id;
+        });
+        data.forEach((item) => {
+          item.resolved = {
+            name: this.resolve(item, 'name'),
+            phone: this.resolve(item, 'phone'),
+            address: item.info.formatted_address || this.resolve(item, 'address'),
+          };
+        });
+        this.items.set(data);
       })
     );
   }
 
-  startDiscussion(image: Blob): Observable<any> {
-    const formData = new FormData();
-    formData.append('image', image);
-    const params: any = {
-      workspace: this.workspace(),
-      api_key: this.api_key(),
-    };
-    if (this.automatic()) {
-      params['automatic'] = 'true';
-    }
-    return this.http.post(this.SCREENSHOT_HANDLER_URL, formData, { params });
+  selectId(selectedId: any) {
+    this.selectedId.update((value) => {
+      if (value === selectedId) {
+        return null;
+      }
+      return selectedId;
+    });
   }
 
-  sendInitMessageNoStream(item_id: string, item_key: string): Observable<any> {
-    const params = {
-      workspace: this.workspace(),
-      api_key: this.api_key(),
-      item_id,
-      item_key,
-      message: 'initial',
-      stream: 'false',
-    };
-    return this.http.get(`${this.ITEM_INGRES_AGENT_URL}`, {params}).pipe(
-      map((response: any) => {
-        return response.status;
-      })
-    );
-  }
-
-  sendMessage(message: string): Observable<any> {
-    const params = {
-      workspace: this.workspace(),
-      api_key: this.api_key(),
-      item_id: this.item().item_id,
-      item_key: this.item().item_key,
-      message: message,
-    };
-    // return this.http.get(`${this.ITEM_INGRES_AGENT_URL}`, {params}).pipe(
-    //   map((response: any) => {
-    //     return response as DiscussResult;
-    //   })
-    // );
-    return new Observable(observer => {
-      const url = `${this.ITEM_INGRES_AGENT_URL}?${new URLSearchParams(params).toString()}`;
-      const eventSource = new EventSource(url);
-      eventSource.onmessage = (event) => {
-        // console.log('EVENT', event);
-        try {
-          this.zone.run(() => {
-            observer.next(JSON.parse(event.data));
-          });
-        } catch (error) {
-          console.error('PARSE ERROR', error);
-          observer.error(error);
-        }
-      };
-      eventSource.onerror = (error) => {
-        console.error('EVENTSOURCE ERROR', error);
-        eventSource.close(); //
-        observer.complete();
-        // observer.error(error);
-      };
-      return () => {
-        eventSource.close();
-      };
-    });    
-  }
 }
