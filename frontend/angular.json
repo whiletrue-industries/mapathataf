@@ -138,7 +138,10 @@
             ],
             "scripts": [],
             "server": "projects/app/src/main.server.ts",
-            "prerender": true,
+            "prerender": {
+              "discoverRoutes": false,
+              "routesFile": "projects/app/routes.txt"
+            },
             "ssr": {
               "entry": "projects/app/src/server.ts"
             }
