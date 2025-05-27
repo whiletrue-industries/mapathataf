@@ -59,7 +59,30 @@ export class ApiService {
             name: this.resolve(item, 'name'),
             phone: this.resolve(item, 'phone'),
             address: item.info.formatted_address || this.resolve(item, 'address'),
+            license_status: this.resolve(item, 'license_status'),
+            symbol: this.resolve(item, 'symbol'),
+            source: this.resolve(item, 'source'),
           };
+          if (item.resolved.license_status === 'לא הוגשה בקשה לרישוי') {
+            item.resolved.license_status_code = 'did_not_apply';
+          } else if (item.resolved.license_status === 'רישיון בתוקף') {
+            item.resolved.license_status_code = 'valid';
+          } else if (item.resolved.license_status === 'בתהליך רישוי') {
+            item.resolved.license_status_code = 'in_progress';
+          } else if (!item.resolved.license_status) {
+            item.resolved.license_status = 'לא ידוע';
+            item.resolved.license_status_code = 'none';
+          } else {
+            console.log('UNEXPECTED LICENSE STATUS', item.resolved.license_status);
+          }
+
+          if (item.resolved.source === 'labor') {
+            item.resolved.symbol_text = `${item.resolved.symbol} (משרד העבודה)`;
+          } else if (item.resolved.source === 'welfare') {
+            item.resolved.symbol_text = `${item.resolved.symbol} (משרד הרווחה)`;
+          } else {
+            item.resolved.symbol_text = `${item.resolved.symbol}`
+          }
         });
         this.items.set(data);
       })

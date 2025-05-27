@@ -7,10 +7,11 @@ import { ApiService } from '../api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapboxService } from '../mapbox.service';
 import { ItemListComponent } from "../item-list/item-list.component";
+import { HeaderComponent } from "../header/header.component";
 
 @Component({
   selector: 'app-main',
-  imports: [MapComponent, ItemListComponent],
+  imports: [MapComponent, ItemListComponent, HeaderComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.less'
 })

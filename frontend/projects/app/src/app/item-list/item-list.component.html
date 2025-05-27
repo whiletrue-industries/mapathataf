@@ -13,6 +13,7 @@
                     <th class='total'><div class='tag'>{{ api.items().length }}</div></th>
                     <th class='name'>שם מזהה</th>
                     <th class='kind'>סוג</th>
+                    <th class='licensing'>רישוי</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,14 +28,19 @@
                         </td>
                         <td class='name'>{{ item.resolved.name }}</td>
                         <td class='kind'><span class='muni'>עירייה</span></td>
+                        <td class='licensing'><span [class]='item.resolved.license_status_code' [title]='item.resolved.license_status'></span></td>
                     </tr>
                     @if (item.info._id === api.selectedId()) {
                         <tr class='details'>
-                            <td colspan='3' class='details'>
+                            <td colspan='4' class='details'>
                                 <div class='details'>
                                     <div class='inner'>
-                                        @if(item.resolved.phone) {<div class='phone'>טלפון: {{ item.resolved.phone }}</div>}
-                                        @if(item.resolved.email) {<div class='email'>אימייל: {{ item.resolved.email }}</div>}
+                                        <div class='deets'>
+                                            <div>סמל מעון: {{ item.resolved.symbol_text }}</div>
+                                            <div>רישוי: {{ item.resolved.license_status }}</div>
+                                        </div>
+                                        @if(item.resolved.phone) {<div class='phone'>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
+                                        @if(item.resolved.email) {<div class='email'>אימייל: <a [href]='"mailto:" + item.resolved.email' target="_blank">{{ item.resolved.email }}</a></div>}
                                         <div class='address'>כתובת: {{ item.resolved.address }}</div>
                                     </div>
                                     <div class='bookend'>
