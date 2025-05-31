@@ -1,0 +1,37 @@
+<div class='field' [class.text]='field.type === "text"'
+     [class.boolean]='field.type === "boolean"'
+     [class.enum]='field.type === "enum"'>
+    <label>{{field.label}}:</label>
+    @if (editing()) {
+        @switch (field.type) {
+             @case ('text') {
+                <input type='text' [(ngModel)]='value' (blur)='save()' #textInput/>
+             }
+             @case ('boolean') {
+                <input type='checkbox' [(ngModel)]='value' (change)='save()'/>
+             }
+             @case ('enum') {
+                <select [(ngModel)]='value' (change)='save()'>
+                    @for (option of field.options; track option) {
+                        <option [value]='option'>{{option}}</option>
+                    }
+                </select>
+             }
+        }
+    } @else {
+        @if (editable) {
+            @if (field.value !== undefined && field.value !== null) {
+                <span class='value editable' (click)='editing.set(true)'>{{field.value}}</span>
+            } @else {
+                <span class='value editable initial' (click)='editing.set(true)'>לא הוזן</span>
+            }
+
+        } @else {
+            @if (field.value !== undefined && field.value !== null) {
+                <span class='value'>{{field.value}}</span>
+            } @else {
+                <span class='value initial'>לא הוזן</span>
+            }
+        }
+    }
+</div>

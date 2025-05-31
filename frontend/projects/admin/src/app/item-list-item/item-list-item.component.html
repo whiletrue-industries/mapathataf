@@ -1,0 +1,38 @@
+<a class='card' [routerLink]="[item.info['id-slug']]" [queryParamsHandling]="'preserve'">
+    <div class='header'>
+        <div class='name'>{{ item.resolved.name }}</div>
+        @if (item.resolved.symbol_text) {
+            <div class='symbol'>סמל:<br/>{{ item.resolved.symbol_text }}</div>
+        } @else {
+            <div class='symbol'>פרטי</div>
+        }
+    </div>
+    <div class='address'>
+        <span class='label'>כתובת: </span>
+        <span class='value'>{{ item.resolved.address }}</span>
+    </div>
+    <div class='phone'>
+        <span class='label'>טלפון: </span>
+        <span class='value'>
+            @if (item.resolved.phone) {
+                <a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a>
+            } @else {
+                <span>לא זמין</span>
+            }
+        </span>
+    </div>
+    <div class='status'>
+        @if (item.admin.hidden) {
+            <span class='hidden'>מוסתר</span>
+        } @else {
+            <span class='visible'>מוצג</span>
+        }
+        @if (item.admin) {
+            <span class='admin-input'>מידע רשותי עודכן</span>
+        }
+        @if (item.admin) {
+            <span class='user-input'>מידע בעלים עודכן</span>
+        }
+            
+    </div>
+</a>

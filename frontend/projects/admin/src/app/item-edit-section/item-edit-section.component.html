@@ -1,0 +1,14 @@
+<div class='section'>
+    @if (!inner) {
+        <h2 class='header'>{{ header }}</h2>
+    } @else {
+        <h3 class='header'>{{ header }}</h3>
+    }
+    @if (fields().length > 0) {
+        @for (field of fields(); track field.name) {
+            <app-item-edit-field [data]='data' [field]='field' [editable]='editable' (update)='update.next($event)'></app-item-edit-field>
+        }
+    } @else {
+        <ng-content></ng-content>
+    }
+</div>

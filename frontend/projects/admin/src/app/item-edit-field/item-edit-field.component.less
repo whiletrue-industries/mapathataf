@@ -1,0 +1,63 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    align-self: flex-start;
+    overflow: hidden;
+    width: 100%;
+    .field {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        &.text {
+            width: 100%;
+        }
+        gap: 16px;
+        label, .value {
+            font-size: 16px;
+        }
+        label {
+            font-weight: 300;
+            color: @color-text;
+
+            flex: 1 0 auto;
+            width: min-content;
+            min-width: 200px;
+        }
+        input {
+            &[type="text"] {
+                flex: 100000 1 auto;
+            }
+            &[type="checkbox"] {
+                width: fit-content;
+                flex: 100000 0 auto;
+                text-align: right;
+            }
+            text-align: right;
+        }
+        .value {
+            color: @color-text;
+            font-weight: 600;
+            flex: 1 1 100%;
+
+            &.initial {
+                color: @color-gray-2;
+                font-style: italic;
+                font-weight: 300;
+            }
+            &.editable {
+                .background-image;
+                background-image: url('../../../public/icon-edit.svg');
+                background-size: 12px;
+                padding-right: 18px;
+                background-position: center right;
+                cursor: pointer;
+                &:hover {
+                    color: @color-text;
+                    background-image: url('../../../public/icon-edit-hover.svg');
+                }
+            }
+        }
+    }
+}

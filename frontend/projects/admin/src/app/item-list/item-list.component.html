@@ -1,0 +1,5 @@
+<div class="items">
+    @for (item of api.items(); track item.info._id) {
+        <app-item-list-item [item]='item'></app-item-list-item>
+    }
+</div>

@@ -1,0 +1,18 @@
+@let item = api.item();
+@if (item) {
+    <div class='content'>
+        <app-item-edit-section [data]='item.admin' header='מידע רשותי' [fieldConfig]='FIELD_CONFIG_ADMIN' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
+        <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER' [showAll]='true'></app-item-edit-section>
+        @if (item.official) {
+            <app-item-edit-section header='מידע רשמי'>
+                @for (official of item.official; track official.symbol) {
+                    <app-item-edit-section 
+                        [data]='official'
+                        [fieldConfig]='FIELD_CONFIG_OFFICIAL'
+                        [header]='"סמל: " + official.symbol_text'
+                        [inner]='true'></app-item-edit-section>
+                }
+            </app-item-edit-section>
+        }
+    </div>
+}

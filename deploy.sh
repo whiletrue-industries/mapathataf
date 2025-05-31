@@ -6,10 +6,12 @@ cd frontend && \
 rm .gitignore && \
 npm run build:landing && \
 npm run build:app && \
+npm run build:admin && \
 mkdir _dist && \
 cp CNAME _dist || true && \
 mv dist/landing/browser/* _dist/ && \
 mv dist/app/browser _dist/a/ && \
+mv dist/admin/browser _dist/manage/ && \
 git add _dist && \
 git commit -m "Deploying frontend browser files" && \
 (git branch -D gh-pages || true) && \

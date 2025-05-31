@@ -1,0 +1,37 @@
+@import '../common.less';
+
+.section {
+    width: 100%;
+    padding: 24px 32px;
+    margin-top: 8px;
+    border: 1px solid @color-gray-2;
+    border-radius: 16px;
+
+    min-height: 100px;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    gap: 8px;
+
+    h2.header, h3.header {
+        display: block;
+        padding: 0 4px;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.1;
+        margin-bottom: 16px;
+        position: absolute;
+        top: -11px;
+        right: 32px;
+        margin: 0;
+        background-color: @color-gray-1;
+        color: @color-night;
+    }
+
+    h3.header {
+        font-size: 16px;
+        top: -10px;
+        font-weight: 400;
+    }
+}

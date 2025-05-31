@@ -7,6 +7,8 @@
     "build:landing": "projects/landing/fetch-fonts.sh projects/landing/src ; ng build landing",
     "start:app": "ng serve app",
     "build:app": "projects/landing/fetch-fonts.sh projects/app/src ; ng build app --base-href /a/",
+    "start:admin": "ng serve admin",
+    "build:admin": "ng build app --base-href /manage/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:landing": "node dist/landing/server/server.mjs",
