@@ -1,16 +1,34 @@
 @let item = api.item();
+@let mode = api.mode();
 @if (item) {
     <div class='content'>
-        <app-item-edit-section [data]='item.admin' header='מידע רשותי' [fieldConfig]='FIELD_CONFIG_ADMIN' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
-        <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER' [showAll]='true'></app-item-edit-section>
-        @if (item.official) {
+        @if (mode === 'admin') {
+            <a [routerLink]="['/', api.workspaceId()]" [queryParamsHandling]="'merge'">➤ חזרה לכל הפריטים של <strong>{{api.workspace().city}}</strong></a>
+            <h2>עריכת נתונים עבור: <strong>{{item.resolved.name}}</strong></h2>
+            <app-item-edit-section [data]='item.admin' header='מידע רשותי' [fieldConfig]='FIELD_CONFIG_ADMIN' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
+            <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER' [showAll]='true'>
+                <div class='copy-to-clipboard'>
+                    @if (!copiedLink()) {
+                        <span (click)='copyToClipboard()'>צור קישור אישי לעריכת פרטי הבעלים למסגרת זו</span>
+                    } @else {
+                        <span class='copied'>הקישור האישי הועתק ללוח!</span>
+                    }
+                </div>
+            </app-item-edit-section>
+        }
+        @if (mode === 'user') {
+            <h2>עדכון נתונים עבור: <strong>{{item.resolved.name}}</strong></h2>
+            <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
+        }
+        @if (item.official && mode === 'admin') {
             <app-item-edit-section header='מידע רשמי'>
                 @for (official of item.official; track official.symbol) {
                     <app-item-edit-section 
                         [data]='official'
                         [fieldConfig]='FIELD_CONFIG_OFFICIAL'
                         [header]='"סמל: " + official.symbol_text'
-                        [inner]='true'></app-item-edit-section>
+                        [inner]='true'>
+                    </app-item-edit-section>
                 }
             </app-item-edit-section>
         }

@@ -1,12 +1,15 @@
-import { Component, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, effect, Input, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../api.service';
 import { Field, ItemEditSectionComponent } from "../item-edit-section/item-edit-section.component";
 import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-item-edit',
-  imports: [ItemEditSectionComponent],
+  imports: [
+    ItemEditSectionComponent,
+    RouterLink
+  ],
   templateUrl: './item-edit.component.html',
   styleUrl: './item-edit.component.less'
 })
@@ -92,16 +95,30 @@ export class ItemEditComponent {
 
   update: any = {};
   updater = new Subject<void>();
+  
+  copiedLink = signal(false);
+  clipboardSupported = signal(false);
 
   constructor(public api: ApiService, private route: ActivatedRoute) {
     this.api.updateFromRoute(this.route.snapshot);
     this.updater.pipe(
-      debounceTime(2000)
+      debounceTime(750)
     ).subscribe(() => {
       const update = this.update;
       this.update = {};
       this.api.updateItem(update);
     });
+    effect(() => {
+      const item = this.api.item();
+      if (item) {
+        this.copiedLink.set(false);
+      }
+    });
+    try {
+      this.clipboardSupported.set(document.queryCommandSupported && document.queryCommandSupported('copy'));
+    } catch (e) {
+      console.log('Failed to check if copy clipboard is available');
+    }
   }
 
   queueUpdate(update: any) {
@@ -109,4 +126,22 @@ export class ItemEditComponent {
     this.updater.next();
   }
 
+  copyToClipboard() {
+    if (!this.clipboardSupported()) {
+      return;
+    }
+    const text = `${window.location.origin}${window.location.pathname}?item-key=${this.api.item().key}`;
+    const txt = document.createElement('textarea');
+    txt.textContent = text;
+    txt.classList.add('visually-hidden');
+    document.body.appendChild(txt);
+    txt.select();
+    try {
+      document.execCommand('copy');
+      this.copiedLink.set(true);
+    } catch (ex) {
+    } finally {
+      document.body.removeChild(txt);
+    }
+  }
 }

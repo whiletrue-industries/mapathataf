@@ -1,9 +1,72 @@
 @import '../common.less';
 
+
+
+:host {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+   
+}
+
+
 .content {
     display: flex;
     flex-flow: column;
+    align-items: stretch;
     width: 100%;
+    max-width: @mobile-threshold;
     padding: 32px 64px;
     gap: 32px;
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    h2 {
+        margin: 0;
+        color: @color-text;
+        font-size: 24px;
+        font-weight: 300;
+
+        strong {
+            font-size: 32px;
+            font-weight: 700;
+        }
+    }
+    
+    .copy-to-clipboard {
+        width: 400px;
+        align-self: flex-end;
+        display: flex;
+        background-color: @color-off-white;
+        border: 1px solid @color-gray-2;
+        padding: 8px;
+        border-radius: 8px;
+        box-shadow: @button-shadow;
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+        &:hover {
+            transform: translateY(-2px);
+        }
+        &:active {
+            transform: translateY(2px);
+        }
+        span {
+            display: block;
+            padding-right: 40px;
+            .background-image;
+            background-size: 24px;
+            background-position: right center;
+            background-image: url('../../../public/icon-user-edit.svg');
+            font-size: 16px;
+            font-weight: 500;
+            color: @color-text;
+
+            &.copied {
+                background-image: url('../../../public/icon-user-edit-copied.svg');
+            }
+        }
+    }
 }

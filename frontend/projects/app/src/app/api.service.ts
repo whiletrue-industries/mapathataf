@@ -8,6 +8,48 @@ export type DiscussResult = {
   message: string;
 };
 
+function resolve(item: any, field: string): any {
+  const tries = [item.user, item.admin, ...(item.official || [])];
+  for (const tryItem of tries) {
+    if (tryItem && tryItem[field]) {
+      return tryItem[field];
+    }
+  }
+}
+
+export function resolveItem(item: any): any {
+  item.resolved = {
+    name: resolve(item, 'name'),
+    phone: resolve(item, 'phone'),
+    address: item.info.formatted_address || resolve(item, 'address'),
+    license_status: resolve(item, 'license_status'),
+    symbol: resolve(item, 'symbol'),
+    source: resolve(item, 'source'),
+    symbol_text: resolve(item, 'symbol_text'),
+  };
+  if (item.resolved.license_status === 'לא הוגשה בקשה לרישוי') {
+    item.resolved.license_status_code = 'did_not_apply';
+  } else if (item.resolved.license_status === 'רישיון בתוקף') {
+    item.resolved.license_status_code = 'valid';
+  } else if (item.resolved.license_status === 'בתהליך רישוי') {
+    item.resolved.license_status_code = 'in_progress';
+  } else if (!item.resolved.license_status) {
+    item.resolved.license_status = 'לא ידוע';
+    item.resolved.license_status_code = 'none';
+  } else {
+    console.log('UNEXPECTED LICENSE STATUS', item.resolved.license_status);
+  }
+
+  if (!item.resolved.symbol_text) {
+    if (item.resolved.source === 'labor') {
+      item.resolved.symbol_text = `${item.resolved.symbol} (משרד העבודה)`;
+    } else if (item.resolved.source === 'welfare') {
+      item.resolved.symbol_text = `${item.resolved.symbol} (משרד הרווחה)`;
+    } else {
+      item.resolved.symbol_text = `${item.resolved.symbol}`
+    }
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -31,15 +73,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  resolve(item: any, field: string): any {
-    const tries = [item.user, item.admin, ...(item.official || [])];
-    for (const tryItem of tries) {
-      if (tryItem && tryItem[field]) {
-        return tryItem[field];
-      }
-    }
-  }
-
   fetchData(workspaceId: string): Observable<any[]> {
     const params = {
       page_size: 100000,
@@ -55,34 +88,7 @@ export class ApiService {
           return item.info && item.info.lng && item.info.lat && item.info._id;
         });
         data.forEach((item) => {
-          item.resolved = {
-            name: this.resolve(item, 'name'),
-            phone: this.resolve(item, 'phone'),
-            address: item.info.formatted_address || this.resolve(item, 'address'),
-            license_status: this.resolve(item, 'license_status'),
-            symbol: this.resolve(item, 'symbol'),
-            source: this.resolve(item, 'source'),
-          };
-          if (item.resolved.license_status === 'לא הוגשה בקשה לרישוי') {
-            item.resolved.license_status_code = 'did_not_apply';
-          } else if (item.resolved.license_status === 'רישיון בתוקף') {
-            item.resolved.license_status_code = 'valid';
-          } else if (item.resolved.license_status === 'בתהליך רישוי') {
-            item.resolved.license_status_code = 'in_progress';
-          } else if (!item.resolved.license_status) {
-            item.resolved.license_status = 'לא ידוע';
-            item.resolved.license_status_code = 'none';
-          } else {
-            console.log('UNEXPECTED LICENSE STATUS', item.resolved.license_status);
-          }
-
-          if (item.resolved.source === 'labor') {
-            item.resolved.symbol_text = `${item.resolved.symbol} (משרד העבודה)`;
-          } else if (item.resolved.source === 'welfare') {
-            item.resolved.symbol_text = `${item.resolved.symbol} (משרד הרווחה)`;
-          } else {
-            item.resolved.symbol_text = `${item.resolved.symbol}`
-          }
+          resolveItem(item);
         });
         this.items.set(data);
       })

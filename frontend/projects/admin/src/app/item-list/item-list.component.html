@@ -1,5 +1,9 @@
-<div class="items">
-    @for (item of api.items(); track item.info._id) {
-        <app-item-list-item [item]='item'></app-item-list-item>
-    }
-</div>
+@if (api.mode() === 'admin') {
+    <div class="items">
+        @for (item of api.items(); track item.info._id) {
+            <app-item-list-item [item]='item'></app-item-list-item>
+        }
+    </div>
+} @else {
+    <div class='items'>אין לכם הרשאות לצפות בעמוד זה</div>
+}

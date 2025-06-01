@@ -41,10 +41,10 @@ export class ItemEditSectionComponent implements OnChanges{
   fields = signal<Field[]>([]);
 
   ngOnChanges() {
+      console.log('ItemEditSectionComponent: ngOnChanges - showAll', this.header, this.fieldConfig?.length, this.showAll, this.data, this.fieldConfig);
     if (this.data && this.fieldConfig?.length >= 0) {
       const fields: Field[] = [];
       if (this.showAll) {
-        console.log('ItemEditSectionComponent: ngOnChanges - showAll', this.data, this.fieldConfig);
         this.fieldConfig.forEach((field: any) => {
           if (!field.hide) {
             fields.push({

@@ -2,6 +2,7 @@
 
 .section {
     width: 100%;
+    max-width: @mobile-threshold;
     padding: 24px 32px;
     margin-top: 8px;
     border: 1px solid @color-gray-2;
@@ -14,7 +15,7 @@
     align-items: stretch;
     gap: 8px;
 
-    h2.header, h3.header {
+    h3.header, h4.header {
         display: block;
         padding: 0 4px;
         font-size: 18px;
@@ -29,7 +30,7 @@
         color: @color-night;
     }
 
-    h3.header {
+    h4.header {
         font-size: 16px;
         top: -10px;
         font-weight: 400;

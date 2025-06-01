@@ -22,7 +22,7 @@
         </span>
     </div>
     <div class='status'>
-        @if (item.admin.hidden) {
+        @if (item.admin.app_publication === false) {
             <span class='hidden'>מוסתר</span>
         } @else {
             <span class='visible'>מוצג</span>
