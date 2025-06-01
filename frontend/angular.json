@@ -37,10 +37,6 @@
             ],
             "scripts": [],
             "server": "projects/landing/src/main.server.ts",
-            "prerender": {
-              "discoverRoutes": false,
-              "routesFile": "projects/app/routes.txt"
-            },
             "ssr": {
               "entry": "projects/landing/src/server.ts"
             }
@@ -243,7 +239,15 @@
             "styles": [
               "projects/admin/src/styles.less"
             ],
-            "scripts": []
+            "scripts": [],
+            "server": "projects/admin/src/main.server.ts",
+            "prerender": {
+              "discoverRoutes": false,
+              "routesFile": "projects/app/routes.txt"
+            },
+            "ssr": {
+              "entry": "projects/admin/src/server.ts"
+            }
           },
           "configurations": {
             "production": {
@@ -301,7 +305,7 @@
             ],
             "styles": [
               "projects/admin/src/styles.less"
-            ],
+            ],            
             "scripts": []
           }
         }

@@ -1,0 +1,66 @@
+name: Production CI
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+      - name: npm requirements
+        run: npm install
+      - name: git identity
+        run: |
+          git config user.email "adam.kariv@gmail.com"
+          git config user.name "Adam Kariv"
+      - name: Build
+        run: |
+          npm run build:landing &&
+          npm run build:admin &&
+          npm run build:app
+      - name: Build Docker Image and push to GitHub Container Registry
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HASADNA_K8S_DEPLOY_KEY: ${{ secrets.HASADNA_K8S_DEPLOY_KEY }}
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin          
+          DOCKER_IMAGE_NAME_APP=ghcr.io/${{ github.repository }}-app
+          docker build --build-arg PROJECT=app -t img .
+          docker tag img "${DOCKER_IMAGE_NAME_APP}:latest"
+          docker push "${DOCKER_IMAGE_NAME_APP}:latest"
+          docker tag img "${DOCKER_IMAGE_NAME_APP}:${GITHUB_SHA}" 
+          docker push "${DOCKER_IMAGE_NAME_APP}:${GITHUB_SHA}"    
+          
+          DOCKER_IMAGE_NAME_ADMIN=ghcr.io/${{ github.repository }}-admin
+          docker build --build-arg PROJECT=admin -t img .
+          docker tag img "${DOCKER_IMAGE_NAME_ADMIN}:latest"
+          docker push "${DOCKER_IMAGE_NAME_ADMIN}:latest"
+          docker tag img "${DOCKER_IMAGE_NAME_ADMIN}:${GITHUB_SHA}"
+          docker push "${DOCKER_IMAGE_NAME_ADMIN}:${GITHUB_SHA}"
+          
+          DOCKER_IMAGE_NAME_LANDING=ghcr.io/${{ github.repository }}-landing
+          docker build --build-arg PROJECT=landing -t img .
+          docker tag img "${DOCKER_IMAGE_NAME_LANDING}:latest"
+          docker push "${DOCKER_IMAGE_NAME_LANDING}:latest"
+          docker tag img "${DOCKER_IMAGE_NAME_LANDING}:${GITHUB_SHA}"
+          docker push "${DOCKER_IMAGE_NAME_LANDING}:${GITHUB_SHA}"
+
+
+          if ! git log -1 --pretty=format:"%s" | grep -- --no-deploy; then
+            cd `mktemp -d` &&\
+            echo "${HASADNA_K8S_DEPLOY_KEY}" > hasadna_k8s_deploy_key &&\
+            chmod 400 hasadna_k8s_deploy_key &&\
+            export GIT_SSH_COMMAND="ssh -i `pwd`/hasadna_k8s_deploy_key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" &&\
+            git clone git@github.com:hasadna/hasadna-k8s.git &&\
+            cd hasadna-k8s &&\
+            python update_yaml.py '{"appImage":"'"${DOCKER_IMAGE_NAME_APP}:${GITHUB_SHA}"'", "adminImage":"'"${DOCKER_IMAGE_NAME_ADMIN}:${GITHUB_SHA}"'", "landingImage":"'"${DOCKER_IMAGE_NAME_LANDING}:${GITHUB_SHA}"'"}' apps/mapathataf/values-hasadna-auto-updated.yaml &&\
+            git config --global user.name "MapatHataf CI" &&\
+            git config --global user.email "mapathataf-ci@localhost" &&\
+            git add apps/mapathataf/values-hasadna-auto-updated.yaml && git commit -m "automatic update of mapathataf" &&\
+            git push origin master
+          fi
