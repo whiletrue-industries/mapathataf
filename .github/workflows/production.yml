@@ -17,7 +17,7 @@ jobs:
           cd frontend && npm install
       - name: Build
         run: |
-          pwd && ls -la && \
+          cd frontend && \
           npm run build:landing && \
           npm run build:admin && \
           npm run build:app
@@ -26,6 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HASADNA_K8S_DEPLOY_KEY: ${{ secrets.HASADNA_K8S_DEPLOY_KEY }}
         run: |
+          cd frontend
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin          
           DOCKER_IMAGE_NAME_APP=ghcr.io/${{ github.repository }}-app
           docker build --build-arg PROJECT=app -t img .
