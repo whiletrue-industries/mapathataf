@@ -13,11 +13,13 @@ jobs:
         with:
           node-version: '20'
       - name: npm requirements
-        run: cd frontend && npm install
+        run: |
+          cd frontend && npm install
       - name: Build
         run: |
-          npm run build:landing &&
-          npm run build:admin &&
+          pwd && ls -la && \
+          npm run build:landing && \
+          npm run build:admin && \
           npm run build:app
       - name: Build Docker Image and push to GitHub Container Registry
         env:
