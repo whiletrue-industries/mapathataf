@@ -13,11 +13,7 @@ jobs:
         with:
           node-version: '20'
       - name: npm requirements
-        run: npm install
-      - name: git identity
-        run: |
-          git config user.email "adam.kariv@gmail.com"
-          git config user.name "Adam Kariv"
+        run: cd frontend && npm install
       - name: Build
         run: |
           npm run build:landing &&
