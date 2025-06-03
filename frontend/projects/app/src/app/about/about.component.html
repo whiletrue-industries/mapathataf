@@ -1,0 +1,20 @@
+<app-header></app-header>
+<div class='content'>
+    @switch (section()) {
+        @case ("early-childhood") {
+            <iframe src='https://data-city.my.canva.site/tafmap-guidelines' frameborder="0" onmousewheel="" width="100%" height="100%"></iframe>
+        }
+        @case ("supervision") {
+            <iframe src='https://data-city.my.canva.site/tafmap-supervision' frameborder="0" onmousewheel="" width="100%" height="100%"></iframe>
+        }
+        @case ("about") {
+            <iframe src='https://data-city.my.canva.site/tafmap-about' frameborder="0" onmousewheel="" width="100%" height="100%"></iframe>
+        }
+        @case ("contact") {
+            <iframe src='https://data-city.my.canva.site/tafmap-contact' frameborder="0" onmousewheel="" width="100%" height="100%"></iframe>
+        }
+        @default {
+            <div class='not-found'>Page not found</div>
+        }
+    }
+</div>
