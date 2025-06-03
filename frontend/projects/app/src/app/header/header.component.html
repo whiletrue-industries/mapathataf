@@ -3,8 +3,19 @@
     <a class='logo' href='/' target='_blank'></a>    
 </div>
 <div class='menu' [class.active]='active' (click)='active=false; true'>
-    <a href='#link'>קישור</a>
-    <a href='#link'>קישור</a>
-    <a href='#link'>קישור</a>
+    @for (link of api.workspace()?.links || []; track link) {
+        @if (link.kind !== 'whatsapp') {
+            <a class='external' [href]='link.href' target='_blank'>{{link.title}}</a>
+        }
+    }
+    @for (link of commonLinks || []; track link) {
+        <a class='internal' [routerLink]='link.routerLink'>{{link.title}}</a>
+    }
+    <a class='about' [routerLink]='["/about", "about"]'>אודות</a>
+    @for (link of api.workspace()?.links || []; track link) {
+        @if (link.kind === 'whatsapp') {
+            <a class='whatsapp' [href]='link.href' target='_blank'>{{link.title}}</a>
+        }
+    }
     <div class='close'></div>
 </div>

@@ -544,7 +544,7 @@
                 &.interface {
                     .mockup {
                         background-image: url(../../assets/img/illus-management-interface.png);
-                        transform: translateY(-20%)translateX(-8%)scale(2);
+                        transform: scale(1.5);
                     }
                 }
                 &.app {
@@ -601,6 +601,7 @@
             display: flex;
             flex-flow: column;
             align-items: flex-start;
+            gap: 20px;
 
             h2 {
                 color: @color-night;
@@ -609,7 +610,6 @@
                 line-height: 120%; /* 48px */
                 letter-spacing: 0.8px;
                 max-width: 682px;
-                margin-bottom: 20px;
             }
 
             p {
@@ -623,31 +623,33 @@
 
             .cta {
                 width: 100%;
-                min-height: 67vh;
+                height: 677px;
                 display: flex;
                 .desktop({
                     flex-flow: row;
                     align-items: center;
+                    gap: 40px;
                 });
                 .mobile({
                     flex-flow: column;
                     align-items: center;
                     padding-top: 32px;
+                    gap: 32px;
                 });
                 .contact-form {
                     .desktop({
-                        flex: 0 0 40%;
-                        height: 80%;
-                        padding: 0 32px;
+                        flex: 0 0 50%;
+                        height: 100%;
                     });
                     .mobile({
                         width: 100%;
                         min-height: 80vh;
                     });
                     background-color: #ccc;
+                    padding: 0;
                 }
                 .image {
-                    flex: 0 0 60%;
+                    flex: 0 0 50%;
                     height: 100%;
                     .background-image;
                     background-image: url(../../assets/img/illus-app-interface.png);
