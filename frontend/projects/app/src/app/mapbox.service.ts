@@ -17,7 +17,7 @@ export class MapboxService {
     (mapboxgl as any).accessToken = 'pk.eyJ1IjoidHJlZWJhc2UiLCJhIjoiY2xjazVueWFnMHBscDN2bXRkdjh1dHd1cyJ9.zcn36ZZJ9b0RJlYJTSZYOA';
     this.platform.browser(() => {
       mapboxgl.setRTLTextPlugin(
-        '/a/mapbox-gl-rtl-text.js',
+        '/mapbox-gl-rtl-text.js',
         (error: any) => {
           if (error) {
             console.log('FAILED TO LOAD RTL PLUGIN', error);
