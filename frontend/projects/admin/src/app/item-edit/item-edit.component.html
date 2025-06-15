@@ -57,7 +57,7 @@
             <h2>עדכון נתונים עבור: <strong>{{item.resolved.name}}</strong></h2>
             <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER()' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
         }
-        @if (item.official && mode === 'admin') {
+        @if (item.official && item.official.length && mode === 'admin') {
             <app-item-edit-section header='מידע רשמי'>
                 @for (official of item.official; track official.symbol) {
                     <app-item-edit-section 
