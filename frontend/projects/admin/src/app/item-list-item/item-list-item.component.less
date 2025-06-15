@@ -1,7 +1,7 @@
 @import '../common.less';
 
 .card {
-    width: 360px;
+    width: 450px;
     padding: 16px;
     border-radius: 8px;
     box-shadow: @card-shadow;
@@ -24,9 +24,22 @@
         gap: 12px;
 
         .name {
+            .background-image;
+            padding-right: 40px;
             font-size: 22px;
             font-weight: 600;
             line-height: 1.1;
+            background-position: center right 6px;
+
+            &.education {
+                background-image: url('../../../public/icon-education.svg');
+            }
+            &.health {
+                background-image: url('../../../public/icon-health.svg');
+            }
+            &.community {
+                background-image: url('../../../public/icon-community.svg');
+            }
         }
 
         .symbol {

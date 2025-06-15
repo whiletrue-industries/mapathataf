@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./header/header.component";
+import dayjs from 'dayjs';
+import 'dayjs/locale/he';
+
+dayjs.locale('he');
 
 @Component({
   selector: 'app-root',
@@ -9,5 +13,6 @@ import { HeaderComponent } from "./header/header.component";
   styleUrl: './app.component.less'
 })
 export class AppComponent {
-
+  constructor() {
+  }
 }

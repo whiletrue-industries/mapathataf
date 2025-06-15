@@ -26,6 +26,8 @@ export function resolveItem(item: any): any {
     symbol: resolve(item, 'symbol'),
     source: resolve(item, 'source'),
     symbol_text: resolve(item, 'symbol_text'),
+    facility_kind: item.info?.facility_kind || item.admin?.facility_kind || 'not-set',
+    facility_kind_editable: !item.info?.facility_kind
   };
   if (item.resolved.license_status === 'לא הוגשה בקשה לרישוי') {
     item.resolved.license_status_code = 'did_not_apply';
@@ -40,7 +42,7 @@ export function resolveItem(item: any): any {
     console.log('UNEXPECTED LICENSE STATUS', item.resolved.license_status);
   }
 
-  if (!item.resolved.symbol_text) {
+  if (!item.resolved.symbol_text && item.resolved.symbol) {
     if (item.resolved.source === 'labor') {
       item.resolved.symbol_text = `${item.resolved.symbol} (משרד העבודה)`;
     } else if (item.resolved.source === 'welfare') {
@@ -64,7 +66,7 @@ export class ApiService {
     const id = this.selectedId();
     const items = this.items();
     if (id) {
-      return items.find((item) => item.info._id === id);
+      return items.find((item) => item.id === id);
     }
     return null;
   });

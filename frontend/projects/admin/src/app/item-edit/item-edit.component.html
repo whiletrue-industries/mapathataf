@@ -4,12 +4,49 @@
     <div class='content'>
         @if (mode === 'admin') {
             <a [routerLink]="['/', api.workspaceId()]" [queryParamsHandling]="'merge'">➤ חזרה לכל הפריטים של <strong>{{api.workspace().city}}</strong></a>
-            <h2>עריכת נתונים עבור: <strong>{{item.resolved.name}}</strong></h2>
-            <app-item-edit-section [data]='item.admin' header='מידע רשותי' [fieldConfig]='FIELD_CONFIG_ADMIN' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
-            <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER' [showAll]='true'>
+            <div class='heading'>
+                <h2>
+                    <span>עריכת נתונים עבור: <strong>{{item.resolved.name}}</strong></span>
+                </h2>
+                <div [class]='"facility-kind " + item.resolved.facility_kind'>
+                    <div class='tag'>
+                        @if (item.resolved.facility_kind === 'education') {
+                            <span>מסגרת חינוך</span>
+                        }
+                        @else if (item.resolved.facility_kind === 'health') {
+                            <span>בריאות והתפתחות</span>
+                        }
+                        @else if (item.resolved.facility_kind === 'community') {
+                            <span>פנאי וקהילה</span>
+                        }                        
+                    </div>
+                </div>
+            </div>
+            <div class='status'>
+                @if (item?.info?.updated_at) {
+                    <div>
+                        <label>מידע רשמי נכון ל-</label>
+                        <div>{{niceDate(item.info.updated_at)}}</div>
+                    </div>
+                }
+                @if (item?.admin?.updated_at) {
+                    <div>
+                        <label>מידע רשותי עודכן ב-</label>
+                        <div>{{niceDate(item.admin.updated_at)}}</div>
+                    </div>
+                }
+                @if (item?.user?.updated_at) {
+                    <div>
+                        <label>מידע בעלים עודכן ב-</label>
+                        <div>{{niceDate(item.user.updated_at)}}</div>
+                    </div>
+                }
+            </div>
+            <app-item-edit-section [data]='item.admin' header='מידע רשותי' [fieldConfig]='FIELD_CONFIG_ADMIN()' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
+            <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER()' [showAll]='true'>
                 <div class='copy-to-clipboard'>
                     @if (!copiedLink()) {
-                        <span (click)='copyToClipboard()'>צור קישור אישי לעריכת פרטי הבעלים למסגרת זו</span>
+                        <span (click)='copyToClipboard()'>יצירת קישור אישי לעריכת פרטי הבעלים למסגרת זו</span>
                     } @else {
                         <span class='copied'>הקישור האישי הועתק ללוח!</span>
                     }
@@ -18,14 +55,14 @@
         }
         @if (mode === 'user') {
             <h2>עדכון נתונים עבור: <strong>{{item.resolved.name}}</strong></h2>
-            <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
+            <app-item-edit-section [data]='item.user' header='מידע בעלים' [fieldConfig]='FIELD_CONFIG_USER()' [showAll]='true' [editable]='true' (update)='queueUpdate($event)'></app-item-edit-section>
         }
         @if (item.official && mode === 'admin') {
             <app-item-edit-section header='מידע רשמי'>
                 @for (official of item.official; track official.symbol) {
                     <app-item-edit-section 
                         [data]='official'
-                        [fieldConfig]='FIELD_CONFIG_OFFICIAL'
+                        [fieldConfig]='FIELD_CONFIG_OFFICIAL()'
                         [header]='"סמל: " + official.symbol_text'
                         [inner]='true'>
                     </app-item-edit-section>

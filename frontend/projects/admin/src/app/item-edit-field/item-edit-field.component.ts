@@ -15,6 +15,7 @@ export class ItemEditFieldComponent implements OnChanges{
   @Input() data: any;
   @Input() field: Field;
   @Input() editable: boolean = false;
+  @Input() justIcon: boolean = false;
   @Output() update = new EventEmitter<any>();
 
   value = signal<any>(null);

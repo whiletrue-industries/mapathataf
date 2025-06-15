@@ -23,7 +23,7 @@ export class ApiService {
     const apiKey = this.apiKey();
     const itemKey = this.itemKey();
     const privilege = this.privilege();
-    console.log('Mode computed:', { apiKey, itemKey, privilege });
+    // console.log('Mode computed:', { apiKey, itemKey, privilege });
     if (apiKey && privilege === 4) {
       console.log('Mode: admin');
       return 'admin';
@@ -33,7 +33,19 @@ export class ApiService {
       return 'user';
     }
     return null;
-  })
+  });
+
+  neighborhoodOptions = computed(() => {
+    const workspace = this.workspace();
+    // console.log('Neighborhood options computed:', workspace.neighborhoods);
+    const neighborhoods = workspace?.neighborhoods || [];
+    return neighborhoods.map((n: any) => ({ id: n, display: n }));
+  });
+
+  cityName = computed(() => {
+    const workspace = this.workspace();
+    return workspace?.city || '';
+  });
 
   constructor(private http: HttpClient) { }
 
@@ -46,19 +58,19 @@ export class ApiService {
     this.apiKey.set(apiKey || null);
     this.itemKey.set(itemKey || null);
     this.itemId.set(itemId || null);
-    console.log('Updating from route:', workspaceId, itemId, apiKey, itemKey);
+    // console.log('Updating from route:', workspaceId, itemId, apiKey, itemKey);
     effect(() => {
       const id = this.workspaceId();
       const key = this.apiKey();
-      if (id && key) {
-        console.log('Fetching data for workspaceId:', id);
+      if (id) {
+        // console.log('Fetching data for workspaceId:', id);
         this.fetchData(id).subscribe();
       }
     });
     effect(() => {
       const id = this.workspaceId();
       const itemId = this.itemId();
-      console.log('Fetching item for id:', id, 'and itemId:', itemId);
+      // console.log('Fetching item for id:', id, 'and itemId:', itemId);
       if (id && itemId) {
         this.fetchItem(id, itemId).subscribe((item) => {
           if (item) {
@@ -88,7 +100,9 @@ export class ApiService {
       } else if (source === 'moe') {
         official.office = 'משרד החינוך';
       }
-      official.symbol_text = `${official.symbol} (${official.office})`;
+      if (official.symbol && official.office) {
+        official.symbol_text = `${official.symbol} (${official.office})`;
+      }
     });
     resolveItem(item);
   }
@@ -97,9 +111,10 @@ export class ApiService {
     const params = {
       page_size: 100000,
     };
-    const headers = {
-      'Authorization': this.apiKey() || ''
-    };
+    const headers: any = {};
+    if (this.apiKey()) {
+      headers['Authorization'] = this.apiKey();
+    }
     return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}`, {headers}).pipe(
       switchMap((data: any) => {
         this.workspace.set(data);
@@ -108,7 +123,7 @@ export class ApiService {
         return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}/items`, {params, headers});
       }),
       tap((data) => {
-        data = data.sort((a, b) => a.info._id.localeCompare(b.info._id)); 
+        data = data.sort((a, b) => a.id.localeCompare(b.id)); 
         data.forEach((item) => {
           this.prepare(item);
         });
@@ -149,6 +164,7 @@ export class ApiService {
             return items;
           });
         }
+        console.log('ITEM:', item);
         return item || null;
       })
     );
@@ -166,16 +182,35 @@ export class ApiService {
       return;
     }
     const options = this.reqOptions();
-    console.log('Updating item:', workspaceId, itemId, update);
+    // console.log('Updating item:', workspaceId, itemId, update);
     this.http.put<any>(`${this.BASE_URL}/${workspaceId}/${itemId}`, update, options).subscribe((response) => {
       console.log('Item updated successfully:', response);
       this.fetchItem(workspaceId, itemId).subscribe((item) => {
         if (item) {
+          console.log('setting item after update:', item);
           this.item.set(item);
         } else {
           this.item.set(null);
         }
       });
     });
+  }
+
+  newItem() {
+    const workspaceId = this.workspaceId();
+    const apiKey = this.apiKey();
+    if (!workspaceId || !apiKey) {
+      console.error('Cannot create new item: workspaceId or apiKey is not set');
+      return;
+    }
+    const options = this.reqOptions();
+    return this.http.post<any>(`${this.BASE_URL}/${workspaceId}`, {}, options).pipe(
+      tap((item) => {
+        this.prepare(item);
+        console.log('New item created:', item);
+        this.items.update((items) => [...items, item]);
+        return item;
+      })
+    );
   }
 }

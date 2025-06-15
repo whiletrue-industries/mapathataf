@@ -1,6 +1,62 @@
 @if (api.mode() === 'admin') {
+    <div class='filters'>
+        <div class='filter'>
+            <label>לפי סוג מסגרת</label>
+            <select [(ngModel)]='state.facilityKind'>
+                <option value='all'>הכל</option>
+                <option value='education'>חינוך</option>
+                <option value='health'>בריאות והתפתחות</option>
+                <option value='community'>פנאי וקהילה</option>
+            </select>
+        </div>
+        <div class='filter'>
+            <label>לפי סוג מקור מידע</label>
+            <select [(ngModel)]='state.itemSource'>
+                <option value='all'>הכל</option>
+                <option value='official'>ארצי</option>
+                <option value='unofficial'>רשותי</option>
+            </select>
+        </div>
+        <div class='filter'>
+            <label>לפי מוצג/מוסתר</label>
+            <select [(ngModel)]='state.appPublication'>
+                <option value='all'>הכל</option>
+                <option value='published'>מוצגים</option>
+                <option value='hidden'>מוסתרים</option>
+            </select>
+        </div>
+        <div class='filter'>
+            <label>לפי עדכון של הרשות</label>
+            <select [(ngModel)]='state.adminUpdated'>
+                <option value='all'>הכל</option>
+                <option value='updated'>עודכנו</option>
+                <option value='not-updated'>לא עודכנו</option>
+            </select>
+        </div>
+        <div class='filter'>
+            <label>לפי עדכון בעלים</label>
+            <select [(ngModel)]='state.userUpdated'>
+                <option value='all'>הכל</option>
+                <option value='updated'>עודכנו</option>
+                <option value='not-updated'>לא עודכנו</option>
+            </select>
+        </div>
+    </div>
     <div class="items">
-        @for (item of api.items(); track item.info._id) {
+        <div class='top-line'>
+            <div class='total'>
+                <span>מוצגים</span>&nbsp;
+                <strong>{{ filteredItems().length }}</strong>&nbsp;
+                <span>פריטים מתוך</span>&nbsp;
+                <strong>{{ api.items().length }}</strong>&nbsp;
+                <span>סה"כ</span>
+            </div>
+            <div class='actions'>
+                <div class='add-new' (click)='addNew()'>הוספת פריט חדש</div>
+            </div>
+        </div>
+
+        @for (item of filteredItems(); track item.info._id) {
             <app-item-list-item [item]='item'></app-item-list-item>
         }
     </div>

@@ -1,7 +1,7 @@
-<a class='card' [routerLink]="[item.info['id-slug']]" [queryParamsHandling]="'preserve'">
+<a class='card' [routerLink]="[item.id]" [queryParamsHandling]="'preserve'">
     <div class='header'>
-        <div class='name'>{{ item.resolved.name }}</div>
-        @if (item.resolved.symbol_text) {
+        <div [class]='"name " + item.resolved?.facility_kind' >{{ item.resolved.name }}</div>
+        @if (!!item.resolved?.symbol_text) {
             <div class='symbol'>סמל:<br/>{{ item.resolved.symbol_text }}</div>
         } @else {
             <div class='symbol'>פרטי</div>
@@ -15,7 +15,7 @@
         <span class='label'>טלפון: </span>
         <span class='value'>
             @if (item.resolved.phone) {
-                <a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a>
+                <span>{{ item.resolved.phone }}</span>
             } @else {
                 <span>לא זמין</span>
             }
@@ -27,12 +27,11 @@
         } @else {
             <span class='visible'>מוצג</span>
         }
-        @if (item.admin) {
+        @if (item.admin && item.admin.updated_at) {
             <span class='admin-input'>מידע רשותי עודכן</span>
         }
-        @if (item.admin) {
+        @if (item.user && item.user.updated_at) {
             <span class='user-input'>מידע בעלים עודכן</span>
         }
-            
     </div>
 </a>

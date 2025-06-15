@@ -17,7 +17,6 @@
     z-index: 1000;
 
     .container {
-        max-width: @mobile-threshold;
         width: 100%;
         display: flex;
         flex-flow: row;
@@ -28,8 +27,12 @@
         h1 {
             margin: 0;
             color: @color-night;
-            font-size: 32px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 300;
+            strong {
+                font-size: 32px;
+                font-weight: 700;
+            }
         }
 
         .links {
@@ -51,11 +54,37 @@
         
         .logo {
             flex: 0 0 auto;
-            width: 36px;
+            width: 250px;
             height: 38px;
             .background-image;
             background-image: url(../../../public/logo-header.svg);
+            background-size: 36px 38px;
+            background-position: center left;
             margin-right: auto;
+            text-align: left;
+            padding-left: 48px;
+            display: flex;
+            align-items: center;
+            color: @color-night;
+            font-size: 20px;
+            font-weight: 600;
+            justify-content: flex-end;
+        }
+
+        .sep {
+            flex: 0 0 auto;
+            width: 1px;
+            height: 48px;
+            border-left: 1px solid @color-night;
+        }
+
+        .pkw {
+            display: flex;
+            flex: 0 0 auto;
+            width: 187px;
+            height: 32px;
+            .background-image;
+            background-image: url(../../../public/logo-hasadna.svg);
         }
         
         .menu-button {
@@ -85,6 +114,7 @@
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 0px 0px 20px 20px;
         z-index: 1000;
+        max-width: @mobile-threshold;
 
         a {
             font-weight: 400;
