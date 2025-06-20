@@ -40,6 +40,23 @@ export class ItemEditComponent {
     label: 'סוג מסגרת',
     options: this.FACILITY_KIND_OPTIONS
   };
+  FACILITY_SUB_KIND_FIELD: { [key: string]: Field[] } = {
+    'education': [],
+    'health': [
+      { name: 'facility_sub_kind', type: 'enum', label: 'תת סוג מענה', options: [
+        { 'id': 'טיפת חלב', 'display': 'טיפת חלב' },
+        { 'id': 'מרכז לגיל רך', 'display': 'מרכז לגיל רך' },
+        { 'id': 'הדרכה וייעוץ', 'display': 'הדרכה וייעוץ' },
+        { 'id': 'אחר', 'display': 'אחר' }
+      ]}],
+    'community': [
+      { name: 'facility_sub_kind', type: 'enum', label: 'תת סוג מענה', options: [
+        { 'id': 'גן עם אמא', 'display': 'גן עם אמא' },
+        { 'id': 'חוגים', 'display': 'חוגים' },
+        { 'id': 'גן או פארק', 'display': 'גן או פארק' },
+        { 'id': 'אחר', 'display': 'אחר' },
+      ]}]
+  };
 
   itemKind = computed(() => {
     const item = this.api.item();
@@ -51,31 +68,34 @@ export class ItemEditComponent {
     const educationUserFields = this.FIELD_CONFIG_USER_EDUCATION();
     const itemKind = this.itemKind();
     return [
-      {  name: 'name',        type: 'text',    label: 'שם'     },
-      {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
-      {  name: 'activity_hours', type: 'text', label: 'שעות פעילות' },
-      {  name: 'more_details', type: 'text', label: 'פרטים נוספים' },
-      {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל'     },
-      {  name: '_private_safe_room',        type: 'enum',    label: 'מרחב מוגן', options: this.SAFE_ROOM_OPTIONS },
+      {  name: 'תיאור המענה', type: 'section' },
+        {  name: 'name',        type: 'text',    label: 'שם'     },
+        {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
+        {  name: 'activity_hours', type: 'text', label: 'שעות פעילות' },
+        {  name: 'more_details', type: 'text', label: 'פרטים נוספים' },
+        {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל'     },
+        {  name: '_private_safe_room',        type: 'enum',    label: 'מרחב מוגן', options: this.SAFE_ROOM_OPTIONS },
 
-      {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת'  },
-      {  name: 'url',   type: 'text',    label: 'כתובת אתר'  },
-      {  name: 'phone', type: 'text', label: 'טלפון' },
-      {  name: '_private_email', type: 'text', label: 'דוא"ל' },
-      {  name: 'contact_details', type: 'text', label: 'פרטי קשר' },
       ...(itemKind === 'education' ? educationUserFields : []),
+
+      {  name: 'פרטי קשר', type: 'section' },
+        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת'  },
+        {  name: 'url',   type: 'text',    label: 'כתובת אתר'  },
+        {  name: 'phone', type: 'text', label: 'טלפון' },
+        {  name: '_private_email', type: 'text', label: 'דוא"ל' },
     ];
   });
   FIELD_CONFIG_USER_EDUCATION = computed<Field[]>(() => [
-    {  name: 'education_stream', type: 'text', label: 'זרם חינוכי' },
-    {  name: '_private_feeding',        type: 'enum',    label: 'הזנה', options: [
-        { 'id': 'catering', 'display': 'קייטרינג' },
-        { 'id': 'kitchen', 'display': 'מבשלת' },
-        { 'id': 'no_feeding', 'display': 'ללא הזנה' }
-      ] },
-    {  name: 'safe_room',        type: 'boolean',    label: 'מרחב מוגן'     },
-    { name: 'classes_count', type: 'text', label: 'מספר כיתות' },
-    { name: 'children_count', type: 'text', label: 'מספר ילדים' },
+
+    {  name: 'מידע נוסף על מסגרות חינוך', type: 'section' },
+      { name: 'education_stream', type: 'text', label: 'זרם חינוכי' },
+      { name: 'classes_count', type: 'text', label: 'מספר כיתות' },
+      { name: 'children_count', type: 'text', label: 'מספר ילדים' },
+      {  name: '_private_feeding',        type: 'enum',    label: 'הזנה', options: [
+          { 'id': 'catering', 'display': 'קייטרינג' },
+          { 'id': 'kitchen', 'display': 'מבשלת' },
+          { 'id': 'no_feeding', 'display': 'ללא הזנה' }
+        ] },
   ]);
 
 
@@ -86,42 +106,52 @@ export class ItemEditComponent {
     return [
       {  name: 'app_publication', type: 'boolean', label: 'פרסום באפליקציה' },
       ...(item.resolved?.facility_kind_editable ? [this.FACILITY_KIND_FIELD] : []),
+      ...(this.FACILITY_SUB_KIND_FIELD[itemKind] || []),
 
-      {  name: 'name',        type: 'text',    label: 'שם'     },
+      {  name: 'תיאור המענה', type: 'section' },
+        {  name: 'name',        type: 'text',    label: 'שם'    },
+        {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
+        {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל ' },
+        {  name: '_private_safe_room',        type: 'enum',    label: 'מרחב מוגן', options: this.SAFE_ROOM_OPTIONS },
+        {  name: '_private_notes', type: 'text', label: 'הערות נוספות' },
 
-      {  name: 'address',     type: 'text',    label: 'כתובת'  },
-      {  name: 'neighborhood',     type: 'enum',    label: 'שכונה', options: this.api.neighborhoodOptions() },
-
-      {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
-      {  name: 'details', type: 'text', label: 'תיאור' },
-      {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל'     },
-      
-      {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת'  },
-      {  name: 'url',   type: 'text',    label: 'כתובת אתר'  },
-      {  name: 'phone', type: 'text', label: 'טלפון' },
-      {  name: '_private_email', type: 'text', label: 'דוא"ל' },
-      {  name: 'contact_details', type: 'text', label: 'פרטי קשר' },
+      {  name: 'מיקום', type: 'section' },
+        {  name: 'address',     type: 'text',    label: 'כתובת'  },
+        {  name: 'neighborhood',     type: 'enum',    label: 'שכונה', options: this.api.neighborhoodOptions() },
 
       ...(itemKind === 'education' ? educationAdminFields : []),
+
+      {  name: 'פרטי קשר', type: 'section' },
+        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת'  },
+        {  name: 'url',   type: 'text',    label: 'כתובת אתר אינטרנט'  },
+        {  name: 'phone', type: 'text', label: 'טלפון' },
+        {  name: '_private_email', type: 'text', label: 'דוא"ל' },
+        {  name: '_private_contact_details', type: 'text', label: 'פרטי קשר נוספים' },
+
     ];
   });
   FIELD_CONFIG_ADMIN_EDUCATION = computed<Field[]>(() => [
-    {  name: 'owner_kind',        type: 'enum',    label: 'סוג',  options: [
-        { 'id': 'national', 'display': 'רשת ארצית' },
-        { 'id': 'municipal', 'display': 'רשת עירונית' },
-        { 'id': 'private', 'display': 'פרטי' }
-      ] },
-    // {  name: 'education_stream', type: 'text', label: 'זרם חינוכי' },
 
-    { name: '_private_license_status_description', type: 'text', label: 'תיאור סטטוס רישוי' },
-    { name: 'mentoring_type', type: 'enum', label: 'סוג הדרכה', options: [
-      { 'id': 'municipal', 'display': 'הדרכה עירונית'},
-      { 'id': 'private', 'display': 'הדרכה פרטית'},
-      { 'id': 'not_mentored', 'display': 'אינו מודרך/לא ידוע' }
-    ] },
-    { name: 'mentoring_status_description', type: 'text', label: 'תיאור סטטוס הדרכה' },
-    { name: '_private_mentor_name', type: 'text', label: 'שם מדריכה' },
-    { name: '_private_mentor_phone', type: 'text', label: 'טלפון מדריכה' },    
+    {  name: 'מידע נוסף על מסגרות חינוך', type: 'section' },
+      {  name: 'owner_kind',        type: 'enum',    label: 'סוג',  options: [
+          { 'id': 'national', 'display': 'רשת ארצית' },
+          { 'id': 'municipal', 'display': 'רשת עירונית' },
+          { 'id': 'private', 'display': 'פרטי' }
+        ] },
+
+    {  name: 'רישוי', type: 'section' },
+      {  name: 'licensing_not_needed',     type: 'boolean',    label: 'מתחת ל-7 ילדים ואינו דורש רישוי' },
+      {  name: '_private_licensing_process_notes',     type: 'text',    label: 'סטטוס ליווי הרשות בתהליך הרישוי' },
+
+    {  name: 'הדרכה', type: 'section' },
+      { name: 'mentoring_type', type: 'enum', label: 'סוג הדרכה', options: [
+        { 'id': 'municipal', 'display': 'הדרכה עירונית'},
+        { 'id': 'private', 'display': 'הדרכה פרטית'},
+        { 'id': 'not_mentored', 'display': 'אינו מודרך/לא ידוע' }
+      ] },
+      { name: '_private_mentoring_status_description', type: 'text', label: 'סטטוס ליווי הרשות בהדרכה' },
+      { name: '_private_mentor_name', type: 'text', label: 'שם מדריכה' },
+      { name: '_private_mentor_phone', type: 'text', label: 'טלפון מדריכה' },    
   ]);
   FIELD_CONFIG_OFFICIAL = computed<Field[]>(() => [
     {  name: 'name',        type: 'text',    label: 'שם'     },

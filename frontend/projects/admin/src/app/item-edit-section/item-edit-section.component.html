@@ -6,7 +6,11 @@
     }
     @if (fields().length > 0) {
         @for (field of fields(); track field.name) {
-            <app-item-edit-field [data]='data' [field]='field' [editable]='editable' (update)='update.next($event)'></app-item-edit-field>
+            @if (field.type === 'section') {
+                <strong>{{ field.name }}</strong>
+            } @else {
+                <app-item-edit-field [data]='data' [field]='field' [editable]='editable' (update)='update.next($event)'></app-item-edit-field>
+            }
         }
     }
     <ng-content></ng-content>
