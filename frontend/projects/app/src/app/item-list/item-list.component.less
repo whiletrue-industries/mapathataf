@@ -84,6 +84,11 @@
                 }
             }
             thead {
+                background-color: white;
+                position: sticky;
+                top: 0;
+                z-index: 1;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
                 tr {
                     th {
                         font-size: 14px;
@@ -207,7 +212,7 @@
                                 padding: 12px 20px;
                                 gap: 12px;
 
-                                .phone, .address, .deets {
+                                .phone, .url, .address, .deets, .activity-hours {
                                     display: flex;
                                     flex-flow: row nowrap;
                                     align-items: center;
@@ -232,6 +237,13 @@
                                 }
 
                                 .phone {
+                                    background-image: url('../../../public/icon-phone.svg');
+                                    a {
+                                        text-decoration: underline;
+                                        text-decoration-color: fade(@color-night, 50);
+                                    }
+                                }
+                                .url {
                                     background-image: url('../../../public/icon-phone.svg');
                                     a {
                                         text-decoration: underline;

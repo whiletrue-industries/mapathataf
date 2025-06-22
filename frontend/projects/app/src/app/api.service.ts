@@ -21,8 +21,10 @@ export function resolveItem(item: any): any {
   item.resolved = {
     name: resolve(item, 'name'),
     phone: resolve(item, 'phone'),
+    url: resolve(item, 'url'),
     address: resolve(item, 'formatted_address') || resolve(item, 'address'),
     license_status: resolve(item, 'license_status'),
+    licensing_not_needed: resolve(item, 'licensing_not_needed'),
     symbol: resolve(item, 'symbol'),
     source: resolve(item, 'source'),
     symbol_text: resolve(item, 'symbol_text'),
@@ -33,6 +35,7 @@ export function resolveItem(item: any): any {
     age_group: resolve(item, 'age_group'),
     mentoring_type: resolve(item, 'mentoring_type'),
     subsidized: item?.official?.some((o: any) => o.source === 'mol') || false,
+    activity_hours: resolve(item, 'activity_hours'),
   };
   if (item.resolved.license_status === 'לא הוגשה בקשה לרישוי') {
     item.resolved.license_status_code = 'did_not_apply';
@@ -41,8 +44,13 @@ export function resolveItem(item: any): any {
   } else if (item.resolved.license_status === 'בתהליך רישוי') {
     item.resolved.license_status_code = 'in_progress';
   } else if (!item.resolved.license_status) {
-    item.resolved.license_status = 'לא ידוע';
-    item.resolved.license_status_code = 'none';
+    if (item.resolved.licensing_not_needed) {
+      item.resolved.license_status = 'מתחת ל-7 ילדים ואינו דורש רישוי';
+      item.resolved.license_status_code = 'not_needed';
+    } else {
+      item.resolved.license_status = 'לא ידוע';
+      item.resolved.license_status_code = 'none';
+    }
   } else {
     console.log('UNEXPECTED LICENSE STATUS', item.resolved.license_status);
   }
