@@ -69,14 +69,16 @@
                 }
             </app-item-edit-section>
         }
-        @if (item.admin._private_deleted) {        
-            <div class='button restore' (click)='setDeleted(false)'>
-                פריט זה נמחק על ידי הרשות - לחץ לשחזור
-            </div>
-        } @else {
-            <div class='button delete' (click)='setDeleted(true)'>
-                מחיקת פריט זה
-            </div>
+        @if (!item.official || !item.official.length) {
+            @if (item.admin._private_deleted) {
+                <div class='button restore' (click)='setDeleted(false)'>
+                    פריט זה נמחק על ידי הרשות - לחץ לשחזור
+                </div>
+            } @else {
+                <div class='button delete' (click)='setDeleted(true)'>
+                    מחיקת פריט זה
+                </div>
+            }
         }
     </div>
 }
