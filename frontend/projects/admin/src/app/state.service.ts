@@ -15,8 +15,4 @@ export class StateService {
   filterState = computed(() => 
     `${this.facilityKind()}-${this.itemSource()}-${this.appPublication()}-${this.adminUpdated()}-${this.userUpdated()}`
   );
-
-  constructor() {
-    console.log('StateService initialized');
-  }
 }

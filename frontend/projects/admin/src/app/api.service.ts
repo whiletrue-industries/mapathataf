@@ -119,7 +119,7 @@ export class ApiService {
       switchMap((data: any) => {
         this.workspace.set(data);
         this.privilege.set(data._p);
-        console.log('WORKSPACE:', data);
+        // console.log('WORKSPACE:', data);
         return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}/items`, {params, headers});
       }),
       tap((data) => {

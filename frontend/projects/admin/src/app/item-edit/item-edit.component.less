@@ -154,4 +154,22 @@
             }
         }
     }
+
+    .button {
+        align-self: flex-end;
+        padding: 8px 16px;
+        background-color: @color-night;
+        color: @color-white;
+        border: none;
+        border-radius: 8px;
+        box-shadow: @button-shadow;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        transition: background-color 0.1s ease-in-out, transform 0.1s ease-in-out;
+        &:hover {
+            background-color: darken(@color-night, 10%);
+            transform: translateY(-2px);
+        }
+    }
 }

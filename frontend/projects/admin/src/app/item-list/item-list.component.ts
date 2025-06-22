@@ -18,14 +18,14 @@ export class ItemListComponent {
 
   filteredItems = computed(() => {
     let items = this.api.items() || [];
+    items = items.filter(item => !!item.admin?._private_deleted === (this.state.appPublication() === 'recycled'));
     if (this.state.facilityKind() !== 'all') {
       items = items.filter(item => item.resolved.facility_kind === this.state.facilityKind());
     }
-    console.log('FIFIFI', (items && items.length) ? items[0].official : 'no items');
     if (this.state.itemSource() !== 'all') {
       items = items.filter(item => (!!item.official && item.official.length > 0) === (this.state.itemSource() === 'official'));
     }
-    if (this.state.appPublication() !== 'all') {
+    if (this.state.appPublication() !== 'all' && this.state.appPublication() !== 'recycled') {
       items = items.filter(item => !!item.admin?.app_publication === (this.state.appPublication() === 'published'));
     }
     if (this.state.adminUpdated() !== 'all') {

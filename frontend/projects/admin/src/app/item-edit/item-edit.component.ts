@@ -1,8 +1,8 @@
 import { Component, computed, effect, Input, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../api.service';
 import { Field, ItemEditSectionComponent, Option } from "../item-edit-section/item-edit-section.component";
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, Subject, timer } from 'rxjs';
 import dayjs from 'dayjs';
 import { ItemEditFieldComponent } from "../item-edit-field/item-edit-field.component";
 
@@ -203,7 +203,7 @@ export class ItemEditComponent {
 
   dayjs = dayjs;
 
-  constructor(public api: ApiService, private route: ActivatedRoute) {
+  constructor(public api: ApiService, private route: ActivatedRoute, private router: Router) {
     this.api.updateFromRoute(this.route.snapshot);
     dayjs.locale('he');
     this.updater.pipe(
@@ -254,6 +254,15 @@ export class ItemEditComponent {
       console.error('Failed to copy to clipboard', ex);
     } finally {
       document.body.removeChild(txt);
+    }
+  }
+
+  setDeleted(deleted: boolean) {
+    this.queueUpdate({_private_deleted: deleted});
+    if (deleted) {
+      timer(1000).subscribe(() => {
+        this.router.navigate(['/', this.api.workspaceId()], { queryParamsHandling: 'preserve'});
+      });
     }
   }
 }
