@@ -9,7 +9,7 @@ export type DiscussResult = {
 };
 
 function resolve(item: any, field: string): any {
-  const tries = [item.user, item.admin, ...(item.official || [])];
+  const tries = [item.info, item.user, item.admin, ...(item.official || [])];
   for (const tryItem of tries) {
     if (tryItem && tryItem[field]) {
       return tryItem[field];
@@ -21,13 +21,18 @@ export function resolveItem(item: any): any {
   item.resolved = {
     name: resolve(item, 'name'),
     phone: resolve(item, 'phone'),
-    address: item.info.formatted_address || resolve(item, 'address'),
+    address: resolve(item, 'formatted_address') || resolve(item, 'address'),
     license_status: resolve(item, 'license_status'),
     symbol: resolve(item, 'symbol'),
     source: resolve(item, 'source'),
     symbol_text: resolve(item, 'symbol_text'),
-    facility_kind: item.info?.facility_kind || item.admin?.facility_kind || 'not-set',
-    facility_kind_editable: !item.info?.facility_kind
+    lat: resolve(item, 'lat'),
+    lng: resolve(item, 'lng'),
+    facility_kind: resolve(item, 'facility_kind') || 'not-set',
+    facility_kind_editable: !item.info?.facility_kind,
+    age_group: resolve(item, 'age_group'),
+    mentoring_type: resolve(item, 'mentoring_type'),
+    subsidized: item?.official?.some((o: any) => o.source === 'mol') || false,
   };
   if (item.resolved.license_status === 'לא הוגשה בקשה לרישוי') {
     item.resolved.license_status_code = 'did_not_apply';
@@ -61,15 +66,6 @@ export class ApiService {
   BASE_URL = 'https://api-m5crpfzdeq-ez.a.run.app';
 
   items = signal<any[]>([]);
-  selectedId = signal<string | null>(null);
-  selectedItem = computed(() => {
-    const id = this.selectedId();
-    const items = this.items();
-    if (id) {
-      return items.find((item) => item.id === id);
-    }
-    return null;
-  });
   workspace = signal<any>({});
   mapPaddingBottom = signal<number>(0);
 
@@ -86,24 +82,14 @@ export class ApiService {
         return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}/items`, {params})
       }),
       tap((data) => {
-        data = data.filter((item) => {
-          return item.info && item.info.lng && item.info.lat && item.info._id;
-        });
         data.forEach((item) => {
           resolveItem(item);
+        });
+        data = data.filter((item) => {
+          return item.info && item.resolved.lng && item.resolved.lat && item.info._id;
         });
         this.items.set(data);
       })
     );
   }
-
-  selectId(selectedId: any) {
-    this.selectedId.update((value) => {
-      if (value === selectedId) {
-        return null;
-      }
-      return selectedId;
-    });
-  }
-
 }

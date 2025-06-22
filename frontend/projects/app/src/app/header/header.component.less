@@ -23,6 +23,7 @@
         flex-flow: row;
         align-items: center;
         justify-content: space-between;
+        gap: 8px;
 
         .links {
             flex: 0 1 auto;
@@ -57,6 +58,60 @@
             .background-image;
             background-image: url(../../../public/icon-menu.svg);
         }
+
+        .sections {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            flex: 1 1 auto;
+            overflow-x: auto;
+
+            .section {
+                text-align: right;
+                font-size: 11px;
+                font-weight: 300;
+                .background-image;
+                background-position: center right 8px;
+                background-size: 16px;
+                border: 1px solid @color-text;
+                border-radius: 30px;
+                padding: 4px 8px;
+                padding-right: 28px;
+                color: fade(@color-text, 70%);
+
+                &.selected {
+                    color: @color-text;
+                }
+
+                &.education {
+                    border-color: @color-fk-education;
+                    background-color: lighten(@color-fk-education, 20%);
+                    background-image: url(../../../../admin/public/icon-education.svg);
+
+                    &.selected {
+                        background-color: @color-fk-education;
+                    }
+                }
+                &.health {
+                    border-color: @color-fk-health;
+                    background-color: lighten(@color-fk-health, 20%);
+                    background-image: url(../../../../admin/public/icon-health.svg);
+                    &.selected {
+                        background-color: @color-fk-health;
+                    }
+                }
+                &.community {
+                    border-color: @color-fk-community;
+                    background-color: lighten(@color-fk-community, 20%);
+                    background-image: url(../../../../admin/public/icon-community.svg);
+                    &.selected {
+                        background-color: @color-fk-community;
+                    }
+                }
+            }
+        }
     }
 
     .menu {
@@ -70,7 +125,7 @@
             transform: translateY(0);
         }
         background-color: white;
-        padding: 64px;
+        padding: 64px 32px;
         display: flex;
         flex-flow: column;
         gap: 10px;
@@ -79,7 +134,7 @@
         z-index: 1000;
 
         a {
-            height: 50px;
+            min-height: 50px;
             width: 100%;
             display: flex;
             flex-flow: row nowrap;
@@ -91,7 +146,7 @@
             font-size: 16px;
             line-height: 100%;
             color: @color-night;
-            white-space: nowrap;
+            white-space: wrap;
 
             border-radius: 2px;
             border: 1px solid @color-night;

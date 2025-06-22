@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { Observable, take, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlatformService } from '../platform.service';
+import { StateService } from '../state.service';
 
 @Component({
   selector: 'app-item-list',
@@ -14,9 +15,9 @@ export class ItemListComponent implements AfterViewInit{
 
   expanded = signal(false)
 
-  constructor(public api: ApiService, private destroyRef: DestroyRef, private platform: PlatformService, private el: ElementRef) {
+  constructor(public api: ApiService, private destroyRef: DestroyRef, private platform: PlatformService, private el: ElementRef, public state: StateService) {
     effect(() => {
-      const selectedId = this.api.selectedId();
+      const selectedId = this.state.selectedId();
       timer(10).subscribe(() => {
         this.el?.nativeElement?.querySelector(`[data-id="${selectedId}"]`)?.scrollIntoView({
           behavior: 'smooth',

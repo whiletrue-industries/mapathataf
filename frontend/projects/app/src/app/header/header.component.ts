@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../api.service';
 import { RouterLink } from '@angular/router';
+import { StateService } from '../state.service';
 
 @Component({
   selector: 'app-header',
@@ -29,5 +30,5 @@ export class HeaderComponent {
     },
   ]
 
-  constructor(public api: ApiService) {}
+  constructor(public api: ApiService, public state: StateService) {}
 }

@@ -3,6 +3,7 @@ import { MapboxService } from '../mapbox.service';
 import mapboxgl from 'mapbox-gl';
 import { PlatformService } from '../platform.service';
 import { ApiService } from '../api.service';
+import { StateService } from '../state.service';
 
 @Component({
   selector: 'app-map',
@@ -26,29 +27,29 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
 
   data = computed<GeoJSON.GeoJSON>(() => {
-    const activeId = this.api.selectedId();
-    console.log('ITEMS:', this.api.items());
+    const activeId = this.state.selectedId();
     return {
       type: 'FeatureCollection',
-      features: this.api.items().filter((item) => {
-        return item.info && item.info.lng && item.info.lat;
+      features: this.state.items().filter((item) => {
+        return item.resolved && item.resolved.lng && item.resolved.lat;
       }).map((item) => {
         return {
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [item.info.lng, item.info.lat],
+            coordinates: [item.resolved.lng, item.resolved.lat],
           },
           properties: {
             active: item.info._id === activeId,
             id: item.info._id,
+            kind: item.resolved.facility_kind,
           }
         };
       })
     };
   });
 
-  constructor(private mapboxService: MapboxService, private platform: PlatformService, private api: ApiService) {
+  constructor(private mapboxService: MapboxService, private platform: PlatformService, private api: ApiService, private state: StateService) {
     console.log('MapComponent constructor');
     effect(() => {
       const data = this.data();
@@ -60,14 +61,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
     effect(() => {
       const map = this.map();
-      const selectedItem = this.api.selectedItem();
+      const selectedItem = this.state.selectedItem();
       if (map && selectedItem) {
         let zoom = map.getZoom();        
         if (zoom < 15) {
           zoom = 15;
         }
         map.flyTo({
-          center: [selectedItem.info.lng, selectedItem.info.lat],
+          center: [selectedItem.resolved.lng, selectedItem.resolved.lat],
           zoom,
         });
       }
@@ -133,7 +134,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
               map.on('click', layer, (e) => {
                 if (e?.features && e.features[0]?.properties) {
                   const props: any = e.features[0].properties;
-                  this.api.selectedId.set(props.id || null);
+                  this.state.selectedId.set(props.id || null);
                 }
               });
               map.on('mousemove', layer, (e) => {
@@ -144,7 +145,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           this.map.set(map);
         });
         map.on('click', (e) => {
-          this.api.selectedId.set(null);
+          this.state.selectedId.set(null);
         });
         map.on('mousemove', (e) => {
           map.getCanvas().style.cursor = '';

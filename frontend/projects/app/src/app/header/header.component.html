@@ -1,5 +1,10 @@
 <div class='container'>
     <div class='menu-button' (click)='active = true'></div>
+    <div class='sections'>
+        <a class='section health' [class.selected]='state.section() === "health"'  [routerLink]='[]' fragment="health">התפתחות הילד</a>
+        <a class='section education' [class.selected]='state.section() === "education"'  [routerLink]='[]' fragment="education">מסגרות חינוך</a>
+        <a class='section community' [class.selected]='state.section() === "community"'  [routerLink]='[]' fragment="community">פנאי וקהילה</a>
+    </div>
     <a class='logo' href='/' target='_blank'></a>    
 </div>
 <div class='menu' [class.active]='active' (click)='active=false; true'>

@@ -6,54 +6,134 @@
             </svg>
         </div>
     </div>
-    <div class='table'>
-        <table>
-            <thead>
-                <tr>
-                    <th class='total'><div class='tag'>{{ api.items().length }}</div></th>
-                    <th class='name'>שם מזהה</th>
-                    <th class='kind'>סוג</th>
-                    <th class='licensing'>רישוי</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (item of api.items(); track item.info._id) {
-                    <tr class='item' (click)='api.selectId(item.info._id)' [class.active]='api.selectedId() === item.info._id' [attr.data-id]='item.info._id'>
-                        <td class='toggle' [class.active]='api.selectedId() === item.info._id'>
-                            <div>
-                                <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.17188 6.85156L5 3.02344L8.82812 6.85156L10 5.67969L5 0.679688L0 5.67969L1.17188 6.85156Z" fill="#053856"/>
-                                </svg>
-                            </div>
-                        </td>
-                        <td class='name'>{{ item.resolved.name }}</td>
-                        <td class='kind'><span class='muni'>עירייה</span></td>
-                        <td class='licensing'><span [class]='item.resolved.license_status_code' [title]='item.resolved.license_status'></span></td>
+    @if (state.section() === 'education') {
+        <div class='table'>
+            <table>
+                <thead>
+                    <tr>
+                        <th class='total'><div class='tag'>{{ state.items().length }}</div></th>
+                        <th class='name'>שם מזהה</th>
+                        <th class='age-group'>גיל</th>
+                        <th class='subsidized'>סבסוד</th>
+                        <th class='guidance'>הדרכה</th>
+                        <th class='licensing'>רישוי</th>
                     </tr>
-                    @if (item.info._id === api.selectedId()) {
-                        <tr class='details'>
-                            <td colspan='4' class='details'>
-                                <div class='details'>
-                                    <div class='inner'>
-                                        <div class='deets'>
-                                            <div>סמל מעון: {{ item.resolved.symbol_text }}</div>
-                                            <div>רישוי: {{ item.resolved.license_status }}</div>
-                                        </div>
-                                        @if(item.resolved.phone) {<div class='phone'>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
-                                        @if(item.resolved.email) {<div class='email'>אימייל: <a [href]='"mailto:" + item.resolved.email' target="_blank">{{ item.resolved.email }}</a></div>}
-                                        <div class='address'>כתובת: {{ item.resolved.address }}</div>
-                                    </div>
-                                    <div class='bookend'>
-                                        <div class='inner'>
-                                            מצאת טעות בנתונים?
-                                        </div>
-                                    </div>
+                </thead>
+                <tbody>
+                    @for (item of state.items(); track item.info._id) {
+                        <tr class='item' (click)='state.selectId(item.info._id)' [class.active]='state.selectedId() === item.info._id' [attr.data-id]='item.info._id'>
+                            <td class='toggle' [class.active]='state.selectedId() === item.info._id'>
+                                <div>
+                                    <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.17188 6.85156L5 3.02344L8.82812 6.85156L10 5.67969L5 0.679688L0 5.67969L1.17188 6.85156Z" fill="#053856"/>
+                                    </svg>
                                 </div>
                             </td>
+                            <td class='name'><span>{{ item.resolved.name }}</span></td>
+                            <td class='age-group'>
+                                <span>
+                                    @if (item.resolved.age_group === 'birth_to_1') {
+                                        0-1
+                                    } @else if (item.resolved.age_group === '1_to_2') {
+                                        1-2
+                                    } @else if (item.resolved.age_group === '2_to_3') {
+                                        2-3
+                                    } @else if (item.resolved.age_group === 'all_ages') {
+                                        הכל
+                                    } @else {
+                                        &mdash;
+                                    }
+                                </span>
+                            </td>
+                            <td class='subsidized'><span [class]='item.resolved.subsidized ? "yes" : "no"'>{{ item.resolved.subsidized ? "כן" : "לא" }}</span></td>
+                            <td class='guidance'><span [class]='item.resolved.mentoring_type'>
+                                @if (item.resolved.mentoring_type === 'municipal') {
+                                    עירונית
+                                } @else if (item.resolved.mentoring_type === 'private') {
+                                    פרטית
+                                } @else {
+                                    &mdash;
+                                }
+                            </span></td>
+                            <td class='licensing'><span [class]='item.resolved.license_status_code' [title]='item.resolved.license_status'></span></td>
                         </tr>
+                        @if (item.info._id === state.selectedId()) {
+                            <tr class='details'>
+                                <td colspan='6' class='details'>
+                                    <div class='details'>
+                                        <div class='inner'>
+                                            <div class='deets'>
+                                                <div>סמל מעון: {{ item.resolved.symbol_text }}</div>
+                                                <div>רישוי: {{ item.resolved.license_status }}</div>
+                                            </div>
+                                            @if(item.resolved.phone) {<div class='phone'>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
+                                            @if(item.resolved.email) {<div class='email'>אימייל: <a [href]='"mailto:" + item.resolved.email' target="_blank">{{ item.resolved.email }}</a></div>}
+                                            <div class='address'>כתובת: {{ item.resolved.address }}</div>
+                                        </div>
+                                        <div class='bookend'>
+                                            <div class='inner'>
+                                                מצאת טעות בנתונים?
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     }
-                }
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>        
+    } @else {
+        <div class='table'>
+            <table>
+                <thead>
+                    <tr>
+                        <th class='total'><div class='tag'>{{ state.items().length }}</div></th>
+                        <th class='name'>שם מזהה</th>
+                        <th class='kind'>סוג</th>
+                        <th class='licensing'>רישוי</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of state.items(); track item.info._id) {
+                        <tr class='item' (click)='state.selectId(item.info._id)' [class.active]='state.selectedId() === item.info._id' [attr.data-id]='item.info._id'>
+                            <td class='toggle' [class.active]='state.selectedId() === item.info._id'>
+                                <div>
+                                    <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.17188 6.85156L5 3.02344L8.82812 6.85156L10 5.67969L5 0.679688L0 5.67969L1.17188 6.85156Z" fill="#053856"/>
+                                    </svg>
+                                </div>
+                            </td>
+                            <td class='name'><span>{{ item.resolved.name }}</span></td>
+                            <td class='kind'><span class='muni'>עירייה</span></td>
+                            <td class='licensing'><span [class]='item.resolved.license_status_code' [title]='item.resolved.license_status'></span></td>
+                        </tr>
+                        @if (item.info._id === state.selectedId()) {
+                            <tr class='details'>
+                                <td colspan='4' class='details'>
+                                    <div class='details'>
+                                        <div class='inner'>
+                                            <div class='deets'>
+                                                <div>סמל מעון: {{ item.resolved.symbol_text }}</div>
+                                                <div>רישוי: {{ item.resolved.license_status }}</div>
+                                            </div>
+                                            @if(item.resolved.phone) {<div class='phone'>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
+                                            @if(item.resolved.email) {<div class='email'>אימייל: <a [href]='"mailto:" + item.resolved.email' target="_blank">{{ item.resolved.email }}</a></div>}
+                                            <div class='address'>כתובת: {{ item.resolved.address }}</div>
+                                        </div>
+                                        <div class='bookend'>
+                                            <div class='inner'>
+                                                מצאת טעות בנתונים?
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>        
+    }
+
 </div>
