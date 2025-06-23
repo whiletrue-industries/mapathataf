@@ -3,6 +3,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from './api.service';
 
+export type ResultItem = {
+  name: string;
+  id: string;
+  kind: 'item' | 'street';
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +19,8 @@ export class StateService {
   items = computed(() => {
     const items = this.api.items();
     const section = this.section();
+    console.log('StateService items for section:', section, items.length);
     return items.filter(item => {
-      // if (item.resolved.facility_kind === section) {
-      //   console.log('Filtering item:', item, 'for section:', section);
-      // }
       return (item.resolved.facility_kind === section);
     });
   });
@@ -30,6 +34,8 @@ export class StateService {
     }
     return null;
   });
+  searchTerm = signal<string>('');
+  searchResults = signal<ResultItem[] | null>(null);
 
 
   constructor(private router: Router, private route: ActivatedRoute, private api: ApiService) {
@@ -47,10 +53,12 @@ export class StateService {
   }
 
   updateStateFromFragment(fragment: string | null) {
+    console.log('Updating state from fragment:', fragment);
     if (fragment) {
       const parts = fragment.split('/');
       if (parts.length > 0) {
         const section = parts[0];
+        console.log('Setting section to:', section);
         this.section.set(section);
       }
     } 

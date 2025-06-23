@@ -9,10 +9,11 @@ import { MapboxService } from '../mapbox.service';
 import { ItemListComponent } from "../item-list/item-list.component";
 import { HeaderComponent } from "../header/header.component";
 import { StateService } from '../state.service';
+import { FiltersComponent } from "../filters/filters.component";
 
 @Component({
   selector: 'app-main',
-  imports: [MapComponent, ItemListComponent, HeaderComponent],
+  imports: [MapComponent, ItemListComponent, HeaderComponent, FiltersComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.less'
 })

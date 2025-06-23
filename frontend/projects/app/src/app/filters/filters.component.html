@@ -1,0 +1,23 @@
+<div class='filters'>
+    <div class='search'>
+        <div class='filter-icon'></div>
+        <input type='text' placeholder='חיפוש לפי כתובת או שם...' [(ngModel)]='state.searchTerm' #input/>
+    </div>
+</div>
+@let searchResults = state.searchResults();
+@if (searchResults !== null) {   
+    <div class='results'>
+        @for (r of searchResults; track r.id) {
+            <div class='result'>
+                @if (r.kind === 'item') {
+                    <a class='item' (click)='itemSelect(r)'>{{ r.name }}</a>
+                } @else if (r.kind === 'street') {
+                    <a class='street' (click)='autocompleteSelect(r)'>{{ r.name }}</a>
+                }
+            </div>
+        }
+        @if (searchResults.length === 0) {
+            <div class='no-results'>לא נמצאו תוצאות</div>
+        }
+    </div>
+}

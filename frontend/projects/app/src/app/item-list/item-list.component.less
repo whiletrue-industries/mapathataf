@@ -31,7 +31,7 @@
     }
 
     &.expanded {
-        height: 70vh;
+        height: calc(0.7 ~'*' (100vh - 114px));
 
         .expander {
             .button {
@@ -112,6 +112,7 @@
             }
             tbody {
                 tr {
+                    scroll-margin-top: 30px;
                     td {
                         font-size: 14px;
                         color: @color-night;
@@ -150,32 +151,13 @@
                         }
                         &.kind {
                             width: 0;
-                            .muni {
-                                display: flex;
-                                padding: 0px 10px;
-                                justify-content: center;
-                                align-items: center;
-                                gap: 4px;
-                                padding-right: 32px;
-                                border-radius: 10px;
-                                color: @color-night;
-                                font-size: 17px;
-                                font-weight: 400;
-                                .background-image;
-                                background-position: center right 10px;
-                                background-size: 14px 18px;
-                            }
-                            .muni {
-                                background-color: fade(@color-green-200, 40);
-                                background-image: url(../../../public/icon-muni.svg);
-                            }
                         }
                         &.guidance, &.subsidized, &.age-group {
                             width: 0;
                             text-align: center;
                             span {
                                 display: inline-block;
-                                white-space: wrap;
+                                white-space: nowrap;
                             }
                         }
                         &.licensing {

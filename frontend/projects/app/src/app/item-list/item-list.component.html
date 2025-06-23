@@ -6,12 +6,13 @@
             </svg>
         </div>
     </div>
-    @if (state.section() === 'education') {
+    @let items = state.items();
+    @if (state.section() === 'education') { 
         <div class='table'>
             <table>
                 <thead>
                     <tr>
-                        <th class='total'><div class='tag'>{{ state.items().length }}</div></th>
+                        <th class='total'><div class='tag'>{{ items.length }}</div></th>
                         <th class='name'>שם מזהה</th>
                         <th class='age-group'>גיל</th>
                         <th class='subsidized'>סבסוד</th>
@@ -20,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (item of state.items(); track item.info._id) {
+                    @for (item of items; track item.info._id) {
                         <tr class='item' (click)='state.selectId(item.info._id)' [class.active]='state.selectedId() === item.info._id' [attr.data-id]='item.info._id'>
                             <td class='toggle' [class.active]='state.selectedId() === item.info._id'>
                                 <div>
@@ -93,14 +94,14 @@
             <table>
                 <thead>
                     <tr>
-                        <th class='total'><div class='tag'>{{ state.items().length }}</div></th>
-                        <th class='name'>שם מזהה</th>
+                        <th class='total'><div class='tag'>{{ items.length }}</div></th>
                         <th class='kind'>סוג</th>
-                        <th class='licensing'>רישוי</th>
+                        <th class='name'>שם מזהה</th>
+                        <th class='age-group'>גיל</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @for (item of state.items(); track item.info._id) {
+                    @for (item of items; track item.info._id) {
                         <tr class='item' (click)='state.selectId(item.info._id)' [class.active]='state.selectedId() === item.info._id' [attr.data-id]='item.info._id'>
                             <td class='toggle' [class.active]='state.selectedId() === item.info._id'>
                                 <div>
@@ -109,21 +110,34 @@
                                     </svg>
                                 </div>
                             </td>
+                            <td class='kind'><span class='muni'>{{ item.resolved.facility_sub_kind }}</span></td>
                             <td class='name'><span>{{ item.resolved.name }}</span></td>
-                            <td class='kind'><span class='muni'>עירייה</span></td>
-                            <td class='licensing'><span [class]='item.resolved.license_status_code' [title]='item.resolved.license_status'></span></td>
+                            <td class='age-group'>
+                                <span>
+                                    @if (item.resolved.age_group === 'birth_to_1') {
+                                        0-1
+                                    } @else if (item.resolved.age_group === '1_to_2') {
+                                        1-2
+                                    } @else if (item.resolved.age_group === '2_to_3') {
+                                        2-3
+                                    } @else if (item.resolved.age_group === 'all_ages') {
+                                        הכל
+                                    } @else {
+                                        &mdash;
+                                    }
+                                </span>
+                            </td>
                         </tr>
                         @if (item.info._id === state.selectedId()) {
                             <tr class='details'>
                                 <td colspan='4' class='details'>
                                     <div class='details'>
                                         <div class='inner'>
-                                            <div class='deets'>
-                                                <div>סמל מעון: {{ item.resolved.symbol_text }}</div>
-                                                <div>רישוי: {{ item.resolved.license_status }}</div>
-                                            </div>
+                                            @if (item.resolved.activity_hours) {
+                                                <div class='activity-hours'>שעות פעילות: {{ item.resolved.activity_hours }}</div>
+                                            }
                                             @if(item.resolved.phone) {<div class='phone'>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
-                                            @if(item.resolved.email) {<div class='email'>אימייל: <a [href]='"mailto:" + item.resolved.email' target="_blank">{{ item.resolved.email }}</a></div>}
+                                            @if(item.resolved.url) {<div class='url'>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
                                             <div class='address'>כתובת: {{ item.resolved.address }}</div>
                                         </div>
                                         <div class='bookend'>

@@ -79,7 +79,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       const padding = this.api.mapPaddingBottom();
       if (map && workspace) {
         if (workspace.bounds) {
-          map.fitBounds(workspace.bounds, {animate: false, padding: {bottom: padding}});
+          map.fitBounds(workspace.bounds, {animate: false, padding: {bottom: padding, top: 58}});
         }
       }
     });
@@ -96,6 +96,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           attributionControl: false,
           logoPosition: 'bottom-right',
         });
+        this.mapboxService.map = map;
         map.on('load', () => {
           map.addSource('points', {
             type: 'geojson',

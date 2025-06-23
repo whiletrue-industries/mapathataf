@@ -9,7 +9,7 @@ export type DiscussResult = {
 };
 
 function resolve(item: any, field: string): any {
-  const tries = [item.info, item.user, item.admin, ...(item.official || [])];
+  const tries = [item.user, item.admin, item.info, ...(item.official || [])];
   for (const tryItem of tries) {
     if (tryItem && tryItem[field]) {
       return tryItem[field];
@@ -31,6 +31,7 @@ export function resolveItem(item: any): any {
     lat: resolve(item, 'lat'),
     lng: resolve(item, 'lng'),
     facility_kind: resolve(item, 'facility_kind') || 'not-set',
+    facility_sub_kind: resolve(item, 'facility_sub_kind'),
     facility_kind_editable: !item.info?.facility_kind,
     age_group: resolve(item, 'age_group'),
     mentoring_type: resolve(item, 'mentoring_type'),

@@ -2,7 +2,8 @@
 <div class='content'>
     @if (showMap) {
         <app-map></app-map>
-    }
+    }   
+    <app-filters></app-filters>
     @if (api.workspace().logo_url) {
         <div class='logo'>
             <img [src]='api.workspace().logo_url' />
