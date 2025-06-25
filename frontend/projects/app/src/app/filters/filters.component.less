@@ -2,6 +2,10 @@
 
 :host {
     // position: relative;
+    pointer-events: none;
+    & > * {
+        pointer-events: all;
+    }
     .search {
         display: flex;
         flex-flow: row nowrap;
