@@ -2,55 +2,171 @@
 
 :host {
     // position: relative;
-    .filters {
+    .search {
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
         justify-content: flex-start;
-        padding: 0 10px;
+        gap: 16px;
+
         width: 100%;
-        min-height: 58px;
+        height: 58px;
+        padding: 0 10px;
+
         background-color: white;
         border-radius: 0px 0px 20px 20px;
         overflow: hidden;
         box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.19);
+        position: relative;
+        z-index: 2;
+        transition: box-shadow 0.3s ease-in-out;
+        transition-delay: 0.15s;
 
-        .search {
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: center;
-            gap: 16px;
-            width: 100%;
+        &.expanded {
+            transition-duration: 0s;
+            transition-delay: 0s;
+            box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0);
+        }
 
-            .filter-icon {
-                .background-image;
-                width: 32px;
-                height: 32px;
-                background-image: url(../../../public/icon-filter.svg);
-            }
+        .filter-icon {
+            .background-image;
+            width: 32px;
+            height: 32px;
+            background-image: url(../../../public/icon-filter.svg);
+            position: relative;
 
-            input {
-                width: 100%;
-                height: 36px;
-                border-radius: 20px;
-                border: 1px solid @color-text;
-                padding: 0 10px;
-                padding-right: 40px;
-                font-size: 16px;
-                &:placeholder-shown {
-                    color: @color-gray-3;
-                }
+            .count {
+                width: 20px;
+                height: 20px;
+                position: absolute;
+                top: -4px;
+                right: -4px;
+                background-color: @color-pinky;
+                color: white;
+                font-size: 12px;
+                font-weight: 600;
+                border-radius: 10px;
                 display: flex;
-                flex-flow: row nowrap;
                 align-items: center;
-                .background-image;
-                background-image: url(../../../public/icon-search.svg);
-                background-position: center right 12px;
-                background-size: 20px;
+                justify-content: center;
             }
         }
 
+        input {
+            width: 100%;
+            height: 36px;
+            border-radius: 20px;
+            border: 1px solid @color-text;
+            padding: 0 10px;
+            padding-right: 40px;
+            font-size: 16px;
+            &:placeholder-shown {
+                color: @color-gray-3;
+            }
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            .background-image;
+            background-image: url(../../../public/icon-search.svg);
+            background-position: center right 12px;
+            background-size: 20px;
+        }
     }
+
+    .filters-tab {
+        display: flex;
+        flex-flow: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        
+        width: 100%;
+        height: 128px;
+        padding: 0;
+        padding-top: 20px;
+
+        background-color: white;
+        border-radius: 0px 0px 20px 20px;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+
+        transition: transform 0.3s ease-in-out;
+        transition-property: transform, box-shadow;
+        
+        transform: translateY(-100%)translateY(-20px);
+        box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0);
+
+        &.expanded {
+            transform: translateY(-20px);
+            box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.19);
+        }
+
+        .filters {
+            display: flex;
+            width: 100%;
+            height: 54px;
+            padding: 0;
+
+            .filter-row {
+                display: flex;
+                flex-flow: row nowrap;
+                overflow: auto;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 10px;
+                padding: 0 10px;
+
+                .filter-selector {
+                    height: 34px;
+                    padding: 0 8px;
+                    min-width: 100px;
+                    padding-left: 40px;
+                    border-radius: 6px;
+
+                    display: flex;
+                    flex-direction: row nowrap;
+                    align-items: center;
+                    justify-content: flex-start;
+
+                    color: @color-night;
+                    font-weight: 400;
+                    font-size: 12px;
+
+                    background-color: @color-gray-1;
+                    .background-image;
+                    background-position: center left 12px;
+                    background-size: 10px;
+                    background-image: url(../../../public/icon-chevron-down-night.svg);
+                    
+                    &.active {
+                        background-color: @color-green-100;
+                        color: @color-night;
+                    }
+                }
+            }
+        }
+
+        .closer {
+            display: flex;
+            padding: 10px;
+            height: 54px;
+
+            .button {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                justify-content: center;
+
+                width: 100%;
+                height: 34px;
+                border-radius: 0px 0px 20px 20px;
+                background-color: @color-gray-1;
+
+                
+            }
+        }
+    }
+
     .results {
         position: absolute;
         right: 56px;

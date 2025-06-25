@@ -1,0 +1,17 @@
+<div class='bg'></div>
+@let values = currentValues();
+<div class='container'>
+    <div class='options'>
+        @for (option of options(); track option.value) {
+            <div class='option' (click)='toggleValue(option.value)'>
+                <div class='icon' [class.checked]='values?.includes(option.value)' >
+                </div>
+                <span class='name'>{{ option.label }}</span>
+            </div>
+        }
+    </div>
+    <div class='controls'>
+        <div class='clear' (click)='clear()'>ניקוי הסינון</div>
+        <div class='save' (click)='save()'>שמירה</div>
+    </div>
+</div>

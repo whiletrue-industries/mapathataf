@@ -10,10 +10,11 @@ import { ItemListComponent } from "../item-list/item-list.component";
 import { HeaderComponent } from "../header/header.component";
 import { StateService } from '../state.service';
 import { FiltersComponent } from "../filters/filters.component";
+import { FilterDialogComponent } from "../filter-dialog/filter-dialog.component";
 
 @Component({
   selector: 'app-main',
-  imports: [MapComponent, ItemListComponent, HeaderComponent, FiltersComponent],
+  imports: [MapComponent, ItemListComponent, HeaderComponent, FiltersComponent, FilterDialogComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.less'
 })
@@ -26,7 +27,7 @@ export class MainComponent implements AfterViewInit {
     private route: ActivatedRoute,
     public api: ApiService,
     private mapboxService: MapboxService,
-    private state: StateService
+    public state: StateService
   ) {
     console.log('MainComponent constructor');
     this.route.params.pipe(

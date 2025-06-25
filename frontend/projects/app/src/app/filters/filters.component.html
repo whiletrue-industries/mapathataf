@@ -1,7 +1,49 @@
-<div class='filters'>
-    <div class='search'>
-        <div class='filter-icon'></div>
-        <input type='text' placeholder='חיפוש לפי כתובת או שם...' [(ngModel)]='state.searchTerm' #input/>
+<div class='search' [class.expanded]='state.filtersExpanded()'>
+    <div class='filter-icon' (click)='state.filtersExpanded.set(true)'>
+        @if (state.filterCount() > 0) {
+            <span class='count'>{{state.filterCount()}}</span>
+        }
+    </div>
+    <input type='text' placeholder='חיפוש לפי כתובת או שם...' [(ngModel)]='state.searchTerm' #input/>
+</div>
+@let education = state.section() === 'education';
+@let health = state.section() === 'health';
+@let community = state.section() === 'community';
+<div class='filters-tab' [class.expanded]='state.filtersExpanded()'>
+    <div class='filters'>
+        <div class='filter-row'>
+            @if (health) {
+                <div class='filter-selector' [class.active]='state.filterHealthSubkind() !== null' (click)='state.filterOptions.set("health_subkind")'>
+                    סוג המענה
+                </div>
+            }
+            @if (community) {
+                <div class='filter-selector' [class.active]='state.filterCommunitySubkind() !== null' (click)='state.filterOptions.set("community_subkind")'>
+                    סוג המענה
+                </div>
+            }
+            <div class='filter-selector' [class.active]='state.filterAgeGroup() !== null' (click)='state.filterOptions.set("age_group")'>
+                גיל
+            </div>
+            @if (education) {
+                <div class='filter-selector' [class.active]='state.filterLicensing() !== null' (click)='state.filterOptions.set("licensing")'>
+                    רישוי
+                </div>
+                <div class='filter-selector' [class.active]='state.filterSubsidy() !== null' (click)='state.filterOptions.set("subsidy")'>
+                    סבסוד
+                </div>
+                <div class='filter-selector' [class.active]='state.filterGuidance() !== null' (click)='state.filterOptions.set("guidance")'>
+                    הדרכה
+                </div>
+            }
+        </div>
+    </div>
+    <div class='closer' (click)='state.filtersExpanded.set(false)'>
+        <div class='button'>
+            <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.17188 6.85156L5 3.02344L8.82812 6.85156L10 5.67969L5 0.679688L0 5.67969L1.17188 6.85156Z" fill="#053856"/>
+            </svg>
+        </div>
     </div>
 </div>
 @let searchResults = state.searchResults();

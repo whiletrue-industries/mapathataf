@@ -11,3 +11,6 @@
     }
     <app-item-list></app-item-list>
 </div>
+@if (state.filterOptions() !== null) {
+    <app-filter-dialog></app-filter-dialog>
+}

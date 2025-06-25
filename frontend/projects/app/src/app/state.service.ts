@@ -10,20 +10,49 @@ export type ResultItem = {
   kind: 'item' | 'street';
 };
 
+export type FilterKind = 'age_group' | 'health_subkind' | 'community_subkind' | 'licensing' | 'subsidy' | 'guidance';
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
-
   section = signal('education');
 
   items = computed(() => {
-    const items = this.api.items();
+    let items = this.api.items();
     const section = this.section();
     console.log('StateService items for section:', section, items.length);
-    return items.filter(item => {
-      return (item.resolved.facility_kind === section);
-    });
+    items = items.filter(item => item.resolved.facility_kind === section);
+    if (this.filterAgeGroup()) {
+      items = items.filter(item => {
+        return this.filterAgeGroup()!.includes(item.resolved.age_group);
+      });
+    }
+    if (this.filterLicensing() && this.section() === 'education') {
+      items = items.filter(item => {
+        return this.filterLicensing()!.includes(item.resolved.license_status_code);
+      });
+    }
+    if (this.filterHealthSubkind() && this.section() === 'health') {
+      items = items.filter(item => {
+        return this.filterHealthSubkind()!.includes(item.resolved.facility_sub_kind);
+      });
+    }
+    if (this.filterCommunitySubkind() && this.section() === 'community') {
+      items = items.filter(item => {
+        return this.filterCommunitySubkind()!.includes(item.resolved.facility_sub_kind);
+      });
+    }
+    if (this.filterSubsidy() && this.section() === 'education') {
+      items = items.filter(item => {
+        return this.filterSubsidy()!.includes(item.resolved.subsidized ? 'yes' : 'no');
+      });
+    }
+    if (this.filterGuidance() && this.section() === 'education') {
+      items = items.filter(item => {
+        return this.filterGuidance()!.includes(item.resolved.mentoring_type);
+      });
+    }
+    return items;
   });
 
   selectedId = signal<string | null>(null);
@@ -41,6 +70,27 @@ export class StateService {
   askZoom = signal<[number, number, number] | null>(null);
   mapPaddingBottom = signal<number>(0);
 
+  // Filters
+  filtersExpanded = signal<boolean>(true);
+  filterOptions = signal<FilterKind | null>(null);
+  filterAgeGroup = signal<string[] | null>(null);
+  filterHealthSubkind = signal<string[] | null>(null);
+  filterCommunitySubkind = signal<string[] | null>(null);
+  filterLicensing = signal<string[] | null>(null);
+  filterSubsidy = signal<string[] | null>(null);
+  filterGuidance = signal<string[] | null>(null);
+
+  filterCount = computed(() => {
+    let count = 0;
+    if (this.filterAgeGroup()) count++;
+    if (this.filterHealthSubkind()) count++;
+    if (this.filterCommunitySubkind()) count++;
+    if (this.filterLicensing()) count++;
+    if (this.filterSubsidy()) count++;
+    if (this.filterGuidance()) count++;
+    return count;
+  });
+
   constructor(private router: Router, private route: ActivatedRoute, private api: ApiService) {
     effect(() => {
       const section = this.section();
@@ -52,6 +102,21 @@ export class StateService {
         parts.push(mapState[0].toFixed(6), mapState[1].toFixed(6), mapState[2].toFixed(2));
       } else {
         parts.push('0', '0', '0');
+      }
+
+      for (const filter of [
+        this.filterAgeGroup(),
+        this.filterHealthSubkind(),
+        this.filterCommunitySubkind(),
+        this.filterLicensing(),
+        this.filterSubsidy(),
+        this.filterGuidance()
+      ]) {
+        if (filter && filter.length > 0) {
+          parts.push(filter.join(';'));
+        } else {
+          parts.push('');
+        }
       }
 
       const selectedId = this.selectedId();
@@ -71,29 +136,40 @@ export class StateService {
   updateStateFromFragment(fragment: string | null) {
     console.log('Updating state from fragment:', fragment);
     if (fragment) {
-      const parts = fragment.split('/');
+      let parts = fragment.split('/');
       if (parts.length > 0) {
         const section = parts[0];
         console.log('Setting section to:', section);
         this.section.set(section);
+        parts = parts.slice(1);
       }
 
-      if (parts.length > 3) {
-        const lng = parseFloat(parts[1]);
-        const lat = parseFloat(parts[2]);
-        const zoom = parseFloat(parts[3]);
+      if (parts.length >= 3) {
+        const lng = parseFloat(parts[0]);
+        const lat = parseFloat(parts[1]);
+        const zoom = parseFloat(parts[2]);
         if (lat && lng && zoom) {
           this.askZoom.set([lng, lat, zoom]);
         }
+        parts = parts.slice(3);
       }
        
-      if (parts.length > 4) {
-        const selectedId = parts[4];
-        if (selectedId.length > 0) {
-          timer(0).subscribe(() => {
-            this.selectId(selectedId);
-          });
-        }
+      if (parts.length >= 6) {
+        this.filterAgeGroup.set(parts[0] ? parts[0].split(';') : null);
+        this.filterHealthSubkind.set(parts[1] ? parts[1].split(';') : null);
+        this.filterCommunitySubkind.set(parts[2] ? parts[2].split(';') : null);
+        this.filterLicensing.set(parts[3] ? parts[3].split(';') : null);
+        this.filterSubsidy.set(parts[4] ? parts[4].split(';') : null);
+        this.filterGuidance.set(parts[5] ? parts[5].split(';') : null);
+        parts = parts.slice(6);
+      }
+
+      if (parts.length > 0) {
+        const selectedId = parts[0];
+        console.log('Setting selectedId to:', selectedId);
+        this.selectedId.set(selectedId);
+      } else {
+        this.selectedId.set(null);
       }
     }
   }
