@@ -2,6 +2,7 @@ import { computed, effect, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from './api.service';
+import { ReplaySubject, Subject, timer } from 'rxjs';
 
 export type ResultItem = {
   name: string;
@@ -36,13 +37,28 @@ export class StateService {
   });
   searchTerm = signal<string>('');
   searchResults = signal<ResultItem[] | null>(null);
-
+  mapState = signal<number[]>([]);
+  askZoom = signal<[number, number, number] | null>(null);
+  mapPaddingBottom = signal<number>(0);
 
   constructor(private router: Router, private route: ActivatedRoute, private api: ApiService) {
     effect(() => {
       const section = this.section();
       console.log('MainComponent section:', section);
       const parts = [section];
+
+      const mapState = this.mapState();
+      if (mapState.length === 3) {
+        parts.push(mapState[0].toFixed(6), mapState[1].toFixed(6), mapState[2].toFixed(2));
+      } else {
+        parts.push('0', '0', '0');
+      }
+
+      const selectedId = this.selectedId();
+      if (selectedId) {
+        parts.push(selectedId);
+      }
+
       const fragment = parts.join('/');
       if (section) {
         this.router.navigate([], {
@@ -61,7 +77,25 @@ export class StateService {
         console.log('Setting section to:', section);
         this.section.set(section);
       }
-    } 
+
+      if (parts.length > 3) {
+        const lng = parseFloat(parts[1]);
+        const lat = parseFloat(parts[2]);
+        const zoom = parseFloat(parts[3]);
+        if (lat && lng && zoom) {
+          this.askZoom.set([lng, lat, zoom]);
+        }
+      }
+       
+      if (parts.length > 4) {
+        const selectedId = parts[4];
+        if (selectedId.length > 0) {
+          timer(0).subscribe(() => {
+            this.selectId(selectedId);
+          });
+        }
+      }
+    }
   }
 
   selectId(selectedId: any) {

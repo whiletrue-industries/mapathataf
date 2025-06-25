@@ -76,7 +76,6 @@ export class ApiService {
 
   items = signal<any[]>([]);
   workspace = signal<any>({});
-  mapPaddingBottom = signal<number>(0);
 
   constructor(private http: HttpClient) { }
 

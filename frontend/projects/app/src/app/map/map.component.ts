@@ -48,6 +48,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       })
     };
   });
+  initializedView = signal(false);
 
   constructor(private mapboxService: MapboxService, private platform: PlatformService, private api: ApiService, private state: StateService) {
     console.log('MapComponent constructor');
@@ -76,10 +77,28 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     effect(() => {
       const map = this.map();
       const workspace = this.api.workspace();
-      const padding = this.api.mapPaddingBottom();
-      if (map && workspace) {
-        if (workspace.bounds) {
-          map.fitBounds(workspace.bounds, {animate: false, padding: {bottom: padding, top: 58}});
+      const padding = this.state.mapPaddingBottom();
+      const askZoom = this.state.askZoom();
+      const initializedView = this.initializedView();
+      if (map) {
+        if (!initializedView && askZoom) {
+          map.flyTo({
+            center: [askZoom[0], askZoom[1]],
+            zoom: askZoom[2],
+            animate: false,          
+          });
+          this.initializedView.set(true);
+        } else if (!initializedView && workspace) {
+          if (workspace.bounds) {
+            map.fitBounds(workspace.bounds, {animate: false, padding: {bottom: padding, top: 58}});
+            this.initializedView.set(true);
+          }
+        } else {
+          map.jumpTo({
+            center: map.getCenter(),
+            zoom: map.getZoom(),
+            padding: { bottom: padding, top: 58}
+          });
         }
       }
     });
@@ -142,7 +161,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
                 map.getCanvas().style.cursor = 'pointer';
               });              
             }
-          }          
+          }
+
+          map.on('moveend', () => {
+            this.state.mapState.set(map.getCenter().toArray().concat(map.getZoom()));
+          });
+
           this.map.set(map);
         });
         map.on('click', (e) => {

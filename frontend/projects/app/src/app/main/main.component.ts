@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, computed, effect, signal } from '@angular/core';
 import { MapComponent } from "../map/map.component";
 import { PlatformService } from '../platform.service';
-import { switchMap, timer } from 'rxjs';
+import { switchMap, take, timer } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -36,7 +36,7 @@ export class MainComponent implements AfterViewInit {
       });
     });
     this.route.fragment.pipe(
-      takeUntilDestroyed(),
+      take(1)
     ).subscribe((fragment) => {
       this.state.updateStateFromFragment(fragment);
     });

@@ -14,11 +14,17 @@ import { StateService } from '../state.service';
 export class ItemListComponent implements AfterViewInit{
 
   expanded = signal(false)
+  initialized = signal(false);
 
   constructor(public api: ApiService, private destroyRef: DestroyRef, private platform: PlatformService, private el: ElementRef, public state: StateService) {
     effect(() => {
       const selectedId = this.state.selectedId();
-      timer(10).subscribe(() => {
+      const initialized = this.initialized();
+      const items = this.state.items();
+      if (!initialized || !selectedId || !items || items.length === 0) {
+        return;
+      }
+      timer(0).subscribe(() => {
         this.el?.nativeElement?.querySelector(`[data-id="${selectedId}"]`)?.scrollIntoView({
           behavior: 'smooth',
         });
@@ -43,9 +49,10 @@ export class ItemListComponent implements AfterViewInit{
         const entry = entries[0];
         if (entry) {
           const height = entry.contentRect.height;
-          this.api.mapPaddingBottom.set(height);
+          this.state.mapPaddingBottom.set(height);
         }
       });
+      this.initialized.set(true);
     });
   }
 }
