@@ -71,7 +71,7 @@ export class StateService {
   mapPaddingBottom = signal<number>(0);
 
   // Filters
-  filtersExpanded = signal<boolean>(true);
+  filtersExpanded = signal<boolean>(false);
   filterOptions = signal<FilterKind | null>(null);
   filterAgeGroup = signal<string[] | null>(null);
   filterHealthSubkind = signal<string[] | null>(null);
