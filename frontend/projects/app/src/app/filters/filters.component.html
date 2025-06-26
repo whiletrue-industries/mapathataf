@@ -4,7 +4,14 @@
             <span class='count'>{{state.filterCount()}}</span>
         }
     </div>
-    <input type='text' placeholder='חיפוש לפי כתובת או שם...' [(ngModel)]='state.searchTerm' #input/>
+    <div class='input-container'>
+        <input type='text' placeholder='חיפוש לפי כתובת או שם...' [(ngModel)]='state.searchTerm' #input/>
+        <div class='clear' (click)='state.searchTerm.set("")'>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 6.586L10.95 3.636L12.364 5.05L9.414 8L12.364 10.95L10.95 12.364L8 9.414L5.05 12.364L3.636 10.95L6.586 8L3.636 5.05L5.05 3.636L8 6.586Z" fill="#053856"/>
+            </svg>
+        </div>
+    </div>
 </div>
 @let education = state.section() === 'education';
 @let health = state.section() === 'health';

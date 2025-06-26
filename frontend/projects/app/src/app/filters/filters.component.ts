@@ -21,6 +21,7 @@ export class FiltersComponent {
   constructor() {
     toObservable(this.state.searchTerm).pipe(
       switchMap(term => {
+        // console.log('Search term changed', term);
         if (!term || term.length < 3) {
           this.state.searchResults.set(null);
           return from([]);
@@ -31,7 +32,7 @@ export class FiltersComponent {
       switchMap(term => {
         const items = this.state.items();
         const relevant: ResultItem[] = items.filter(item => {
-          console.log('Autocomplete item', term, item.resolved.name, item.resolved.address);
+          // console.log('Autocomplete item', term, item.resolved.name, item.resolved.address);
           return item.resolved.name.includes(term) || item.resolved.address.includes(term);
         }).map(item => {
           return {
@@ -47,8 +48,12 @@ export class FiltersComponent {
         ]);
       })
     ).subscribe((results: [ResultItem[], ResultItem[]]) => {
-      console.log('Autocomplete results', results);
-      this.state.searchResults.set([...results[0], ...results[1]]);
+      // console.log('Autocomplete results', results);
+      if (this.state.searchTerm() && this.state.searchTerm().length) {
+        this.state.searchResults.set([...results[0], ...results[1]]);
+      } else {
+        this.state.searchResults.set(null);
+      }
     });
   }
 
