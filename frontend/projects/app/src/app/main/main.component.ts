@@ -33,8 +33,8 @@ export class MainComponent implements AfterViewInit {
     this.route.params.pipe(
       takeUntilDestroyed(),
     ).subscribe((params) => {
-      this.api.fetchData(params['workspaceId']).subscribe(() => {        
-      });
+      this.state.workspaceId.set(params['workspaceId']);
+      this.api.fetchData(params['workspaceId']).subscribe(() => {});
     });
     this.route.fragment.pipe(
       take(1)

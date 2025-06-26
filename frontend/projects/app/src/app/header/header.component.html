@@ -5,7 +5,7 @@
         <a class='section education' [class.selected]='state.section() === "education"' (click)='state.section.set("education")'>מסגרות חינוך</a>
         <a class='section community' [class.selected]='state.section() === "community"' (click)='state.section.set("community")'>פנאי וקהילה</a>
     </div>
-    <a class='logo' href='/' target='_blank'></a>    
+    <a class='logo' [routerLink]="['/', state.workspaceId()]" target='_blank'></a>
 </div>
 <div class='menu' [class.active]='active' (click)='active=false; true'>
     @for (link of api.workspace()?.links || []; track link) {

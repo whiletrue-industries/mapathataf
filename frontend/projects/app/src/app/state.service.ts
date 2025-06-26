@@ -15,6 +15,8 @@ export type FilterKind = 'age_group' | 'health_subkind' | 'community_subkind' | 
   providedIn: 'root'
 })
 export class StateService {
+
+  workspaceId = signal<string>('');
   section = signal('education');
 
   items = computed(() => {
