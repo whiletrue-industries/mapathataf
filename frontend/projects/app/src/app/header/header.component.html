@@ -1,11 +1,13 @@
 <div class='container'>
     <div class='menu-button' (click)='active = true'></div>
-    <div class='sections'>
-        <a class='section health' [class.selected]='state.section() === "health"' (click)='state.section.set("health")'>התפתחות הילד</a>
-        <a class='section education' [class.selected]='state.section() === "education"' (click)='state.section.set("education")'>מסגרות חינוך</a>
-        <a class='section community' [class.selected]='state.section() === "community"' (click)='state.section.set("community")'>פנאי וקהילה</a>
-    </div>
-    <a class='logo' [routerLink]="['/', state.workspaceId()]" target='_blank'></a>
+    @if (kindSelection()) {
+        <div class='sections'>
+            <a class='section health' [class.selected]='state.section() === "health"' (click)='state.section.set("health")'>התפתחות הילד</a>
+            <a class='section education' [class.selected]='state.section() === "education"' (click)='state.section.set("education")'>מסגרות חינוך</a>
+            <a class='section community' [class.selected]='state.section() === "community"' (click)='state.section.set("community")'>פנאי וקהילה</a>
+        </div>
+    }
+    <a class='logo' [routerLink]="['/', state.workspaceId()]"></a>
 </div>
 <div class='menu' [class.active]='active' (click)='active=false; true'>
     @for (link of api.workspace()?.links || []; track link) {
@@ -16,7 +18,7 @@
     @for (link of commonLinks || []; track link) {
         <a class='internal' [routerLink]='link.routerLink'>{{link.title}}</a>
     }
-    <a class='about' [routerLink]='["/about", "about"]'>אודות</a>
+    <a class='about' [routerLink]='["/about", "about"]'>אודות מפת הטף</a>
     @for (link of api.workspace()?.links || []; track link) {
         @if (link.kind === 'whatsapp') {
             <a class='whatsapp' [href]='link.href' target='_blank'>{{link.title}}</a>

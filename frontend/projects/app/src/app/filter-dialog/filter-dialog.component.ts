@@ -73,9 +73,9 @@ export class FilterDialogComponent {
         ];
       case 'licensing':
         return [
-          { value: 'did_not_apply', label: 'לא הוגשה בקשה לרישוי' },
           { value: 'valid', label: 'רישיון בתוקף' },
           { value: 'in_progress', label: 'בתהליך רישוי' },
+          { value: 'did_not_apply', label: 'לא הוגשה בקשה לרישוי' },
           { value: 'not_needed', label: 'מתחת ל-7 ילדים ואינו דורש רישוי' },
           { value: 'none', label: 'לא ידוע' }
         ];

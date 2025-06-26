@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ApiService } from '../api.service';
 import { RouterLink } from '@angular/router';
 import { StateService } from '../state.service';
@@ -12,6 +12,9 @@ import { StateService } from '../state.service';
   styleUrl: './header.component.less'
 })
 export class HeaderComponent {
+
+  kindSelection = input(true);
+
   active = false;
 
   commonLinks = [
