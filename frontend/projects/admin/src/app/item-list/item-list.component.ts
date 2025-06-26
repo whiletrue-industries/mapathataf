@@ -18,6 +18,8 @@ export class ItemListComponent {
 
   filteredItems = computed(() => {
     let items = this.api.items() || [];
+    // console.log('Filtering items...', items.length, 'items before filtering');
+    // console.log('FK', this.state.facilityKind(), 'IS', this.state.itemSource(), 'AP', this.state.appPublication(), 'AU', this.state.adminUpdated(), 'UU', this.state.userUpdated(), 'LS', this.state.licensingStatus(), 'MT', this.state.mentoringType(), 'SQ', this.state.searchQuery());
     items = items.filter(item => !!item.admin?._private_deleted === (this.state.appPublication() === 'recycled'));
     if (this.state.facilityKind() !== 'all') {
       items = items.filter(item => item.resolved.facility_kind === this.state.facilityKind());
@@ -44,8 +46,14 @@ export class ItemListComponent {
         items = items.filter(item => item.resolved.mentoring_type === this.state.mentoringType());
       }
     }
+    if (this.state.searchQuery()) {
+      const query = this.state.searchQuery().toLowerCase();
+      items = items.filter(item => {
+        return item.resolved.name.toLowerCase().includes(query) || item.resolved.address.toLowerCase().includes(query);
+      });
+    }
     items = items.sort((a, b) => a.resolved?.name?.localeCompare(b.resolved?.name));
-
+    // console.log('Filtering items...', items.length, 'items after filtering');
     return items;
   });
 

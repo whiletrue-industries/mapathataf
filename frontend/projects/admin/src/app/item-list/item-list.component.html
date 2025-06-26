@@ -1,5 +1,5 @@
-@if (api.mode() === 'admin') {
-    <div class='filters'>
+<div class='filters' [class.visible]='api.mode() === "admin"'>
+    <div class='filters-row'>
         <div class='filter'>
             <label>לפי סוג מענה</label>
             <select [(ngModel)]='state.facilityKind'>
@@ -42,7 +42,10 @@
                 <option value='not-updated'>לא עודכנו</option>
             </select>
         </div>
-        @if (state.facilityKind() === 'education') {
+    </div>
+
+    @if (state.facilityKind() === 'education') {
+        <div class='filters-row'>
             <div class='filter'>
                 <label>לפי סטטוס רישוי</label>
                 <select [(ngModel)]='state.licensingStatus'>
@@ -63,26 +66,29 @@
                     <option value='not-mentored'>לא מודרך/לא ידוע</option>
                 </select>
             </div>
-        }
-    </div>
-    <div class="items">
-        <div class='top-line'>
-            <div class='total'>
-                <span>מוצגים</span>&nbsp;
-                <strong>{{ filteredItems().length }}</strong>&nbsp;
-                <span>פריטים מתוך</span>&nbsp;
-                <strong>{{ api.items().length }}</strong>&nbsp;
-                <span>סה"כ</span>
-            </div>
-            <div class='actions'>
-                <div class='add-new' (click)='addNew()'>הוספת פריט חדש</div>
-            </div>
         </div>
-
-        @for (item of filteredItems(); track item.id) {
-            <app-item-list-item [item]='item'></app-item-list-item>
-        }
+    }
+    <div class='filters-row'>
+        <input [(ngModel)]='state.searchQuery' type='text' placeholder='חיפוש פריט לפי שם או כתובת' />
     </div>
-} @else {
-    <div class='items'>אין לכם הרשאות לצפות בעמוד זה</div>
-}
+
+</div>
+<div class="items" [class.visible]='api.mode() === "admin"'>
+    <div class='top-line'>
+        <div class='total'>
+            <span>מוצגים</span>&nbsp;
+            <strong>{{ filteredItems().length }}</strong>&nbsp;
+            <span>פריטים מתוך</span>&nbsp;
+            <strong>{{ api.items().length }}</strong>&nbsp;
+            <span>סה"כ</span>
+        </div>
+        <div class='actions'>
+            <div class='add-new' (click)='addNew()'>הוספת פריט חדש</div>
+        </div>
+    </div>
+
+    @for (item of filteredItems(); track item.id) {
+        <app-item-list-item [item]='item'></app-item-list-item>
+    }
+</div>
+<div class='items' [class.visible]='api.mode() !== "admin"'>אין לכם הרשאות לצפות בעמוד זה</div>
