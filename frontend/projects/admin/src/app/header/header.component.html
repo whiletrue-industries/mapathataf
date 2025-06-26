@@ -1,7 +1,7 @@
 <div class='container'>
     <div class='menu-button' (click)='active = true'></div>
-    <h1>ממשק ניהול - <strong>{{api.cityName()}}</strong></h1>
-    <a class='logo' href='/' target='_blank'>
+    <h1 [routerLink]="['/', api.workspaceId()]" queryParamsHandling="preserve">ממשק ניהול - <strong>{{api.cityName()}}</strong></h1>
+    <a class='logo' [routerLink]="['/', api.workspaceId()]" queryParamsHandling="preserve">
         <span>מפת הטף</span>
     </a>
     <div class='sep'></div>
