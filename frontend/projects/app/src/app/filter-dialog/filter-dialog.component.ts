@@ -81,8 +81,8 @@ export class FilterDialogComponent {
         ];
       case 'subsidy':
         return [
-          { value: 'yes', label: 'מסובסד' },
-          { value: 'no', label: 'לא מסובסד' },
+          { value: 'yes', label: 'סבסוד משרד העבודה' },
+          { value: 'no', label: 'ללא סבסוד ממשלתי' },
         ];
       case 'mentoring':
         return [
