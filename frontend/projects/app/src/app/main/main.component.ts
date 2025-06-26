@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, effect, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, Inject, signal } from '@angular/core';
 import { MapComponent } from "../map/map.component";
 import { PlatformService } from '../platform.service';
 import { switchMap, take, timer } from 'rxjs';
@@ -11,6 +11,7 @@ import { HeaderComponent } from "../header/header.component";
 import { StateService } from '../state.service';
 import { FiltersComponent } from "../filters/filters.component";
 import { FilterDialogComponent } from "../filter-dialog/filter-dialog.component";
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-main',
@@ -27,14 +28,25 @@ export class MainComponent implements AfterViewInit {
     private route: ActivatedRoute,
     public api: ApiService,
     private mapboxService: MapboxService,
-    public state: StateService
+    public state: StateService,
+    @Inject(DOCUMENT) private document: Document,
   ) {
     console.log('MainComponent constructor');
     this.route.params.pipe(
       takeUntilDestroyed(),
     ).subscribe((params) => {
       this.state.workspaceId.set(params['workspaceId']);
-      this.api.fetchData(params['workspaceId']).subscribe(() => {});
+      this.api.fetchData(params['workspaceId']).subscribe((workspace) => {
+        for (const key of ['og:url', 'twitter:url']) {
+          const metaDescription = this.document.querySelector(`meta[property="${key}"]`);
+          if (metaDescription) {
+            metaDescription.setAttribute('content', `https://app.tafmap.org.il/${params['workspaceId']}`);
+          } else {
+            console.log(`Meta tag not found: ${key}`);
+          }
+        }
+      });
+
     });
     this.route.fragment.pipe(
       take(1)

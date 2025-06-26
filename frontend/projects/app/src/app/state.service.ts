@@ -140,7 +140,7 @@ export class StateService {
           relativeTo: this.route, fragment
         });
       }
-    });    
+    });
   }
 
   updateStateFromFragment(fragment: string | null) {
