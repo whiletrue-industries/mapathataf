@@ -15,7 +15,7 @@
                         <th class='name'>שם מזהה</th>
                         <th class='age-group'>גיל</th>
                         <th class='subsidized'>סבסוד</th>
-                        <th class='guidance'>הדרכה</th>
+                        <th class='mentoring'>הדרכה</th>
                         <th class='licensing'>רישוי</th>
                     } @else {
                         <th class='kind'>סוג</th>
@@ -55,11 +55,13 @@
                         </td>
                         @if (state.section() === 'education') {
                             <td class='subsidized'><span [class]='item.resolved.subsidized ? "yes" : "no"'>{{ item.resolved.subsidized ? "כן" : "לא" }}</span></td>
-                            <td class='guidance'><span [class]='item.resolved.mentoring_type'>
+                            <td class='mentoring'><span [class]='item.resolved.mentoring_type'>
                                 @if (item.resolved.mentoring_type === 'municipal') {
                                     עירונית
                                 } @else if (item.resolved.mentoring_type === 'private') {
                                     פרטית
+                                } @else if (item.resolved.mentoring_type === 'not-mentored') {
+                                    אין/לא ידוע
                                 } @else {
                                     &mdash;
                                 }

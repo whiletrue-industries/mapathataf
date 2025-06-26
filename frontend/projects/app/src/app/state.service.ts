@@ -10,7 +10,7 @@ export type ResultItem = {
   kind: 'item' | 'street';
 };
 
-export type FilterKind = 'age_group' | 'health_subkind' | 'community_subkind' | 'licensing' | 'subsidy' | 'guidance';
+export type FilterKind = 'age_group' | 'health_subkind' | 'community_subkind' | 'licensing' | 'subsidy' | 'mentoring';
 @Injectable({
   providedIn: 'root'
 })
@@ -47,9 +47,9 @@ export class StateService {
         return this.filterSubsidy()!.includes(item.resolved.subsidized ? 'yes' : 'no');
       });
     }
-    if (this.filterGuidance() && this.section() === 'education') {
+    if (this.filterMentoring() && this.section() === 'education') {
       items = items.filter(item => {
-        return this.filterGuidance()!.includes(item.resolved.mentoring_type);
+        return this.filterMentoring()!.includes(item.resolved.mentoring_type);
       });
     }
     return items;
@@ -80,7 +80,7 @@ export class StateService {
   filterCommunitySubkind = signal<string[] | null>(null);
   filterLicensing = signal<string[] | null>(null);
   filterSubsidy = signal<string[] | null>(null);
-  filterGuidance = signal<string[] | null>(null);
+  filterMentoring = signal<string[] | null>(null);
 
   filterCount = computed(() => {
     let count = 0;
@@ -94,7 +94,7 @@ export class StateService {
     if (this.section() === 'education') {
       if (this.filterLicensing()) count++;
       if (this.filterSubsidy()) count++;
-      if (this.filterGuidance()) count++;
+      if (this.filterMentoring()) count++;
     }
     return count;
   });
@@ -118,7 +118,7 @@ export class StateService {
         this.filterCommunitySubkind(),
         this.filterLicensing(),
         this.filterSubsidy(),
-        this.filterGuidance()
+        this.filterMentoring()
       ]) {
         if (filter && filter.length > 0) {
           parts.push(filter.join(';'));
@@ -168,7 +168,7 @@ export class StateService {
         this.filterCommunitySubkind.set(parts[2] ? parts[2].split(';') : null);
         this.filterLicensing.set(parts[3] ? parts[3].split(';') : null);
         this.filterSubsidy.set(parts[4] ? parts[4].split(';') : null);
-        this.filterGuidance.set(parts[5] ? parts[5].split(';') : null);
+        this.filterMentoring.set(parts[5] ? parts[5].split(';') : null);
         parts = parts.slice(6);
       }
 

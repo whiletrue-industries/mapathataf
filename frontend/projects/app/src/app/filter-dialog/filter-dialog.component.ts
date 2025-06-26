@@ -22,7 +22,7 @@ export class FilterDialogComponent {
     const community_subkind = this.state.filterCommunitySubkind;
     const licensing = this.state.filterLicensing;
     const subsidy = this.state.filterSubsidy;
-    const guidance = this.state.filterGuidance;
+    const mentoring = this.state.filterMentoring;
     switch (this.state.filterOptions()) {
       case 'age_group':
         return age_group;
@@ -34,8 +34,8 @@ export class FilterDialogComponent {
         return licensing;
       case 'subsidy':
         return subsidy;
-      case 'guidance':
-        return guidance;
+      case 'mentoring':
+        return mentoring;
       default:
         return null;
     }
@@ -84,10 +84,11 @@ export class FilterDialogComponent {
           { value: 'yes', label: 'מסובסד' },
           { value: 'no', label: 'לא מסובסד' },
         ];
-      case 'guidance':
+      case 'mentoring':
         return [
           { value: 'municipal', label: 'עירונית' },
           { value: 'private', label: 'פרטית' },
+          { value: 'not-mentored', label: 'אינו מודרך/לא ידוע' },
         ];
       default:
         return [];
