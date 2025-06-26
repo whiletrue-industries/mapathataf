@@ -20,8 +20,8 @@ export class StateService {
   items = computed(() => {
     let items = this.api.items();
     const section = this.section();
-    console.log('StateService items for section:', section, items.length);
     items = items.filter(item => item.resolved.facility_kind === section);
+    console.log('StateService items for section:', section, items.length);
     if (this.filterAgeGroup()) {
       items = items.filter(item => {
         return this.filterAgeGroup()!.includes(item.resolved.age_group);
@@ -85,11 +85,17 @@ export class StateService {
   filterCount = computed(() => {
     let count = 0;
     if (this.filterAgeGroup()) count++;
-    if (this.filterHealthSubkind()) count++;
-    if (this.filterCommunitySubkind()) count++;
-    if (this.filterLicensing()) count++;
-    if (this.filterSubsidy()) count++;
-    if (this.filterGuidance()) count++;
+    if (this.section() === 'health') {
+      if (this.filterHealthSubkind()) count++;
+    }
+    if (this.section() === 'community') {
+      if (this.filterCommunitySubkind()) count++;
+    }
+    if (this.section() === 'education') {
+      if (this.filterLicensing()) count++;
+      if (this.filterSubsidy()) count++;
+      if (this.filterGuidance()) count++;
+    }
     return count;
   });
 
