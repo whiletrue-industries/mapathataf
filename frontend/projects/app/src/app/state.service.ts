@@ -62,7 +62,7 @@ export class StateService {
     const id = this.selectedId();
     const items = this.items();
     if (id) {
-      const ret = items.find((item) => item.info._id === id);
+      const ret = items.find((item) => item.id === id);
       // console.log('ITEM', id, ret);
       return ret || null;
     }

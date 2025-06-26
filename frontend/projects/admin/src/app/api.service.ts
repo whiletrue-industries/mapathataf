@@ -157,7 +157,7 @@ export class ApiService {
           this.privilege.set(item._p || 0);
           this.prepare(item);
           this.items.update((items) => {
-            const index = items.findIndex(i => i.info._id === item.info._id);
+            const index = items.findIndex(i => i.id === item.id);
             if (index !== -1) {
               items[index] = item; // Update existing item
             }

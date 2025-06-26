@@ -25,9 +25,9 @@
                 </tr>
             </thead>
             <tbody>
-                @for (item of state.items(); track item.info._id) {
-                    <tr class='item' (click)='state.selectId(item.info._id)' [class.active]='state.selectedId() === item.info._id' [attr.data-id]='item.info._id'>
-                        <td class='toggle' [class.active]='state.selectedId() === item.info._id'>
+                @for (item of state.items(); track item.id) {
+                    <tr class='item' (click)='state.selectId(item.id)' [class.active]='state.selectedId() === item.id' [attr.data-id]='item.id'>
+                        <td class='toggle' [class.active]='state.selectedId() === item.id'>
                             <div>
                                 <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M1.17188 6.85156L5 3.02344L8.82812 6.85156L10 5.67969L5 0.679688L0 5.67969L1.17188 6.85156Z" fill="#053856"/>
@@ -69,7 +69,7 @@
                             <td class='licensing'><span [class]='item.resolved.license_status_code' [title]='item.resolved.license_status'></span></td>
                         }
                     </tr>
-                    @if (item.info._id === state.selectedId()) {
+                    @if (item.id === state.selectedId()) {
                         @if (state.section() === 'education') {
                             <tr class='details'>
                                 <td colspan='6' class='details'>

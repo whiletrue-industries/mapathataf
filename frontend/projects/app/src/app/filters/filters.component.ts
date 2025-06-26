@@ -37,7 +37,7 @@ export class FiltersComponent {
         }).map(item => {
           return {
             name: item.resolved.name,
-            id: item.info._id,
+            id: item.id,
             kind: 'item',
           };
         });

@@ -11,6 +11,8 @@ export class StateService {
   appPublication = signal('all');
   adminUpdated = signal('all');
   userUpdated = signal('all');
+  licensingStatus = signal('all');
+  mentoringType = signal('all');
 
   filterState = computed(() => 
     `${this.facilityKind()}-${this.itemSource()}-${this.appPublication()}-${this.adminUpdated()}-${this.userUpdated()}`

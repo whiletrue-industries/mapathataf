@@ -42,6 +42,28 @@
                 <option value='not-updated'>לא עודכנו</option>
             </select>
         </div>
+        @if (state.facilityKind() === 'education') {
+            <div class='filter'>
+                <label>לפי סטטוס רישוי</label>
+                <select [(ngModel)]='state.licensingStatus'>
+                    <option value='all'>הכל</option>
+                    <option value='valid'>רישיון בתוקף</option>
+                    <option value='in_progress'>בתהליך רישוי</option>
+                    <option value='did_not_apply'>לא הוגשה בקשה לרישוי</option>
+                    <option value='not_needed'>מתחת ל-7 ילדים ואינו דורש רישוי</option>
+                    <option value='none'>לא ידוע</option>
+                </select>
+            </div>
+            <div class='filter'>
+                <label>לפי הדרכה</label>
+                <select [(ngModel)]='state.mentoringType'>
+                    <option value='all'>הכל</option>
+                    <option value='municipal'>עירונית</option>
+                    <option value='private'>פרטית</option>
+                    <option value='not-mentored'>לא מודרך/לא ידוע</option>
+                </select>
+            </div>
+        }
     </div>
     <div class="items">
         <div class='top-line'>
@@ -57,7 +79,7 @@
             </div>
         </div>
 
-        @for (item of filteredItems(); track item.info._id) {
+        @for (item of filteredItems(); track item.id) {
             <app-item-list-item [item]='item'></app-item-list-item>
         }
     </div>

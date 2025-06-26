@@ -40,8 +40,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             coordinates: [item.resolved.lng, item.resolved.lat],
           },
           properties: {
-            active: item.info._id === activeId,
-            id: item.info._id,
+            active: item.id === activeId,
+            id: item.id,
             kind: item.resolved.facility_kind,
           }
         };

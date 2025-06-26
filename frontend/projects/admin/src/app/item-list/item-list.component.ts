@@ -34,7 +34,16 @@ export class ItemListComponent {
     if (this.state.userUpdated() !== 'all') {
       items = items.filter(item => !!item.user?.updated_at === (this.state.userUpdated() === 'updated'));
     }
-
+    if (this.state.licensingStatus() !== 'all') {
+      if (this.state.facilityKind() === 'education') {
+        items = items.filter(item => item.resolved.license_status_code === this.state.licensingStatus());
+      }
+    }
+    if (this.state.mentoringType() !== 'all') {
+      if (this.state.facilityKind() === 'education') {
+        items = items.filter(item => item.resolved.mentoring_type === this.state.mentoringType());
+      }
+    }
     items = items.sort((a, b) => a.resolved?.name?.localeCompare(b.resolved?.name));
 
     return items;
