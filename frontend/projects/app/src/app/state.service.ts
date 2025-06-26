@@ -60,7 +60,9 @@ export class StateService {
     const id = this.selectedId();
     const items = this.items();
     if (id) {
-      return items.find((item) => item.info._id === id);
+      const ret = items.find((item) => item.info._id === id);
+      // console.log('ITEM', id, ret);
+      return ret || null;
     }
     return null;
   });

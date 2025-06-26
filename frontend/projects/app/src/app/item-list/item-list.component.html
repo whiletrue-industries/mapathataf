@@ -69,7 +69,7 @@
                                             @if (item.resolved.symbol_text || item.resolved.license_status) {
                                                 <div class='deets'>
                                                     @if (item.resolved.symbol_text) { <div>סמל מעון: {{ item.resolved.symbol_text }}</div> }
-                                                    @if (item.resolved.license_status) { <div>רישוי: {{ item.resolved.license_status }}</div> }
+                                                    @if (item.resolved.license_status) { <div>רישוי ({{item.resolved.school_year}}): {{ item.resolved.license_status }}</div> }
                                                 </div>
                                             }
                                             @if(item.resolved.phone) {<div class='phone'>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
