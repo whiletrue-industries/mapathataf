@@ -69,7 +69,7 @@
                 }
             </app-item-edit-section>
         }
-        @if (mode === 'admin' && !item.official || !item.official.length) {
+        @if (mode === 'admin' && (!item.official || !item.official.length)) {
             @if (item.admin._private_deleted) {
                 <div class='button restore' (click)='setDeleted(false)'>
                     פריט זה נמחק על ידי הרשות - לחץ לשחזור

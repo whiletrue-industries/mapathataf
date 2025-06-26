@@ -43,4 +43,45 @@
     strong ~ app-item-edit-field {
         margin-right: 16px;
     }
+
+    .legend {
+        flex-flow: row nowrap;
+        gap: 0;
+        padding: 4px 8px;
+        background-color: @color-gray-1;
+        position: absolute;
+        top: -17px;
+        left: 32px;
+        display: none;
+
+        span {
+            display: inline-block;
+            padding: 4px 8px;
+            border-left: 1px solid @color-gray-2;
+            color: @color-text;
+            font-size: 14px;
+            padding-right: 24px;
+            .background-image;
+            background-position: center right 8px;
+            background-size: 12px;
+
+            &:last-child {
+                border-left: none;
+            }
+
+            &.private-field {
+                background-image: url(../../../public/icon-private-field.svg);
+            }
+            &.public-field {
+                background-image: url(../../../public/icon-public-field.svg);
+            }
+            &.editable-field {
+                background-image: url(../../../public/icon-edit.svg);
+            }
+        }
+    }
+
+    &:hover .legend {
+        display: flex;
+    }
 }

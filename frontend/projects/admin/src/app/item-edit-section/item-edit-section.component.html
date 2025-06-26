@@ -4,6 +4,13 @@
     } @else {
         <h4 class='header'>{{ header }}</h4>
     }
+    @if (editable) {
+        <div class='legend'>
+            <span class='private-field'>שדות לשימוש פנימי</span>
+            <span class='public-field'>שדות שיוצגו למשתמשים</span>
+            <span class='editable-field'>ניתן לעריכה</span>
+        </div>
+    }
     @if (fields().length > 0) {
         @for (field of fields(); track field.name) {
             @if (field.type === 'section') {

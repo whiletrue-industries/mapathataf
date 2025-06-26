@@ -1,42 +1,39 @@
-<div class='field' [class.text]='field.type === "text"'
-     [class.boolean]='field.type === "boolean"'
-     [class.enum]='field.type === "enum"'>
-    @if (!justIcon) {
-        <label>{{field.label}}:</label>
-    }
-    @if (editing()) {
-        @switch (field.type) {
-             @case ('text') {
-                <input type='text' [(ngModel)]='value' (blur)='save()' #textInput/>
-             }
-             @case ('boolean') {
-                <input type='checkbox' [(ngModel)]='value' (change)='save()'/>
-             }
-             @case ('enum') {
-                <select [(ngModel)]='value' (change)='save()'>
-                    @for (option of field.options; track option) {
-                        <option [value]='option.id'>{{option.display}}</option>
-                    }
-                </select>
-             }
-        }
-    } @else {
-        @if (editable) {
-            @if (!justIcon) {
-                @if (field.value !== undefined && field.value !== null) {
-                    <span class='value editable' (click)='editing.set(true)'>{{field.value}}</span>
+@let field_ = field();
+@if (field_) {
+    <div class='field' [class.text]='field_.type === "text"'
+        [class.boolean]='field_.type === "boolean"'
+        [class.enum]='field_.type === "enum"'>
+        <label [class.private]='privateField()' [class.editable]='editable()'>{{field_.label}}:</label>
+        @if (editing()) {
+            @switch (field_.type) {
+                @case ('text') {
+                    <input type='text' [(ngModel)]='value' (blur)='save()' #textInput/>
+                }
+                @case ('boolean') {
+                    <input type='checkbox' [(ngModel)]='value' (change)='save()'/>
+                }
+                @case ('enum') {
+                    <select [(ngModel)]='value' (change)='save()' (blur)='save()'>
+                        @for (option of field_.options; track option) {
+                            <option [value]='option.id'>{{option.display}}</option>
+                        }
+                    </select>
+                }
+            }
+        } @else {
+            @if (editable()) {
+                @if (field_.value !== undefined && field_.value !== null) {
+                    <span class='value editable' (click)='editing.set(true)'>{{field_.value}}</span>
                 } @else {
                     <span class='value editable initial' (click)='editing.set(true)'>לא הוזן</span>
                 }
             } @else {
-                <span class='value editable' (click)='editing.set(true)'></span>
-            }
-        } @else {
-            @if (field.value !== undefined && field.value !== null) {
-                <span class='value'>{{field.value}}</span>
-            } @else {
-                <span class='value initial'>לא הוזן</span>
+                @if (field_.value !== undefined && field_.value !== null) {
+                    <span class='value'>{{field_.value}}</span>
+                } @else {
+                    <span class='value initial'>לא הוזן</span>
+                }
             }
         }
-    }
-</div>
+    </div>
+}

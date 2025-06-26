@@ -23,7 +23,21 @@
 
             flex: 1 0 auto;
             width: min-content;
-            min-width: 200px;
+            width: 250px;
+
+            &.editable {
+                width: 270px;
+                display: inline-block;
+                padding-right: 20px;
+                .background-image;
+                background-image: url('../../../public/icon-public-field.svg');
+                background-position: center right;
+                background-size: 12px;
+
+                &.private {
+                    background-image: url('../../../public/icon-private-field.svg');
+                }
+            }
         }
         input {
             &[type="text"] {

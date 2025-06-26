@@ -37,7 +37,7 @@ export class ItemEditComponent {
   FACILITY_KIND_FIELD: Field = {
     name: 'facility_kind',
     type: 'enum',
-    label: 'סוג מסגרת',
+    label: 'סוג מענה',
     options: this.FACILITY_KIND_OPTIONS
   };
   FACILITY_SUB_KIND_FIELD: { [key: string]: Field[] } = {
@@ -73,13 +73,13 @@ export class ItemEditComponent {
         {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
         {  name: 'activity_hours', type: 'text', label: 'שעות פעילות' },
         {  name: 'more_details', type: 'text', label: 'פרטים נוספים' },
-        {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל'     },
+        {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל', internal: true     },
         {  name: '_private_safe_room',        type: 'enum',    label: 'מרחב מוגן', options: this.SAFE_ROOM_OPTIONS },
 
       ...(itemKind === 'education' ? educationUserFields : []),
 
       {  name: 'פרטי קשר', type: 'section' },
-        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת'  },
+        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת', internal: true },
         {  name: 'url',   type: 'text',    label: 'כתובת אתר'  },
         {  name: 'phone', type: 'text', label: 'טלפון' },
         {  name: '_private_email', type: 'text', label: 'דוא"ל' },
@@ -88,9 +88,9 @@ export class ItemEditComponent {
   FIELD_CONFIG_USER_EDUCATION = computed<Field[]>(() => [
 
     {  name: 'מידע נוסף על מסגרות חינוך', type: 'section' },
-      { name: 'education_stream', type: 'text', label: 'זרם חינוכי' },
-      { name: 'classes_count', type: 'text', label: 'מספר כיתות' },
-      { name: 'children_count', type: 'text', label: 'מספר ילדים' },
+      { name: 'education_stream', type: 'text', label: 'זרם חינוכי', internal: true },
+      { name: 'classes_count', type: 'text', label: 'מספר כיתות', internal: true },
+      { name: 'children_count', type: 'text', label: 'מספר ילדים', internal: true },
       {  name: '_private_feeding',        type: 'enum',    label: 'הזנה', options: [
           { 'id': 'catering', 'display': 'קייטרינג' },
           { 'id': 'kitchen', 'display': 'מבשלת' },
@@ -104,25 +104,34 @@ export class ItemEditComponent {
     const itemKind = this.itemKind();
     const item = this.api.item();
     return [
-      {  name: 'app_publication', type: 'boolean', label: 'פרסום באפליקציה' },
+      {  name: 'app_publication', type: 'boolean', label: 'פרסום באפליקציה', internal: true },
       ...(item.resolved?.facility_kind_editable ? [this.FACILITY_KIND_FIELD] : []),
       ...(this.FACILITY_SUB_KIND_FIELD[itemKind] || []),
 
       {  name: 'תיאור המענה', type: 'section' },
         {  name: 'name',        type: 'text',    label: 'שם'    },
         {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
-        {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל ' },
+        {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל ', internal: true },
+
+        ...(itemKind === 'education' ? [
+          { name: 'owner_kind',    type: 'enum',   label: 'סוג ארגון מפעיל', options: [
+            { 'id': 'national', 'display': 'רשת ארצית' },
+            { 'id': 'municipal', 'display': 'רשת עירונית' },
+            { 'id': 'private', 'display': 'פרטי' }
+          ], internal: true },
+        ] as Field[] : []),
+
         {  name: '_private_safe_room',        type: 'enum',    label: 'מרחב מוגן', options: this.SAFE_ROOM_OPTIONS },
         {  name: '_private_notes', type: 'text', label: 'הערות נוספות' },
 
       {  name: 'מיקום', type: 'section' },
         {  name: 'address',     type: 'text',    label: 'כתובת'  },
-        {  name: 'neighborhood',     type: 'enum',    label: 'שכונה', options: this.api.neighborhoodOptions() },
+        {  name: 'neighborhood',     type: 'enum',    label: 'שכונה', options: this.api.neighborhoodOptions(), internal: true },
 
       ...(itemKind === 'education' ? educationAdminFields : []),
 
       {  name: 'פרטי קשר', type: 'section' },
-        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת'  },
+        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת', internal: true },
         {  name: 'url',   type: 'text',    label: 'כתובת אתר אינטרנט'  },
         {  name: 'phone', type: 'text', label: 'טלפון' },
         {  name: '_private_email', type: 'text', label: 'דוא"ל' },
@@ -131,13 +140,6 @@ export class ItemEditComponent {
     ];
   });
   FIELD_CONFIG_ADMIN_EDUCATION = computed<Field[]>(() => [
-
-    {  name: 'מידע נוסף על מסגרות חינוך', type: 'section' },
-      {  name: 'owner_kind',        type: 'enum',    label: 'סוג',  options: [
-          { 'id': 'national', 'display': 'רשת ארצית' },
-          { 'id': 'municipal', 'display': 'רשת עירונית' },
-          { 'id': 'private', 'display': 'פרטי' }
-        ] },
 
     {  name: 'רישוי', type: 'section' },
       {  name: 'licensing_not_needed',     type: 'boolean',    label: 'מתחת ל-7 ילדים ואינו דורש רישוי' },

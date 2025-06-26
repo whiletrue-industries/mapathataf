@@ -13,6 +13,7 @@ export type Field = {
   options?: Option[];
   hide?: boolean;
   value?: any;
+  internal?: boolean;
 };
 
 export function fieldValue(data: any, field: Field): any {
@@ -32,7 +33,9 @@ export function fieldValue(data: any, field: Field): any {
 
 @Component({
   selector: 'app-item-edit-section',
-  imports: [ItemEditFieldComponent],
+  imports: [
+    ItemEditFieldComponent
+  ],
   templateUrl: './item-edit-section.component.html',
   styleUrl: './item-edit-section.component.less'
 })
@@ -60,7 +63,8 @@ export class ItemEditSectionComponent implements OnChanges{
               type: field.type,
               label: field.label,
               value: fieldValue(this.data, field),
-              options: field.options
+              options: field.options,
+              internal: field.internal || false 
             });
           }
         });

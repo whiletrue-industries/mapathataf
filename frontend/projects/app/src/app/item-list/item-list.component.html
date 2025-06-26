@@ -75,6 +75,9 @@
                                 <td colspan='6' class='details'>
                                     <div class='details'>
                                         <div class='inner'>
+                                            @if (item.resolved.more_details) {
+                                                <div class='more-details'>פרטים נוספים: {{ item.resolved.more_details }}</div>
+                                            }
                                             @if (item.resolved.activity_hours) {
                                                 <div class='activity-hours'>שעות פעילות: {{ item.resolved.activity_hours }}</div>
                                             }
@@ -101,6 +104,9 @@
                                 <td colspan='4' class='details'>
                                     <div class='details'>
                                         <div class='inner'>
+                                            @if (item.resolved.more_details) {
+                                                <div class='more-details'>פרטים נוספים: {{ item.resolved.more_details }}</div>
+                                            }
                                             @if (item.resolved.activity_hours) {
                                                 <div class='activity-hours'>שעות פעילות: {{ item.resolved.activity_hours }}</div>
                                             }

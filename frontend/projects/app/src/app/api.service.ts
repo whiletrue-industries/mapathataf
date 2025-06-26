@@ -38,6 +38,7 @@ export function resolveItem(item: any): any {
     school_year: resolve(item, 'school_year'),
     subsidized: item?.official?.some((o: any) => o.source === 'mol') || false,
     activity_hours: resolve(item, 'activity_hours'),
+    more_details: resolve(item, 'more_details'),
   };
   if (item.resolved.license_status === 'לא הוגשה בקשה לרישוי') {
     item.resolved.license_status_code = 'did_not_apply';

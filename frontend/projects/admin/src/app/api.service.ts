@@ -123,7 +123,7 @@ export class ApiService {
         return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}/items`, {params, headers});
       }),
       tap((data) => {
-        data = data.sort((a, b) => a.id.localeCompare(b.id)); 
+        data = data.sort((a, b) => a.id?.localeCompare(b.id)); 
         data.forEach((item) => {
           this.prepare(item);
         });
