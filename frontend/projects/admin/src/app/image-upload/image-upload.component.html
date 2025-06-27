@@ -1,0 +1,11 @@
+<input type="file" id="fileInput" accept="image/*" (change)='processImage($event)' (cancel)='cancel()' #fileInput />
+@if (dataUrl()) {
+    <div class="image-preview">
+        <img [src]="dataUrl()" alt="Image Preview" />
+    </div>
+    <div class='controls'>
+        <button (click)='clicker()'>החלפת תמונה</button>
+        <button (click)='save()'>שמירה</button>
+        <button (click)='cancel()'>ביטול</button>
+    </div>
+}

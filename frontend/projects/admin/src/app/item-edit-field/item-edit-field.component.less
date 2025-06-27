@@ -50,7 +50,7 @@
             }
             text-align: right;
         }
-        .value {
+        span.value {
             color: @color-text;
             font-weight: 600;
             flex: 1 1 100%;
@@ -75,5 +75,23 @@
                 }
             }
         }
+        img.value {
+            width: 100%;
+
+            &.editable {
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.8;
+                }
+            }
+        }
+
+        &.image {
+            align-items: flex-start;
+            span.value.editable {
+                background-position: top 7px right;
+            }
+        }
+
     }
 }

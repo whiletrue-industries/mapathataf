@@ -8,7 +8,7 @@ export type Option = {
 
 export type Field = {
   name: string;
-  type?: 'text' | 'boolean' | 'enum' | 'section';
+  type?: 'text' | 'boolean' | 'enum' | 'section' | 'image';
   label?: string;
   options?: Option[];
   hide?: boolean;

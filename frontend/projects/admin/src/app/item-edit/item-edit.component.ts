@@ -83,6 +83,10 @@ export class ItemEditComponent {
         {  name: 'url',   type: 'text',    label: 'כתובת אתר'  },
         {  name: 'phone', type: 'text', label: 'טלפון' },
         {  name: '_private_email', type: 'text', label: 'דוא"ל' },
+
+      {  name: 'תמונת המסגרת', type: 'section' },
+        {  name: 'photo',   type: 'image',    label: 'תמונה מייצגת של המסגרת' },
+        
     ];
   });
   FIELD_CONFIG_USER_EDUCATION = computed<Field[]>(() => [

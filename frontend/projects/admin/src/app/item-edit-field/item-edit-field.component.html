@@ -2,6 +2,7 @@
 @if (field_) {
     <div class='field' [class.text]='field_.type === "text"'
         [class.boolean]='field_.type === "boolean"'
+        [class.image]='field_.type === "image"'
         [class.enum]='field_.type === "enum"'>
         <label [class.private]='privateField()' [class.editable]='editable()'>{{field_.label}}:</label>
         @if (editing()) {
@@ -19,17 +20,30 @@
                         }
                     </select>
                 }
+                @case ('image') {
+                    <app-image-upload [value]='value' (update)='save()'></app-image-upload>
+                }
             }
         } @else {
             @if (editable()) {
                 @if (field_.value !== undefined && field_.value !== null) {
-                    <span class='value editable' (click)='editing.set(true)'>{{field_.value}}</span>
+                    @if (field_.type !== 'image') {
+                        <span class='value editable' (click)='editing.set(true)'>{{field_.value}}</span>
+                    } @else {
+                        <span class='value editable initial'>לחץ על התמונה לעריכה
+                            <img [src]='field_.value' class='value editable' (click)='editing.set(true)'/>
+                        </span>
+                    }
                 } @else {
                     <span class='value editable initial' (click)='editing.set(true)'>לא הוזן</span>
                 }
             } @else {
                 @if (field_.value !== undefined && field_.value !== null) {
-                    <span class='value'>{{field_.value}}</span>
+                    @if (field_.type !== 'image') {
+                        <span class='value'>{{field_.value}}</span>
+                    } @else {
+                        <img [src]='field_.value' class='value'/>
+                    }
                 } @else {
                     <span class='value initial'>לא הוזן</span>
                 }

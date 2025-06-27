@@ -2,12 +2,14 @@ import { Component, computed, effect, ElementRef, EventEmitter, input, Output, s
 import { Field, fieldValue } from '../item-edit-section/item-edit-section.component';
 import { FormsModule } from '@angular/forms';
 import { timer } from 'rxjs';
+import { ImageUploadComponent } from "../image-upload/image-upload.component";
 
 @Component({
   selector: 'app-item-edit-field',
   imports: [
-    FormsModule
-  ],
+    FormsModule,
+    ImageUploadComponent
+],
   templateUrl: './item-edit-field.component.html',
   styleUrl: './item-edit-field.component.less'
 })
