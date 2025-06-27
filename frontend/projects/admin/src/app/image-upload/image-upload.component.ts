@@ -30,7 +30,7 @@ export class ImageUploadComponent implements AfterViewInit{
 
     /* 1-2) decode & resize (max width 1024, keep aspect) */
     const bmp   = await createImageBitmap(file);          // fast everywhere except iOS ≤ 12
-    const scale = Math.min(1, 1024 / bmp.width);
+    const scale = Math.min(1, 640 / bmp.width);
     const w     = Math.round(bmp.width  * scale);
     const h     = Math.round(bmp.height * scale);
 
@@ -45,7 +45,7 @@ export class ImageUploadComponent implements AfterViewInit{
 
     /* 3-4) to JPEG @ 85 % and stash the Data-URI */
     this.dataUrl.set(canvas.toDataURL('image/jpeg', 0.85));
-    console.log('ImageUploadComponent: processImage - dataUrl', this.dataUrl());
+    // console.log('ImageUploadComponent: processImage - dataUrl', this.dataUrl());
   }
 
   save(): void {
