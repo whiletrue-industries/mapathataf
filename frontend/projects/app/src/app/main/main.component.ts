@@ -37,14 +37,6 @@ export class MainComponent implements AfterViewInit {
     ).subscribe((params) => {
       this.state.workspaceId.set(params['workspaceId']);
       this.api.fetchData(params['workspaceId']).subscribe((workspace) => {
-        for (const key of ['og:url', 'twitter:url']) {
-          const metaDescription = this.document.querySelector(`meta[property="${key}"]`);
-          if (metaDescription) {
-            metaDescription.setAttribute('content', `https://app.tafmap.org.il/${params['workspaceId']}`);
-          } else {
-            console.log(`Meta tag not found: ${key}`);
-          }
-        }
       });
 
     });

@@ -1,8 +1,9 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from './api.service';
 import { ReplaySubject, Subject, timer } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 export type ResultItem = {
   name: string;
@@ -101,7 +102,8 @@ export class StateService {
     return count;
   });
 
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService) {
+  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, @Inject(DOCUMENT) private document: Document,
+  ) {
     effect(() => {
       const section = this.section();
       console.log('MainComponent section:', section);
@@ -140,6 +142,33 @@ export class StateService {
           relativeTo: this.route, fragment
         });
       }
+    });
+    effect(() => {
+      const workspace = this.api.workspace();
+      const item = this.selectedItem();
+      for (const key of ['og:url', 'twitter:url']) {
+        const metaDescription = this.document.querySelector(`meta[property="${key}"]`);
+        if (metaDescription) {
+          metaDescription.setAttribute('content', `https://app.tafmap.org.il/${this.workspaceId()}`);
+        } else {
+          console.log(`Meta tag not found: ${key}`);
+        }
+      }
+      let title = 'מפת הטף';
+      if (workspace && workspace.city) {
+        title += ` - ${workspace.city}`;
+      }
+      if (item && item.resolved.name) {
+        title += `: ${item.resolved.name}`;
+      }
+      for (const key of ['og:title', 'twitter:title']) {
+        const metaTitle = this.document.querySelector(`meta[property="${key}"]`);
+        if (metaTitle) {
+          metaTitle.setAttribute('content', title);
+        }
+      }
+      this.document.querySelector('meta[name="title"]')?.setAttribute('content', title);
+      this.document.title = title;
     });
   }
 
