@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DestroyRef, effect, ElementRef, Input, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, computed, DestroyRef, effect, ElementRef, Input, signal, ViewChild, WritableSignal } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Observable, take, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,6 +15,18 @@ export class ItemListComponent implements AfterViewInit{
 
   expanded = signal(false)
   initialized = signal(false);
+
+  contactFormLink = computed(() => {
+    const item = this.state.selectedItem();
+    const workspace = this.api.workspace();
+    const facilityName = item?.resolved?.name || '';
+    const facilityAddress = item?.resolved?.address || '';
+    const facilityCity = workspace?.city || '';
+    const facilityKind = item?.resolved?.facility_kind || '';
+    const facilitySubKind = item?.resolved?.facility_sub_kind || '';
+    const kind = facilityKind + (facilitySubKind ? ` (${facilitySubKind})` : '');
+    return `https://www.jotform.com/form/251761121414042?facility_name=${encodeURIComponent(facilityName)}&facility_address=${encodeURIComponent(facilityAddress)}&facility_city=${encodeURIComponent(facilityCity)}&facility_kind=${encodeURIComponent(facilityKind)}`;
+  });
 
   constructor(public api: ApiService, private destroyRef: DestroyRef, private platform: PlatformService, private el: ElementRef, public state: StateService) {
     effect(() => {
