@@ -65,15 +65,23 @@ export class MapboxService {
     return this.http.get<any>(URL, {params}).pipe(
       map(response => response.suggestions || []),
       map(suggestions => suggestions.map((suggestion: any) => {
-        const street = suggestion?.context?.street;
-        if (!street) {
-          return null;
+        const address = suggestion?.context?.address;
+        if (address) {
+          return {
+            id: address.id,
+            name: address.name,
+            kind: 'street',
+          };
         }
-        return {
-          id: street.id,
-          name: street.name,
-          kind: 'street'
-        };
+        const street = suggestion?.context?.street;
+        if (street) {
+          return {
+            id: street.id,
+            name: street.name,
+            kind: 'street',
+          };
+        }
+        return null;
       }).filter((suggestion: any) => !!suggestion))
     );
   }
