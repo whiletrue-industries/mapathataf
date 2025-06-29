@@ -202,7 +202,7 @@
                                 padding: 12px 20px;
                                 // gap: 12px;
 
-                                .phone, .url, .address, .deets, .activity-hours, .more-details, .mentoring {
+                                .phone, .url, .address, .deets, .activity-hours, .more-details, .mentoring, .email, .manager {
                                     display: flex;
                                     flex-flow: row nowrap;
                                     align-items: center;
@@ -240,44 +240,38 @@
                                     }
                                 }
 
-                                .phone {
-                                    i {
-                                        background-image: url('../../../public/icon-phone.svg');
-                                    }
+                                .phone, .url, .email {
                                     a {
                                         text-decoration: underline;
                                         text-decoration-color: fade(@color-night, 50);
                                     }
                                 }
-                                .url {
-                                    i {
-                                        background-image: url('../../../public/icon-url.svg');
-                                    }
-                                    a {
-                                        text-decoration: underline;
-                                        text-decoration-color: fade(@color-night, 50);
-                                    }
+                                .phone i {
+                                    background-image: url('../../../public/icon-phone.svg');
+                                }
+                                .url i {
+                                    background-image: url('../../../public/icon-url.svg');
+                                }
+                                .email i {
+                                    background-image: url('../../../public/icon-email.svg');
                                 }
                                 .address i {
                                     background-image: url('../../../public/icon-address.svg');
                                 }
 
-                                .more-details {
-                                    i {
-                                        background-image: url('../../../public/icon-info.svg');
-                                    }
+                                .more-details i {
+                                    background-image: url('../../../public/icon-info.svg');
                                 }
 
-                                .mentoring {
-                                    i {
-                                        background-image: url('../../../public/icon-deets.svg');
-                                    }
+                                .mentoring i {
+                                    background-image: url('../../../public/icon-deets.svg');
                                 }
 
-                                .activity-hours {
-                                    i {
-                                        background-image: url('../../../public/icon-info.svg');
-                                    }
+                                .activity-hours i {
+                                    background-image: url('../../../public/icon-clock.svg');
+                                }
+                                .manager i {
+                                    background-image: url('../../../public/icon-person.svg');
                                 }
                             }
 

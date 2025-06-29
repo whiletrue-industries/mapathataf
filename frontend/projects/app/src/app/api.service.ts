@@ -22,6 +22,8 @@ export function resolveItem(item: any): any {
     name: resolve(item, 'name'),
     phone: resolve(item, 'phone'),
     url: resolve(item, 'url'),
+    email: resolve(item, 'email'),
+    manager_name: resolve(item, 'manager_name'),
     address: resolve(item, 'formatted_address') || resolve(item, 'address'),
     license_status: resolve(item, 'license_status'),
     licensing_not_needed: resolve(item, 'licensing_not_needed'),

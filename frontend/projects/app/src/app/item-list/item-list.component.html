@@ -74,10 +74,9 @@
                                                     <i></i>
                                                     @if (item.resolved.symbol_text) { <div>סמל מעון: {{ item.resolved.symbol_text }}</div> }
                                                     @if (item.resolved.license_status) { 
-                                                        <div>רישוי 
-                                                            @if (item.resolved.school_year) { 
-                                                                ({{item.resolved.school_year}}): 
-                                                            }
+                                                        <div>רישוי@if (item.resolved.school_year) { 
+                                                                ({{item.resolved.school_year}}) 
+                                                            }:
                                                             {{ item.resolved.license_status }}
                                                         </div> 
                                                     }
@@ -97,7 +96,9 @@
                                                 </div>
                                             }
 
+                                            @if(item.resolved.manager_name) {<div class='manager'><i></i>שם מנהל.ת:&nbsp;{{ item.resolved.manager_name }}</div>}
                                             @if(item.resolved.phone) {<div class='phone'><i></i>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
+                                            @if(item.resolved.email) {<div class='email'><i></i>דוא"ל:&nbsp;<a [href]='"mailto:" + item.resolved.email' target="_blank">{{ item.resolved.email }}</a></div>}
                                             @if(item.resolved.url) {<div class='url'><i></i>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
                                             <div class='address'><i></i>כתובת: {{ item.resolved.address }}</div>
                                         </div>
@@ -109,7 +110,9 @@
                                             @if (item.resolved.activity_hours) {
                                                 <div class='activity-hours'>שעות פעילות: {{ item.resolved.activity_hours }}</div>
                                             }
+                                            @if(item.resolved.manager_name) {<div class='manager'><i></i>שם מנהל.ת:&nbsp;{{ item.resolved.manager_name }}</div>}
                                             @if(item.resolved.phone) {<div class='phone'><i></i>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
+                                            @if(item.resolved.email) {<div class='email'><i></i>דוא"ל:&nbsp;<a [href]='"mailto:" + item.resolved.email' target="_blank">{{ item.resolved.email }}</a></div>}
                                             @if(item.resolved.url) {<div class='url'><i></i>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
                                             <div class='address'><i></i>כתובת: {{ item.resolved.address }}</div>
                                         </div>

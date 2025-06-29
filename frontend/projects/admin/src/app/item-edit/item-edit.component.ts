@@ -79,10 +79,10 @@ export class ItemEditComponent {
       ...(itemKind === 'education' ? educationUserFields : []),
 
       {  name: 'פרטי קשר', type: 'section' },
-        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת', internal: true },
+        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת' },
         {  name: 'url',   type: 'text',    label: 'כתובת אתר'  },
         {  name: 'phone', type: 'text', label: 'טלפון' },
-        {  name: '_private_email', type: 'text', label: 'דוא"ל' },
+        {  name: 'email', type: 'text', label: 'דוא"ל' },
 
       {  name: 'תמונת המסגרת', type: 'section' },
         {  name: 'photo',   type: 'image',    label: 'תמונה מייצגת של המסגרת' },
@@ -135,10 +135,10 @@ export class ItemEditComponent {
       ...(itemKind === 'education' ? educationAdminFields : []),
 
       {  name: 'פרטי קשר', type: 'section' },
-        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת', internal: true },
+        {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת' },
         {  name: 'url',   type: 'text',    label: 'כתובת אתר אינטרנט'  },
         {  name: 'phone', type: 'text', label: 'טלפון' },
-        {  name: '_private_email', type: 'text', label: 'דוא"ל' },
+        {  name: 'email', type: 'text', label: 'דוא"ל' },
         {  name: '_private_contact_details', type: 'text', label: 'פרטי קשר נוספים' },
 
     ];
