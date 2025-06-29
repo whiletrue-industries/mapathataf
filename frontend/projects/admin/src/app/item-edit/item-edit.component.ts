@@ -122,7 +122,7 @@ export class ItemEditComponent {
             { 'id': 'national', 'display': 'רשת ארצית' },
             { 'id': 'municipal', 'display': 'רשת עירונית' },
             { 'id': 'private', 'display': 'פרטי' }
-          ], internal: true },
+          ] },
         ] as Field[] : []),
 
         {  name: '_private_safe_room',        type: 'enum',    label: 'מרחב מוגן', options: this.SAFE_ROOM_OPTIONS },

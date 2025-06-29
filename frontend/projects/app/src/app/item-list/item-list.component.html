@@ -63,6 +63,18 @@
                                 <div class='details'>
                                     @if (state.section() === 'education') {
                                         <div class='inner'>
+                                            @if (item.resolved.owner_kind) {
+                                                <div class='owner-kind'>
+                                                    <i></i>סוג בעלות:&nbsp;
+                                                    @if (item.resolved.owner_kind === 'municipal') {
+                                                        רשת עירונית
+                                                    } @else if (item.resolved.owner_kind === 'private') {
+                                                        מסגרת פרטית
+                                                    } @else if (item.resolved.owner_kind === 'national') {
+                                                        רשת ארצית
+                                                    }
+                                                </div>
+                                            }
                                             @if (item.resolved.more_details) {
                                                 <div class='more-details'><i></i>פרטים נוספים: {{ item.resolved.more_details }}</div>
                                             }
