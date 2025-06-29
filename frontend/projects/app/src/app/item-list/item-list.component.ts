@@ -55,4 +55,10 @@ export class ItemListComponent implements AfterViewInit{
       this.initialized.set(true);
     });
   }
+
+  async shareRecord() {
+    const url = location.href;
+    const title = 'מפת הטף';
+    await navigator?.share({url});
+  }
 }

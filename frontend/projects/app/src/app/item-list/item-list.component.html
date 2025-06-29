@@ -58,10 +58,10 @@
                         }
                     </tr>
                     @if (item.id === state.selectedId()) {
-                        @if (state.section() === 'education') {
-                            <tr class='details'>
-                                <td colspan='5' class='details'>
-                                    <div class='details'>
+                        <tr class='details'>
+                            <td [attr.colspan]='state.section() === "education" ? 5 : 4' class='details'>
+                                <div class='details'>
+                                    @if (state.section() === 'education') {
                                         <div class='inner'>
                                             @if (item.resolved.more_details) {
                                                 <div class='more-details'><i></i>פרטים נוספים: {{ item.resolved.more_details }}</div>
@@ -101,23 +101,7 @@
                                             @if(item.resolved.url) {<div class='url'><i></i>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
                                             <div class='address'><i></i>כתובת: {{ item.resolved.address }}</div>
                                         </div>
-                                        @if (item.user?.photo) {
-                                            <div class='img'>
-                                                <img [src]='item.user.photo' alt='תמונת המסגרת'/>
-                                            </div>
-                                        }
-                                        <div class='bookend'>
-                                            <div class='inner'>
-                                                מצאת טעות בנתונים?
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        } @else {
-                            <tr class='details'>
-                                <td colspan='4' class='details'>
-                                    <div class='details'>
+                                    } @else {
                                         <div class='inner'>
                                             @if (item.resolved.more_details) {
                                                 <div class='more-details'>פרטים נוספים: {{ item.resolved.more_details }}</div>
@@ -129,20 +113,23 @@
                                             @if(item.resolved.url) {<div class='url'><i></i>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
                                             <div class='address'><i></i>כתובת: {{ item.resolved.address }}</div>
                                         </div>
-                                        @if (item.user?.photo) {
-                                            <div class='img'>
-                                                <img [src]='item.user.photo' alt='תמונת המסגרת'/>
-                                            </div>
-                                        }
-                                        <div class='bookend'>
-                                            <div class='inner'>
-                                                מצאת טעות בנתונים?
-                                            </div>
+                                    }
+                                    @if (item.user?.photo) {
+                                        <div class='img'>
+                                            <img [src]='item.user.photo' alt='תמונת המסגרת'/>
+                                        </div>
+                                    }
+                                    <div class='bookend'>
+                                        <div class='inner'>
+                                            מצאת טעות בנתונים?
+                                        </div>
+                                        <div class='inner' (click)='shareRecord()'>
+                                            שיתוף הרשומה
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                        }
+                                </div>
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>
