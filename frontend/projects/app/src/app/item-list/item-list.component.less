@@ -199,49 +199,78 @@
                                 flex-direction: column;
                                 align-items: flex-start;
                                 padding: 12px 20px;
-                                gap: 12px;
+                                // gap: 12px;
 
                                 .phone, .url, .address, .deets, .activity-hours, .more-details {
                                     display: flex;
                                     flex-flow: row nowrap;
                                     align-items: center;
                                     color: @color-night;
-                                    font-size: 16px;
+                                    font-size: 14px;
                                     font-weight: 400;
-                                    padding-right: 48px;
-                                    background-repeat: no-repeat;
-                                    background-size: 32px;
-                                    background-position: right center;
-                                    height: 32px;
+                                    padding-right: 24px;
+                                    min-height: 32px;
                                     white-space: wrap;
+                                    position: relative;
+
+                                    i {
+                                        position: absolute;
+                                        right: 0;
+                                        top: 50%;
+                                        transform: translateY(-50%);
+                                        display: inline-block;
+                                        width: 20px;
+                                        height: 16px;
+                                        border-radius: 8px;
+                                        background-color: @color-gray-1;
+                                        .background-image;
+                                        background-size: 12px;                            
+                                    }
                                 }
 
                                 .deets {
-                                    background-image: url('../../../public/icon-deets.svg');
                                     width: 100%;
                                     padding-left: 20px;
                                     justify-content: space-between;
-                                    font-size: 14px;
                                     font-weight: 600;
                                     flex-wrap: wrap;
+                                    i {
+                                        background-image: url('../../../public/icon-deets.svg');
+                                    }
                                 }
 
                                 .phone {
-                                    background-image: url('../../../public/icon-phone.svg');
+                                    i {
+                                        background-image: url('../../../public/icon-phone.svg');
+                                    }
                                     a {
                                         text-decoration: underline;
                                         text-decoration-color: fade(@color-night, 50);
                                     }
                                 }
                                 .url {
-                                    background-image: url('../../../public/icon-phone.svg');
+                                    i {
+                                        background-image: url('../../../public/icon-url.svg');
+                                    }
                                     a {
                                         text-decoration: underline;
                                         text-decoration-color: fade(@color-night, 50);
                                     }
                                 }
-                                .address {
+                                .address i {
                                     background-image: url('../../../public/icon-address.svg');
+                                }
+
+                                .more-details {
+                                    i {
+                                        background-image: url('../../../public/icon-info.svg');
+                                    }
+                                }
+
+                                .activity-hours {
+                                    i {
+                                        background-image: url('../../../public/icon-info.svg');
+                                    }
                                 }
                             }
 

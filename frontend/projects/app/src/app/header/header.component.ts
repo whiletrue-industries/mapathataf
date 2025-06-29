@@ -24,12 +24,8 @@ export class HeaderComponent {
       // href: 'https://data-city.my.canva.site/tafmap-guidelines'
     },
     {
-      title: 'הדרכה ופיקוח מסגרות חינוך',
+      title: 'פיקוח והדרכה',
       routerLink: ['/about', 'supervision'],    
-    },
-    {
-      title: 'צור קשר',
-      routerLink: ['/about', 'contact'],
     },
   ]
 
