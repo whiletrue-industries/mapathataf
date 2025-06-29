@@ -15,7 +15,6 @@
                         <th class='name'>שם מזהה</th>
                         <th class='age-group'>גיל</th>
                         <th class='subsidized'>סבסוד</th>
-                        <th class='mentoring'>הדרכה</th>
                         <th class='licensing'>רישוי</th>
                     } @else {
                         <th class='kind'>סוג</th>
@@ -55,24 +54,13 @@
                         </td>
                         @if (state.section() === 'education') {
                             <td class='subsidized'><span [class]='item.resolved.subsidized ? "yes" : "no"'>{{ item.resolved.subsidized ? "כן" : "לא" }}</span></td>
-                            <td class='mentoring'><span [class]='item.resolved.mentoring_type'>
-                                @if (item.resolved.mentoring_type === 'municipal') {
-                                    עירונית
-                                } @else if (item.resolved.mentoring_type === 'private') {
-                                    פרטית
-                                } @else if (item.resolved.mentoring_type === 'not-mentored') {
-                                    אין/לא ידוע
-                                } @else {
-                                    &mdash;
-                                }
-                            </span></td>
                             <td class='licensing'><span [class]='item.resolved.license_status_code' [title]='item.resolved.license_status'></span></td>
                         }
                     </tr>
                     @if (item.id === state.selectedId()) {
                         @if (state.section() === 'education') {
                             <tr class='details'>
-                                <td colspan='6' class='details'>
+                                <td colspan='5' class='details'>
                                     <div class='details'>
                                         <div class='inner'>
                                             @if (item.resolved.more_details) {
@@ -95,6 +83,20 @@
                                                     }
                                                 </div>
                                             }
+                                            @if (item.resolved.mentoring_type) {
+                                                <div class='mentoring'><i></i>הדרכת צוות:
+                                                    @if (item.resolved.mentoring_type === 'municipal') {
+                                                        עירונית
+                                                    } @else if (item.resolved.mentoring_type === 'private') {
+                                                        פרטית
+                                                    } @else if (item.resolved.mentoring_type === 'not-mentored') {
+                                                        אין/לא ידוע
+                                                    } @else {
+                                                        &mdash;
+                                                    }
+                                                </div>
+                                            }
+
                                             @if(item.resolved.phone) {<div class='phone'><i></i>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
                                             @if(item.resolved.url) {<div class='url'><i></i>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
                                             <div class='address'><i></i>כתובת: {{ item.resolved.address }}</div>
@@ -123,9 +125,9 @@
                                             @if (item.resolved.activity_hours) {
                                                 <div class='activity-hours'>שעות פעילות: {{ item.resolved.activity_hours }}</div>
                                             }
-                                            @if(item.resolved.phone) {<div class='phone'>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
-                                            @if(item.resolved.url) {<div class='url'>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
-                                            <div class='address'>כתובת: {{ item.resolved.address }}</div>
+                                            @if(item.resolved.phone) {<div class='phone'><i></i>טלפון:&nbsp;<a [href]='"tel:" + item.resolved.phone' target="_blank">{{ item.resolved.phone }}</a></div>}
+                                            @if(item.resolved.url) {<div class='url'><i></i>כתובת אתר:&nbsp;<a [href]='item.resolved.url' target="_blank">קישור למידע נוסף</a></div>}
+                                            <div class='address'><i></i>כתובת: {{ item.resolved.address }}</div>
                                         </div>
                                         @if (item.user?.photo) {
                                             <div class='img'>
