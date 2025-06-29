@@ -62,7 +62,7 @@ export class StateService {
   selectedItem = computed(() => {
     const id = this.selectedId();
     const items = this.items();
-    if (id) {
+    if (id && items && items.length > 0) {
       const ret = items.find((item) => item.id === id);
       // console.log('ITEM', id, ret);
       return ret || null;
@@ -184,11 +184,15 @@ export class StateService {
       }
 
       if (parts.length >= 3) {
-        const lng = parseFloat(parts[0]);
-        const lat = parseFloat(parts[1]);
-        const zoom = parseFloat(parts[2]);
-        if (lat && lng && zoom) {
-          this.askZoom.set([lng, lat, zoom]);
+        try {
+          const lng = parseFloat(parts[0]);
+          const lat = parseFloat(parts[1]);
+          const zoom = parseFloat(parts[2]);
+          if (lat && lng && zoom) {
+            this.askZoom.set([lng, lat, zoom]);
+          }
+        } catch (e) {
+          // nvm
         }
         parts = parts.slice(3);
       }
