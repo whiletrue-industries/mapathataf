@@ -99,7 +99,7 @@ export class ApiService {
           resolveItem(item);
         });
         data = data.filter((item) => {
-          return item.info && item.resolved.lng && item.resolved.lat && item.id;
+          return item.resolved.lng && item.resolved.lat && item.id;
         });
         this.items.set(data);
       })
