@@ -19,6 +19,7 @@
         <a class='internal' [routerLink]='link.routerLink'>{{link.title}}</a>
     }
     <a class='about' [routerLink]='["/about", "about"]'>אודות מפת הטף</a>
+    <a class='internal' [href]='add_new_form_link' target='_blank'>הוספת מידע למפת הטף</a>
     @for (link of api.workspace()?.links || []; track link) {
         @if (link.kind === 'whatsapp') {
             <a class='whatsapp' [href]='link.href' target='_blank'>{{link.title}}</a>

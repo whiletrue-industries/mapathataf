@@ -17,6 +17,8 @@ export class HeaderComponent {
 
   active = false;
 
+  add_new_form_link = 'https://form.jotform.com/252952688671472';
+
   commonLinks = [
     {
       title: 'הגיל הרך, מאיפה מתחילים?',
