@@ -125,6 +125,7 @@
         }
         background-color: white;
         padding: 64px 32px;
+        padding-bottom: 16px;
         display: flex;
         flex-flow: column;
         gap: 10px;
@@ -132,7 +133,7 @@
         border-radius: 0px 0px 20px 20px;
         z-index: 1000;
 
-        a {
+        & > a {
             min-height: 50px;
             width: 100%;
             display: flex;
@@ -169,6 +170,24 @@
                 border-radius: 25px;
                 width: fit-content;
                 align-self: center;
+            }
+        }
+
+        .down-links {
+            margin-top: 16px;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 0 24px;
+
+            a {
+                font-size: 14px;
+                font-weight: 300;
+                color: @color-gray-2;
+                border: none;
+                padding: 0;
             }
         }
 

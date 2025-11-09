@@ -10,13 +10,16 @@
     <a class='logo' [routerLink]="['/', state.workspaceId()]"></a>
 </div>
 <div class='menu' [class.active]='active' (click)='active=false; true'>
-    @for (link of api.workspace()?.links || []; track link) {
-        @if (link.kind !== 'whatsapp') {
-            <a class='external' [href]='link.href' target='_blank'>{{link.title}}</a>
-        }
-    }
     @for (link of commonLinks || []; track link) {
         <a class='internal' [routerLink]='link.routerLink'>{{link.title}}</a>
+    }
+    @for (link of api.workspace()?.links || []; track link) {
+        @if (link.kind === 'external') {
+            <a class='external' [href]='link.href' target='_blank'>{{link.title}}</a>
+        }
+        @if (link.kind === 'internal') {
+            <a class='internal' [routerLink]='["/about", "custom"]' [queryParams]='{href: link.href}'>{{link.title}}</a>
+        }
     }
     <a class='about' [routerLink]='["/about", "about"]'>אודות מפת הטף</a>
     <a class='internal' [href]='add_new_form_link' target='_blank'>הוספת מידע למפת הטף</a>
@@ -25,5 +28,9 @@
             <a class='whatsapp' [href]='link.href' target='_blank'>{{link.title}}</a>
         }
     }
+    <div class='down-links'>
+        <a [routerLink]='["/about", "terms-of-use"]'>תנאי שימוש</a>
+        <a [routerLink]='["/about", "accessibility"]'>נגישות</a>
+    </div>
     <div class='close'></div>
 </div>

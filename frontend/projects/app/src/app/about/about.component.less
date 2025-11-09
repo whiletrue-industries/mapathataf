@@ -1,9 +1,25 @@
+@import '../../common.less';
+
 :host {
     display: flex;
     flex-flow: column;
     height: 100%;
+    display: relative;
     
     .content {
         flex: 1 1 auto;
+        height: 100%;
+        overflow: auto;
+    }
+
+    .close {
+        position: absolute;
+        top: 48px;
+        right: 16px;
+        font-size: 32px;
+        font-weight: bold;
+        color: @color-gray-4;
+        cursor: pointer;
+        z-index: 10;
     }
 }

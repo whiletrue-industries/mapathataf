@@ -21,13 +21,8 @@ export class HeaderComponent {
 
   commonLinks = [
     {
-      title: 'הגיל הרך, מאיפה מתחילים?',
-      routerLink: ['/about', 'early-childhood'],
-      // href: 'https://data-city.my.canva.site/tafmap-guidelines'
-    },
-    {
-      title: 'פיקוח והדרכה',
-      routerLink: ['/about', 'supervision'],    
+      title: 'בחירת מסגרת חינוכית',
+      routerLink: ['/about', 'how-to-choose'],
     },
   ]
 

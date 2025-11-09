@@ -137,7 +137,7 @@ export class StateService {
       const fragment = parts.join('/');
       if (section) {
         this.router.navigate([], {
-          relativeTo: this.route, fragment
+          relativeTo: this.route, fragment, queryParamsHandling: 'preserve',
         });
       }
     });
