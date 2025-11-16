@@ -101,6 +101,7 @@ export class ApiService {
         data = data.filter((item) => {
           return item.resolved.lng && item.resolved.lat && item.id;
         });
+        data = data.sort(() => Math.random() - 0.5);
         this.items.set(data);
       })
     );
