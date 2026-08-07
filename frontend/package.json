@@ -11,6 +11,7 @@
     "build:admin": "ng build admin",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:ci": "ng test app --watch=false --browsers=ChromeHeadless && ng test admin --watch=false --browsers=ChromeHeadless && ng test landing --watch=false --browsers=ChromeHeadless",
     "serve:ssr:landing": "node dist/landing/server/server.mjs",
     "serve:ssr:app": "node dist/app/server/server.mjs",
     "serve:ssr:admin": "node dist/admin/server/server.mjs"
