@@ -1,0 +1,71 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+
+    .hint {
+        font-size: 13px;
+        color: @color-gray-3;
+    }
+
+    .map {
+        width: 100%;
+        height: 320px;
+        border-radius: 8px;
+        border: 1px solid @color-gray-1;
+        overflow: hidden;
+        direction: ltr;
+    }
+
+    .actions {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        gap: 12px;
+
+        button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .draw {
+            background-color: @color-night;
+            color: @color-white;
+
+            &.drawing {
+                background-color: @color-d-tara;
+            }
+        }
+
+        .set {
+            background-color: @color-white;
+            border: 1px solid @color-night;
+            color: @color-night;
+        }
+
+        .save {
+            background-color: @color-green-300;
+            color: @color-white;
+        }
+
+        .cancel {
+            background: none;
+            border: 1px solid @color-gray-1;
+        }
+
+        code {
+            font-size: 12px;
+            color: @color-gray-3;
+            direction: ltr;
+        }
+
+        .none {
+            font-size: 13px;
+            color: @color-gray-3;
+        }
+    }
+}

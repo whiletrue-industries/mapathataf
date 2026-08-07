@@ -20,7 +20,8 @@ jobs:
           cd frontend && \
           npm run build:landing && \
           npm run build:admin && \
-          npm run build:app
+          npm run build:app && \
+          npm run build:manage
       - name: Build Docker Image and push to GitHub Container Registry
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,6 +50,13 @@ jobs:
           docker tag img "${DOCKER_IMAGE_NAME_LANDING}:${GITHUB_SHA}"
           docker push "${DOCKER_IMAGE_NAME_LANDING}:${GITHUB_SHA}"
 
+          DOCKER_IMAGE_NAME_MANAGE=ghcr.io/${{ github.repository }}-manage
+          docker build --build-arg PROJECT=manage -t img .
+          docker tag img "${DOCKER_IMAGE_NAME_MANAGE}:latest"
+          docker push "${DOCKER_IMAGE_NAME_MANAGE}:latest"
+          docker tag img "${DOCKER_IMAGE_NAME_MANAGE}:${GITHUB_SHA}"
+          docker push "${DOCKER_IMAGE_NAME_MANAGE}:${GITHUB_SHA}"
+
 
           if ! git log -1 --pretty=format:"%s" | grep -- --no-deploy; then
             cd `mktemp -d` &&\
@@ -57,7 +65,7 @@ jobs:
             export GIT_SSH_COMMAND="ssh -i `pwd`/hasadna_k8s_deploy_key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" &&\
             git clone git@github.com:hasadna/hasadna-k8s.git &&\
             cd hasadna-k8s &&\
-            python update_yaml.py '{"appImage":"'"${DOCKER_IMAGE_NAME_APP}:${GITHUB_SHA}"'", "adminImage":"'"${DOCKER_IMAGE_NAME_ADMIN}:${GITHUB_SHA}"'", "landingImage":"'"${DOCKER_IMAGE_NAME_LANDING}:${GITHUB_SHA}"'"}' apps/mapathataf/values-hasadna-auto-updated.yaml &&\
+            python update_yaml.py '{"appImage":"'"${DOCKER_IMAGE_NAME_APP}:${GITHUB_SHA}"'", "adminImage":"'"${DOCKER_IMAGE_NAME_ADMIN}:${GITHUB_SHA}"'", "landingImage":"'"${DOCKER_IMAGE_NAME_LANDING}:${GITHUB_SHA}"'", "manageImage":"'"${DOCKER_IMAGE_NAME_MANAGE}:${GITHUB_SHA}"'"}' apps/mapathataf/values-hasadna-auto-updated.yaml &&\
             git config --global user.name "MapatHataf CI" &&\
             git config --global user.email "mapathataf-ci@localhost" &&\
             git add apps/mapathataf/values-hasadna-auto-updated.yaml && git commit -m "automatic update of mapathataf" &&\

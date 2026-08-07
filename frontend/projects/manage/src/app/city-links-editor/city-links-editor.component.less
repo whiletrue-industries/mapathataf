@@ -1,0 +1,109 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    gap: 12px;
+
+    .hint {
+        font-size: 13px;
+        color: @color-gray-3;
+    }
+
+    .chips {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 8px;
+
+        .chip {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 6px 4px 12px;
+            border-radius: 16px;
+            background-color: #E3EDF6;
+            color: @color-night;
+            font-size: 14px;
+
+            .slug {
+                font-size: 12px;
+                color: @color-gray-3;
+                direction: ltr;
+            }
+
+            .remove {
+                border: none;
+                background: none;
+                color: @color-d-tara;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 0 4px;
+            }
+        }
+
+        .empty {
+            font-size: 13px;
+            color: @color-gray-3;
+        }
+    }
+
+    .add {
+        position: relative;
+        width: 100%;
+        max-width: 320px;
+
+        input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid @color-gray-1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .results {
+            position: absolute;
+            top: calc(100% ~'+' 4px);
+            right: 0;
+            left: 0;
+            z-index: 2;
+            display: flex;
+            flex-flow: column nowrap;
+            padding: 4px 0;
+            border-radius: 8px;
+            border: 1px solid @color-gray-1;
+            background-color: @color-white;
+            box-shadow: 0px 2px 8px rgba(5, 56, 86, 0.15);
+
+            .result {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: baseline;
+                gap: 8px;
+                padding: 6px 12px;
+                font-size: 14px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: @color-gray-1;
+                }
+
+                .slug {
+                    font-size: 12px;
+                    color: @color-gray-3;
+                    direction: ltr;
+                }
+            }
+        }
+    }
+
+    .save {
+        padding: 6px 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: @color-green-300;
+        color: @color-white;
+        cursor: pointer;
+    }
+}

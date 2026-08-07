@@ -1,0 +1,32 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    gap: 8px;
+
+    .hint {
+        font-size: 13px;
+        color: @color-gray-3;
+    }
+
+    textarea {
+        width: 100%;
+        max-width: 400px;
+        padding: 8px;
+        border: 1px solid @color-gray-1;
+        border-radius: 8px;
+        font-size: 14px;
+        resize: vertical;
+    }
+
+    button {
+        padding: 6px 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: @color-green-300;
+        color: @color-white;
+        cursor: pointer;
+    }
+}

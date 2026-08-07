@@ -1,0 +1,24 @@
+<div class='section'>
+    @if (!inner) {
+        <h3 class='header'>{{ header }}</h3>
+    } @else {
+        <h4 class='header'>{{ header }}</h4>
+    }
+    @if (editable) {
+        <div class='legend'>
+            <span class='private-field'>שדות לשימוש פנימי</span>
+            <span class='public-field'>שדות שיוצגו למשתמשים</span>
+            <span class='editable-field'>ניתן לעריכה</span>
+        </div>
+    }
+    @if (fields().length > 0) {
+        @for (field of fields(); track field.name) {
+            @if (field.type === 'section') {
+                <strong>{{ field.name }}</strong>
+            } @else {
+                <app-item-edit-field [data]='data' [field]='field' [editable]='editable' (update)='update.next($event)'></app-item-edit-field>
+            }
+        }
+    }
+    <ng-content></ng-content>
+</div>

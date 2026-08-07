@@ -1,0 +1,55 @@
+@let field_ = field();
+@if (field_) {
+    <div class='field' [class.text]='field_.type === "text" || field_.type === "readonly"'
+        [class.boolean]='field_.type === "boolean"'
+        [class.textarea]='field_.type === "textarea"'
+        [class.enum]='field_.type === "enum"'
+        [class.multi-enum]='field_.type === "multi-enum"'>
+        <label [class.private]='privateField()' [class.editable]='editable() && field_.type !== "readonly"'>{{field_.label}}:</label>
+        @if (editing()) {
+            @switch (field_.type) {
+                @case ('text') {
+                    <input type='text' [(ngModel)]='value' (blur)='save()' #textInput/>
+                }
+                @case ('textarea') {
+                    <textarea rows='4' [(ngModel)]='value' (blur)='save()' #textInput></textarea>
+                }
+                @case ('boolean') {
+                    <input type='checkbox' [(ngModel)]='value' (change)='save()'/>
+                }
+                @case ('enum') {
+                    <select [(ngModel)]='value' (change)='save()' (blur)='save()'>
+                        @for (option of field_.options; track option) {
+                            <option [value]='option.id'>{{option.display}}</option>
+                        }
+                    </select>
+                }
+                @case ('multi-enum') {
+                    <div class='multi-enum-options'>
+                        @for (option of field_.options; track option.id) {
+                            <label class='multi-enum-option'>
+                                <input type='checkbox' [checked]='optionSelected(option.id)' (change)='toggleOption(option.id)'/>
+                                {{option.display}}
+                            </label>
+                        }
+                        <button type='button' class='multi-enum-done' (click)='editing.set(false)'>סגור</button>
+                    </div>
+                }
+            }
+        } @else {
+            @if (editable() && field_.type !== 'readonly') {
+                @if (field_.value !== undefined && field_.value !== null) {
+                    <span class='value editable' (click)='editing.set(true)'>{{field_.value}}</span>
+                } @else {
+                    <span class='value editable initial' (click)='editing.set(true)'>לא הוזן</span>
+                }
+            } @else {
+                @if (field_.value !== undefined && field_.value !== null) {
+                    <span class='value'>{{field_.value}}</span>
+                } @else {
+                    <span class='value initial'>לא הוזן</span>
+                }
+            }
+        }
+    </div>
+}

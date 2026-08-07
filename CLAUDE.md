@@ -11,9 +11,18 @@ Map of services for ages 0-3, per municipality. Python data pipelines in the rep
 
 ## Architecture pointers
 
-- `frontend/` is an Angular 19 workspace with three apps: `landing` (public landing page),
-  `app` (the map app), `admin`. Serve one with `npx ng serve <project> --port <port>` from
-  `frontend/`.
+- `frontend/` is an Angular 19 workspace with four apps: `landing` (public landing page),
+  `app` (the map app), `admin`, `manage` (super-admin console, manage.tafmap.org.il).
+  Serve one with `npx ng serve <project> --port <port>` from `frontend/`.
+- `manage` auth: Firebase Auth Google sign-in (plain `firebase` SDK, browser-guarded for
+  SSR in `auth.service.ts`; web-app config hardcoded in `firebase.ts`), functional route
+  guard + Bearer interceptor. Server authorizes against the Firestore
+  `settings/superadmins` allowlist; 401/403 on `/manage/workspaces` → access-denied
+  screen. Per-city flags `favorite`/`active` are top-level workspace-doc fields;
+  `active` (+ logo_url) drives `GET /logos`. `city_links` presence (even empty) is what
+  makes a workspace an אשכול — the manage UI keeps empty lists as `[]`, never deletes
+  the key. Deploys as a 4th Docker image via production.yml → hasadna-k8s
+  (`manageImage`).
 - The API server is a Cloud Run service: `https://api-m5crpfzdeq-ez.a.run.app`
   (`BASE_URL` in `frontend/projects/app/src/app/api.service.ts`; also used in the landing
   main component). `/logos` returns per-city logos `{city, id, logo_url}`.

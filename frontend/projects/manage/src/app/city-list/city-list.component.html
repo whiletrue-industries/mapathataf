@@ -1,0 +1,33 @@
+<div class='filters'>
+    <label>
+        מועדפות:
+        <select [(ngModel)]='state.filterFavorite'>
+            <option value='all'>הכל</option>
+            <option value='yes'>מועדפות</option>
+            <option value='no'>לא מועדפות</option>
+        </select>
+    </label>
+    <label>
+        פעילות:
+        <select [(ngModel)]='state.filterActive'>
+            <option value='all'>הכל</option>
+            <option value='yes'>פעילות</option>
+            <option value='no'>לא פעילות</option>
+        </select>
+    </label>
+    <input type='search' placeholder='חיפוש לפי שם או מזהה...' [(ngModel)]='state.searchQuery'/>
+    <span class='count'>מציג {{ filtered().length }} מתוך {{ api.workspaces().length }}</span>
+</div>
+<div class='list'>
+    @for (workspace of filtered(); track workspace.id) {
+        <app-city-list-item [workspace]='workspace'></app-city-list-item>
+    } @empty {
+        <div class='empty'>
+            @if (api.loading()) {
+                טוען...
+            } @else {
+                לא נמצאו רשויות
+            }
+        </div>
+    }
+</div>

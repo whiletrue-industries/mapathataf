@@ -1,0 +1,37 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .card {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        gap: 16px;
+        padding: 48px;
+        border-radius: 16px;
+        border: 1px solid @color-gray-1;
+        color: @color-night;
+
+        img {
+            height: 64px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        button {
+            padding: 10px 32px;
+            border: none;
+            border-radius: 8px;
+            background-color: @color-night;
+            color: @color-white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    }
+}

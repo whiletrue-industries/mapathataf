@@ -1,0 +1,23 @@
+<div class='current'>
+    @if (previewUrl(); as preview) {
+        <img class='preview' [src]='preview' alt='תצוגה מקדימה'/>
+    } @else if (logoUrl() && !currentBroken()) {
+        <img [src]='logoUrl()' (error)='currentBroken.set(true)' alt='לוגו נוכחי'/>
+    } @else {
+        <span class='none'>אין לוגו</span>
+    }
+</div>
+<div class='actions'>
+    @if (file()) {
+        <button class='save' [disabled]='busy()' (click)='upload()'>{{ busy() ? 'מעלה...' : 'העלאה' }}</button>
+        <button class='cancel' (click)='cancel()'>ביטול</button>
+    } @else {
+        <label class='pick'>
+            בחירת קובץ לוגו
+            <input type='file' accept='image/png,image/jpeg,image/svg+xml,image/webp' (change)='fileSelected($event)'/>
+        </label>
+    }
+</div>
+@if (error(); as error_) {
+    <div class='error'>{{ error_ }}</div>
+}
