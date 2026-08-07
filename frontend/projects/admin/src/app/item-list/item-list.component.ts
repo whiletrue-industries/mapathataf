@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ItemListItemComponent } from "../item-list-item/item-list-item.component";
 import { StateService } from '../state.service';
 import { FormsModule } from '@angular/forms';
+import { ExportService } from '../export.service';
 
 @Component({
   selector: 'app-item-list',
@@ -59,8 +60,13 @@ export class ItemListComponent {
     return items;
   });
 
-  constructor(public api: ApiService, private route: ActivatedRoute, public state: StateService, private router: Router) {
+  constructor(public api: ApiService, private route: ActivatedRoute, public state: StateService, private router: Router,
+              private exportService: ExportService) {
       this.api.updateFromRoute(route.snapshot);
+  }
+
+  downloadExcel() {
+    this.exportService.exportItems(this.filteredItems());
   }
 
   addNew() {
