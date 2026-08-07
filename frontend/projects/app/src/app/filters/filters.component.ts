@@ -33,7 +33,9 @@ export class FiltersComponent {
         const items = this.state.items();
         const relevant: ResultItem[] = items.filter(item => {
           // console.log('Autocomplete item', term, item.resolved.name, item.resolved.address);
-          return item.resolved.name.includes(term) || item.resolved.address.includes(term);
+          return (item.resolved.name || '').includes(term) ||
+            [item.resolved.address, item.resolved.formatted_address, item.resolved.original_address]
+              .some((address: string) => address && address.includes(term));
         }).map(item => {
           return {
             name: item.resolved.name,
