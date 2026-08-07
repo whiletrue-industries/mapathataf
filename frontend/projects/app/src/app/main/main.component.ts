@@ -12,10 +12,12 @@ import { StateService } from '../state.service';
 import { FiltersComponent } from "../filters/filters.component";
 import { FilterDialogComponent } from "../filter-dialog/filter-dialog.component";
 import { DOCUMENT } from '@angular/common';
+import { ONBOARDING_QUERY_PARAM, OnboardingService } from '../onboarding/onboarding.service';
+import { OnboardingComponent } from '../onboarding/onboarding.component';
 
 @Component({
   selector: 'app-main',
-  imports: [MapComponent, ItemListComponent, HeaderComponent, FiltersComponent, FilterDialogComponent],
+  imports: [MapComponent, ItemListComponent, HeaderComponent, FiltersComponent, FilterDialogComponent, OnboardingComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.less'
 })
@@ -29,6 +31,7 @@ export class MainComponent implements AfterViewInit {
     public api: ApiService,
     private mapboxService: MapboxService,
     public state: StateService,
+    public onboarding: OnboardingService,
     @Inject(DOCUMENT) private document: Document,
   ) {
     console.log('MainComponent constructor');
@@ -44,6 +47,7 @@ export class MainComponent implements AfterViewInit {
       take(1)
     ).subscribe((fragment) => {
       this.state.updateStateFromFragment(fragment);
+      this.onboarding.considerTrigger(fragment, this.route.snapshot.queryParamMap.get(ONBOARDING_QUERY_PARAM), this.route);
     });
   }
   ngAfterViewInit() {

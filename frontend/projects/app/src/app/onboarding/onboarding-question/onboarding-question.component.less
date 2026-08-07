@@ -1,0 +1,52 @@
+@import '../../../common.less';
+
+:host {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 24px;
+
+    .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: @color-night;
+        text-align: center;
+    }
+
+    .options {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+
+        .option {
+            .font-sans;
+            min-width: 140px;
+            max-width: 100%;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 24px;
+            background-color: @color-white;
+            box-shadow: 0px 2px 8px rgba(5, 56, 86, 0.15);
+            color: @color-night;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+
+            &.selected {
+                background-color: @color-night;
+                color: @color-white;
+            }
+        }
+    }
+
+    .skip {
+        color: @color-night;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
