@@ -1,5 +1,14 @@
 @import '../../common.less';
 
+@keyframes logos-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 :host {
     display: flex;
     flex-flow: column;
@@ -164,11 +173,26 @@
             .logos {
                 width: 100%;
                 max-width: @mobile-threshold;
-                display: flex;
-                flex-flow: row wrap;
-                align-items: center;
-                justify-content: space-between;
-                gap: 32px;
+                overflow: hidden;
+                direction: ltr;
+                // lets white logo backgrounds disappear into the section background
+                mix-blend-mode: multiply;
+
+                .logos-track {
+                    width: 100%;
+                    display: flex;
+                    flex-flow: row;
+                }
+
+                .logo-set {
+                    width: 100%;
+                    flex: 0 0 auto;
+                    display: flex;
+                    flex-flow: row nowrap;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 32px;
+                }
 
                 .logo {
                     flex: 1 0 100px;
@@ -187,6 +211,24 @@
 
                     &.hanadiv {
                         background-image: url(../../assets/img/logo-hanadiv.png);
+                    }
+
+                    &.city {
+                        object-fit: contain;
+                        // approximate the navy monochrome look of the partner logos
+                        filter: grayscale(1) sepia(1) hue-rotate(165deg) saturate(2.5) contrast(1.05);
+                    }
+                }
+
+                &.scrolling {
+                    .logos-track {
+                        width: max-content;
+                        animation: logos-scroll linear infinite;
+                    }
+
+                    .logo-set {
+                        width: max-content;
+                        padding-right: 32px;
                     }
                 }
             }

@@ -23,12 +23,24 @@
     </div>
     <div class='bottom'>
         <h3>השותפים שלנו</h3>
-        <div class='logos'>            
-            <div class='logo digital'>
-            </div>
-            <div class='logo rehovot'>
-            </div>
-            <div class='logo hanadiv'>
+        <div class='logos' [class.scrolling]='scrolling()' #logosEl>
+            <div class='logos-track' [style.animation-duration]='scrollDuration()'>
+                @for (copy of scrolling() ? [0, 1] : [0]; track copy) {
+                    <div class='logo-set' #logoSetEl [attr.aria-hidden]='copy > 0 ? true : null'>
+                        @for (logo of leftLogos(); track logo.id) {
+                            <img class='logo city' [src]='logo.logo_url' [alt]='logo.city' [title]='logo.city' (load)='checkOverflow()' (error)='removeLogo(logo)'/>
+                        }
+                        <div class='logo digital'>
+                        </div>
+                        <div class='logo rehovot'>
+                        </div>
+                        <div class='logo hanadiv'>
+                        </div>
+                        @for (logo of rightLogos(); track logo.id) {
+                            <img class='logo city' [src]='logo.logo_url' [alt]='logo.city' [title]='logo.city' (load)='checkOverflow()' (error)='removeLogo(logo)'/>
+                        }
+                    </div>
+                }
             </div>
         </div>
     </div>
