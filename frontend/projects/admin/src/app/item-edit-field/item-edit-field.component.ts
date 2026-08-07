@@ -1,8 +1,15 @@
 import { Component, computed, effect, ElementRef, EventEmitter, input, Output, signal, ViewChild } from '@angular/core';
-import { Field, fieldValue } from '../item-edit-section/item-edit-section.component';
+import { Field, fieldValue } from '../fields';
 import { FormsModule } from '@angular/forms';
 import { timer } from 'rxjs';
 import { ImageUploadComponent } from "../image-upload/image-upload.component";
+
+function sameValue(a: any, b: any): boolean {
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.length === b.length && a.every((v, i) => v === b[i]);
+  }
+  return a === b;
+}
 
 @Component({
   selector: 'app-item-edit-field',
@@ -43,22 +50,48 @@ export class ItemEditFieldComponent {
       const data = this.data();
       const field = this.field();
       if (data && field) {
-        this.value.set(data[field.name]);
+        if (field.type === 'multi-enum') {
+          const value = data[field.name];
+          this.value.set(Array.isArray(value) ? [...value] : (value ? [value] : []));
+        } else {
+          this.value.set(data[field.name]);
+        }
       } else {
         this.value.set(null);
       }
     });
   }
 
-  save(): void {
+  save(keepEditing = false): void {
     const field = this.field();
     const data = this.data();
     if (this.editable() && field && data) {
-      data[field.name] = this.value();
-      console.log('ItemEditFieldComponent: save', field.name, this.value());
-      this.update.emit({ [field.name]: this.value() });
-      field.value = fieldValue(data, field);
-      this.editing.set(false);
+      if (!sameValue(data[field.name], this.value())) {
+        data[field.name] = this.value();
+        console.log('ItemEditFieldComponent: save', field.name, this.value());
+        this.update.emit({ [field.name]: this.value() });
+        field.value = fieldValue(data, field);
+      }
+      this.editing.set(!!keepEditing);
     }
+  }
+
+  optionSelected(id: string): boolean {
+    const value = this.value();
+    return Array.isArray(value) && value.includes(id);
+  }
+
+  toggleOption(id: string): void {
+    const field = this.field();
+    const current: string[] = Array.isArray(this.value()) ? [...this.value()] : [];
+    const index = current.indexOf(id);
+    if (index >= 0) {
+      current.splice(index, 1);
+    } else {
+      current.push(id);
+    }
+    const ordered = (field?.options || []).map((opt) => opt.id).filter((optId) => current.includes(optId));
+    this.value.set(ordered);
+    this.save(true);
   }
 }

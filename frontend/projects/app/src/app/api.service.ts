@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, NgZone, signal } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { map, Observable, switchMap, tap } from 'rxjs';
+import { normalizeAgeGroups } from './age-groups';
 
 export type DiscussResult = {
   complete: boolean;
@@ -11,7 +12,7 @@ export type DiscussResult = {
 function resolve(item: any, field: string): any {
   const tries = [item.user, item.admin, item.info, ...(item.official || [])];
   for (const tryItem of tries) {
-    if (tryItem && tryItem[field]) {
+    if (tryItem && tryItem[field] && !(Array.isArray(tryItem[field]) && tryItem[field].length === 0)) {
       return tryItem[field];
     }
   }
@@ -49,7 +50,7 @@ export function resolveItem(item: any): any {
     facility_kind: resolve(item, 'facility_kind') || 'not-set',
     facility_sub_kind: resolve(item, 'facility_sub_kind'),
     facility_kind_editable: !item.info?.facility_kind,
-    age_group: resolve(item, 'age_group'),
+    age_group: normalizeAgeGroups(resolve(item, 'age_group')),
     mentoring_type: resolve(item, 'mentoring_type') || 'not-mentored',
     school_year: resolve(item, 'school_year'),
     subsidized: item?.official?.some((o: any) => o.source === 'mol') || false,

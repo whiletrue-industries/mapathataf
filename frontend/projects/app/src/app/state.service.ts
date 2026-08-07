@@ -25,7 +25,7 @@ export class StateService {
     console.log('StateService items for section:', section, items.length);
     if (this.filterAgeGroup()) {
       items = items.filter(item => {
-        return this.filterAgeGroup()!.includes(item.resolved.age_group);
+        return item.resolved.age_group?.some((ag: string) => this.filterAgeGroup()!.includes(ag)) || false;
       });
     }
     if (this.filterLicensing() && this.section() === 'education') {

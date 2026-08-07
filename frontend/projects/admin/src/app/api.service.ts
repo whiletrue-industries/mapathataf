@@ -3,6 +3,7 @@ import { computed, effect, Injectable, signal } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { map, switchMap, tap } from 'rxjs';
 import { resolveItem } from '../../../app/src/app/api.service';
+import { normalizeAgeGroups } from '../../../app/src/app/age-groups';
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +92,11 @@ export class ApiService {
     if (item.admin.app_publication === undefined) {
       item.admin.app_publication = true; // Default to true if not set
     }
+    [item.admin, item.user].forEach((metadata: any) => {
+      if (metadata.age_group) {
+        metadata.age_group = normalizeAgeGroups(metadata.age_group);
+      }
+    });
     item.official.forEach((official: any) => {
       const source = official.source || 'unknown';
       if (source === 'mol') {
