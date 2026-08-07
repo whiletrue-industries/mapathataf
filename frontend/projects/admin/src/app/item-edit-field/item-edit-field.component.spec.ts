@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ItemEditFieldComponent } from './item-edit-field.component';
-import { Field } from '../item-edit-section/item-edit-section.component';
+import { Field } from '../fields';
 
 describe('ItemEditFieldComponent', () => {
   const OPTIONS = [

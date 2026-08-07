@@ -1,4 +1,4 @@
-import { Field, fieldValue } from './item-edit-section.component';
+import { Field, fieldValue } from './fields';
 
 describe('fieldValue', () => {
   const OPTIONS = [

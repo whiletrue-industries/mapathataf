@@ -1,5 +1,5 @@
 import { Component, computed, effect, ElementRef, EventEmitter, input, Output, signal, ViewChild } from '@angular/core';
-import { Field, fieldValue } from '../item-edit-section/item-edit-section.component';
+import { Field, fieldValue } from '../fields';
 import { FormsModule } from '@angular/forms';
 import { timer } from 'rxjs';
 import { ImageUploadComponent } from "../image-upload/image-upload.component";
