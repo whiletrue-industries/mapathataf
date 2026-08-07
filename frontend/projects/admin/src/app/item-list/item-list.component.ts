@@ -49,7 +49,9 @@ export class ItemListComponent {
     if (this.state.searchQuery()) {
       const query = this.state.searchQuery().toLowerCase();
       items = items.filter(item => {
-        return item.resolved?.name?.toLowerCase().includes(query) || item.resolved?.address?.toLowerCase().includes(query);
+        return item.resolved?.name?.toLowerCase().includes(query) ||
+          [item.resolved?.address, item.resolved?.formatted_address, item.resolved?.original_address]
+            .some((address: string) => address && address.toLowerCase().includes(query));
       });
     }
     items = items.sort((a, b) => a.resolved?.name?.localeCompare(b.resolved?.name));

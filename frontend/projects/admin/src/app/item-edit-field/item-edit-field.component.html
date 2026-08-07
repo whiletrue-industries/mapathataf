@@ -1,10 +1,10 @@
 @let field_ = field();
 @if (field_) {
-    <div class='field' [class.text]='field_.type === "text"'
+    <div class='field' [class.text]='field_.type === "text" || field_.type === "readonly"'
         [class.boolean]='field_.type === "boolean"'
         [class.image]='field_.type === "image"'
         [class.enum]='field_.type === "enum"'>
-        <label [class.private]='privateField()' [class.editable]='editable()'>{{field_.label}}:</label>
+        <label [class.private]='privateField()' [class.editable]='editable() && field_.type !== "readonly"'>{{field_.label}}:</label>
         @if (editing()) {
             @switch (field_.type) {
                 @case ('text') {
@@ -25,7 +25,7 @@
                 }
             }
         } @else {
-            @if (editable()) {
+            @if (editable() && field_.type !== 'readonly') {
                 @if (field_.value !== undefined && field_.value !== null) {
                     @if (field_.type !== 'image') {
                         <span class='value editable' (click)='editing.set(true)'>{{field_.value}}</span>
