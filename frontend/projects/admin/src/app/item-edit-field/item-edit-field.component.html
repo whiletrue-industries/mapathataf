@@ -3,7 +3,8 @@
     <div class='field' [class.text]='field_.type === "text"'
         [class.boolean]='field_.type === "boolean"'
         [class.image]='field_.type === "image"'
-        [class.enum]='field_.type === "enum"'>
+        [class.enum]='field_.type === "enum"'
+        [class.multi-enum]='field_.type === "multi-enum"'>
         <label [class.private]='privateField()' [class.editable]='editable()'>{{field_.label}}:</label>
         @if (editing()) {
             @switch (field_.type) {
@@ -19,6 +20,17 @@
                             <option [value]='option.id'>{{option.display}}</option>
                         }
                     </select>
+                }
+                @case ('multi-enum') {
+                    <div class='multi-enum-options'>
+                        @for (option of field_.options; track option.id) {
+                            <label class='multi-enum-option'>
+                                <input type='checkbox' [checked]='optionSelected(option.id)' (change)='toggleOption(option.id)'/>
+                                {{option.display}}
+                            </label>
+                        }
+                        <button type='button' class='multi-enum-done' (click)='editing.set(false)'>סגור</button>
+                    </div>
                 }
                 @case ('image') {
                     <app-image-upload [value]='value' (update)='save()'></app-image-upload>

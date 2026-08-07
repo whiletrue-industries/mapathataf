@@ -1,5 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { StateService } from '../state.service';
+import { AGE_GROUPS } from '../age-groups';
 
 type OptionTuple = {
   value: string;
@@ -51,12 +52,7 @@ export class FilterDialogComponent {
   options = computed<OptionTuple[]>(() => {
     switch (this.state.filterOptions()) {
       case 'age_group':
-        return [
-          { value: 'birth_to_1', label: 'לידה עד 1' },
-          { value: '1_to_2', label: '1-2' },
-          { value: '2_to_3', label: '2-3' },
-          { value: 'all_ages', label: 'כל הגילאים' }
-        ];
+        return AGE_GROUPS.map((ag) => ({ value: ag.id, label: ag.display }));
       case 'health_subkind':
         return [
           { value: 'טיפת חלב', label: 'טיפת חלב' },

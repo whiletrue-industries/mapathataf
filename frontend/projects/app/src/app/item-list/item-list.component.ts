@@ -4,6 +4,7 @@ import { Observable, take, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlatformService } from '../platform.service';
 import { StateService } from '../state.service';
+import { AGE_GROUPS } from '../age-groups';
 
 @Component({
   selector: 'app-item-list',
@@ -66,6 +67,17 @@ export class ItemListComponent implements AfterViewInit{
       });
       this.initialized.set(true);
     });
+  }
+
+  ageGroupLabel(ageGroups: string[] | undefined): string | null {
+    if (!ageGroups?.length) {
+      return null;
+    }
+    const known = AGE_GROUPS.filter((ag) => ageGroups.includes(ag.id));
+    if (known.length === AGE_GROUPS.length) {
+      return 'הכל';
+    }
+    return known.map((ag) => ag.short).join(', ');
   }
 
   async shareRecord() {

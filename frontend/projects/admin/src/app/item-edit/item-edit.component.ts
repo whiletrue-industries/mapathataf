@@ -5,6 +5,7 @@ import { Field, ItemEditSectionComponent, Option } from "../item-edit-section/it
 import { debounceTime, Subject, timer } from 'rxjs';
 import dayjs from 'dayjs';
 import { ItemEditFieldComponent } from "../item-edit-field/item-edit-field.component";
+import { AGE_GROUPS } from '../../../../app/src/app/age-groups';
 
 @Component({
   selector: 'app-item-edit',
@@ -17,12 +18,7 @@ import { ItemEditFieldComponent } from "../item-edit-field/item-edit-field.compo
 })
 export class ItemEditComponent {
 
-  AGE_GROUP_OPTIONS: Option[] = [
-    { 'id': 'birth_to_1', 'display': 'לידה עד 1' },
-    { 'id': '1_to_2', 'display': '1-2' },
-    { 'id': '2_to_3', 'display': '2-3' },
-    { 'id': 'all_ages', 'display': 'כל הגילאים' }
-  ];
+  AGE_GROUP_OPTIONS: Option[] = AGE_GROUPS.map((ag) => ({ id: ag.id, display: ag.display }));
   FACILITY_KIND_OPTIONS: Option[] = [
     { 'id': 'education', 'display': 'מסגרת חינוך' },
     { 'id': 'health', 'display': 'בריאות והתפתחות' },
@@ -70,7 +66,7 @@ export class ItemEditComponent {
     return [
       {  name: 'תיאור המענה', type: 'section' },
         {  name: 'name',        type: 'text',    label: 'שם'     },
-        {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
+        {  name: 'age_group',     type: 'multi-enum',    label: 'קבוצות גיל', options: this.AGE_GROUP_OPTIONS },
         {  name: 'activity_hours', type: 'text', label: 'שעות פעילות' },
         {  name: 'more_details', type: 'text', label: 'פרטים נוספים' },
         {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל', internal: true     },
@@ -114,7 +110,7 @@ export class ItemEditComponent {
 
       {  name: 'תיאור המענה', type: 'section' },
         {  name: 'name',        type: 'text',    label: 'שם'    },
-        {  name: 'age_group',     type: 'enum',    label: 'קבוצת גיל', options: this.AGE_GROUP_OPTIONS },
+        {  name: 'age_group',     type: 'multi-enum',    label: 'קבוצות גיל', options: this.AGE_GROUP_OPTIONS },
         {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל ', internal: true },
 
         ...(itemKind === 'education' ? [

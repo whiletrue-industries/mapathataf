@@ -39,14 +39,8 @@
                         <td class='name'><span>{{ item.resolved.name }}</span></td>
                         <td class='age-group'>
                             <span>
-                                @if (item.resolved.age_group === 'birth_to_1') {
-                                    0-1
-                                } @else if (item.resolved.age_group === '1_to_2') {
-                                    1-2
-                                } @else if (item.resolved.age_group === '2_to_3') {
-                                    2-3
-                                } @else if (item.resolved.age_group === 'all_ages') {
-                                    הכל
+                                @if (ageGroupLabel(item.resolved.age_group); as label) {
+                                    {{ label }}
                                 } @else {
                                     &mdash;
                                 }
