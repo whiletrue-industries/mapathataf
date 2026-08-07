@@ -104,6 +104,25 @@
             }
 
             .actions {
+                display: flex;
+                flex-flow: row;
+                gap: 16px;
+
+                .download-excel {
+                    font-size: 18px;
+                    font-weight: 400;
+                    color: @color-white;
+                    padding: 4px 16px;
+                    background-color: @color-night;
+                    border-radius: 100px;
+                    border: darken(@color-night, 50%);
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: lighten(@color-night, 10%);
+                    }
+                }
+
                 .add-new {
                     .background-image;
                     background-image: url('../../../public/icon-new.svg');
