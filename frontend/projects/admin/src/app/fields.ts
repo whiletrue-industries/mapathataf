@@ -5,7 +5,7 @@ export type Option = {
 
 export type Field = {
   name: string;
-  type?: 'text' | 'boolean' | 'enum' | 'multi-enum' | 'section' | 'image';
+  type?: 'text' | 'boolean' | 'enum' | 'multi-enum' | 'section' | 'image' | 'readonly';
   label?: string;
   options?: Option[];
   hide?: boolean;

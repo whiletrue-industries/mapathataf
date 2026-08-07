@@ -18,6 +18,15 @@ function resolve(item: any, field: string): any {
   }
 }
 
+function originalAddress(item: any): any {
+  for (const official of item.official || []) {
+    if (official.address) {
+      return official.city && !official.address.includes(official.city) ?
+        `${official.address}, ${official.city}` : official.address;
+    }
+  }
+}
+
 export function resolveItem(item: any): any {
   item.resolved = {
     name: resolve(item, 'name'),
@@ -26,7 +35,11 @@ export function resolveItem(item: any): any {
     email: resolve(item, 'email'),
     manager_name: resolve(item, 'manager_name'),
     owner_kind: resolve(item, 'owner_kind'),
-    address: resolve(item, 'formatted_address') || resolve(item, 'address'),
+    // Display address: explicit admin override, then geocoded address, then raw source address
+    address: resolve(item, 'display_address') || resolve(item, 'formatted_address') || resolve(item, 'address'),
+    display_address: resolve(item, 'display_address'),
+    formatted_address: resolve(item, 'formatted_address'),
+    original_address: originalAddress(item),
     license_status: resolve(item, 'license_status'),
     licensing_not_needed: resolve(item, 'licensing_not_needed'),
     symbol: resolve(item, 'symbol'),

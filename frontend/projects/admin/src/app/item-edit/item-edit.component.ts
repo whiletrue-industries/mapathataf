@@ -6,6 +6,7 @@ import { debounceTime, Subject, timer } from 'rxjs';
 import dayjs from 'dayjs';
 import { ItemEditFieldComponent } from "../item-edit-field/item-edit-field.component";
 import { AGE_GROUPS } from '../../../../app/src/app/age-groups';
+import { geocodeStatusText, resolvedLocationText } from './location-status';
 
 @Component({
   selector: 'app-item-edit',
@@ -125,7 +126,11 @@ export class ItemEditComponent {
         {  name: '_private_notes', type: 'text', label: 'הערות נוספות' },
 
       {  name: 'מיקום', type: 'section' },
-        {  name: 'address',     type: 'text',    label: 'כתובת'  },
+        {  name: '_original_address', type: 'readonly', label: 'כתובת מקורית (מהמקור הרשמי)', value: item.resolved?.original_address || 'אין' },
+        {  name: 'geocode_address',   type: 'text',     label: 'כתובת לאיכון (כתובת או קוד פלוס)' },
+        {  name: '_geocode_status',   type: 'readonly', label: 'סטטוס איכון', value: geocodeStatusText(item) },
+        {  name: '_resolved_location', type: 'readonly', label: 'מיקום על המפה', value: resolvedLocationText(item) },
+        {  name: 'display_address',   type: 'text',     label: 'כתובת לתצוגה (אם שונה מהכתובת המאוכנת)' },
         {  name: 'neighborhood',     type: 'enum',    label: 'שכונה', options: this.api.neighborhoodOptions(), internal: true },
 
       ...(itemKind === 'education' ? educationAdminFields : []),

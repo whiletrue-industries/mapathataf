@@ -37,9 +37,9 @@ export class ItemEditSectionComponent implements OnChanges{
               name: field.name,
               type: field.type,
               label: field.label,
-              value: fieldValue(this.data, field),
+              value: field.type === 'readonly' && field.value !== undefined ? field.value : fieldValue(this.data, field),
               options: field.options,
-              internal: field.internal || false 
+              internal: field.internal || false
             });
           }
         });
