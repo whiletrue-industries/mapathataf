@@ -5,6 +5,7 @@ import { Field, ItemEditSectionComponent, Option } from "../item-edit-section/it
 import { debounceTime, Subject, timer } from 'rxjs';
 import dayjs from 'dayjs';
 import { ItemEditFieldComponent } from "../item-edit-field/item-edit-field.component";
+import { geocodeStatusText, resolvedLocationText } from './location-status';
 
 @Component({
   selector: 'app-item-edit',
@@ -131,8 +132,8 @@ export class ItemEditComponent {
       {  name: 'מיקום', type: 'section' },
         {  name: '_original_address', type: 'readonly', label: 'כתובת מקורית (מהמקור הרשמי)', value: item.resolved?.original_address || 'אין' },
         {  name: 'geocode_address',   type: 'text',     label: 'כתובת לאיכון (כתובת או קוד פלוס)' },
-        {  name: '_geocode_status',   type: 'readonly', label: 'סטטוס איכון', value: this.geocodeStatusText(item) },
-        {  name: '_resolved_location', type: 'readonly', label: 'מיקום על המפה', value: this.resolvedLocationText(item) },
+        {  name: '_geocode_status',   type: 'readonly', label: 'סטטוס איכון', value: geocodeStatusText(item) },
+        {  name: '_resolved_location', type: 'readonly', label: 'מיקום על המפה', value: resolvedLocationText(item) },
         {  name: 'display_address',   type: 'text',     label: 'כתובת לתצוגה (אם שונה מהכתובת המאוכנת)' },
         {  name: 'neighborhood',     type: 'enum',    label: 'שכונה', options: this.api.neighborhoodOptions(), internal: true },
 
@@ -238,29 +239,6 @@ export class ItemEditComponent {
 
   niceDate(date: string | Date) {
     return dayjs(date).format('D בMMMM, YYYY');
-  }
-
-  geocodeStatusText(item: any): string {
-    const admin = item?.admin || {};
-    if (admin.geocode_address) {
-      if (admin._private_geocoded_input !== admin.geocode_address) {
-        return 'ממתין לאיכון';
-      }
-      if (admin._private_geocoding_status === 'OK') {
-        return `אוכן בהצלחה: ${admin.formatted_address}`;
-      }
-      return 'האיכון נכשל — נסו כתובת מדויקת יותר או קוד פלוס';
-    }
-    if (item?.info?.lat && item?.info?.lng) {
-      return 'אוכן אוטומטית מהמקור הרשמי';
-    }
-    return 'ללא מיקום — לא יוצג במפה';
-  }
-
-  resolvedLocationText(item: any): string {
-    const lat = Number(item?.resolved?.lat);
-    const lng = Number(item?.resolved?.lng);
-    return lat && lng ? `${lat.toFixed(5)}, ${lng.toFixed(5)}` : 'אין';
   }
 
   queueUpdate(update: any) {
