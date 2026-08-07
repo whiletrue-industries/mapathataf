@@ -1,0 +1,15 @@
+<h2 class='title'>כתובת מגורים</h2>
+<div class='search'>
+    <input type='text' placeholder='מיקוד לפי כתובת' [ngModel]='query()' (ngModelChange)='query.set($event); edit()' />
+    @if (results().length > 0) {
+        <div class='results'>
+            @for (result of results(); track result.id) {
+                <a class='result' (click)='select(result)'>{{ result.name }}</a>
+            }
+        </div>
+    }
+</div>
+@if (address()) {
+    <button class='confirm' (click)='confirm()'>המשך</button>
+}
+<a class='skip' (click)='skip()'>דלג</a>

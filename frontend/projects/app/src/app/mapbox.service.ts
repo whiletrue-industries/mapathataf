@@ -4,7 +4,6 @@ import { PlatformService } from './platform.service';
 import { map, Observable, ReplaySubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from './api.service';
-import { count } from 'console';
 import { ResultItem } from './state.service'; // Assuming ResultItem is defined in state.service.ts
 
 @Injectable({
@@ -86,16 +85,20 @@ export class MapboxService {
     );
   }
 
-  autocompleteRetrieve(id: string) {
+  retrieveCoordinates(id: string): Observable<[number, number]> {
     const URL = 'https://api.mapbox.com/search/searchbox/v1/retrieve/' + id;
     const params: any = {
       access_token: this.ACCESS_TOKEN,
       session_token: this.session_uuid,
     };
     this.session_uuid = null;
-    this.http.get<any>(URL, {params}).pipe(
+    return this.http.get<any>(URL, {params}).pipe(
       map(response => response.features[0].geometry.coordinates)
-    ).subscribe((coordinates) => {
+    );
+  }
+
+  autocompleteRetrieve(id: string) {
+    this.retrieveCoordinates(id).subscribe((coordinates) => {
       this.map?.flyTo({
         center: coordinates,
         zoom: 17,

@@ -14,3 +14,6 @@
 @if (state.filterOptions() !== null) {
     <app-filter-dialog></app-filter-dialog>
 }
+@if (onboarding.visible()) {
+    <app-onboarding></app-onboarding>
+}
