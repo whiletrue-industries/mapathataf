@@ -1,0 +1,5 @@
+<p class='hint'>שכונה אחת בכל שורה</p>
+<textarea rows='8' [ngModel]='text()' (ngModelChange)='text.set($event); dirty.set(true)'></textarea>
+@if (dirty()) {
+    <button (click)='save()'>שמירה</button>
+}

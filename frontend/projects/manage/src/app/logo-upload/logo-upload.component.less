@@ -1,0 +1,69 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 16px;
+
+    .current {
+        width: 96px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px dashed @color-gray-1;
+        border-radius: 8px;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .none {
+            font-size: 13px;
+            color: @color-gray-3;
+        }
+    }
+
+    .actions {
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 8px;
+
+        .pick {
+            padding: 6px 16px;
+            border-radius: 8px;
+            background-color: @color-night;
+            color: @color-white;
+            cursor: pointer;
+
+            input {
+                display: none;
+            }
+        }
+
+        .save {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: @color-green-300;
+            color: @color-white;
+            cursor: pointer;
+        }
+
+        .cancel {
+            padding: 6px 16px;
+            border: 1px solid @color-gray-1;
+            border-radius: 8px;
+            background: none;
+            cursor: pointer;
+        }
+    }
+
+    .error {
+        width: 100%;
+        color: @color-d-tara;
+        font-size: 13px;
+    }
+}

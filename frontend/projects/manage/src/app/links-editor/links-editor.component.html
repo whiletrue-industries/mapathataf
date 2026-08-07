@@ -1,0 +1,20 @@
+@for (row of rows(); track $index) {
+    <div class='row'>
+        <select [(ngModel)]='row.kind' (ngModelChange)='dirty.set(true)'>
+            <option value='internal'>פנימי (דף תוכן)</option>
+            <option value='external'>חיצוני</option>
+            <option value='whatsapp'>וואטסאפ</option>
+        </select>
+        <input type='text' placeholder='כותרת' [(ngModel)]='row.title' (ngModelChange)='dirty.set(true)'/>
+        <input class='href' type='text' placeholder='קישור / נתיב' [(ngModel)]='row.href' (ngModelChange)='dirty.set(true)'/>
+        <button class='remove' (click)='removeRow($index)' title='הסרה'>&times;</button>
+    </div>
+} @empty {
+    <p class='hint'>אין קישורים</p>
+}
+<div class='actions'>
+    <button class='add' (click)='addRow()'>+ הוספת קישור</button>
+    @if (dirty()) {
+        <button class='save' (click)='save()'>שמירה</button>
+    }
+</div>

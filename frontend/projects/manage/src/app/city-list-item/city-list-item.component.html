@@ -1,0 +1,23 @@
+@let workspace_ = workspace();
+<a class='card' [routerLink]='["/", workspace_.id]'>
+    <div class='logo'>
+        @if (workspace_.metadata.logo_url && !logoBroken()) {
+            <img [src]='workspace_.metadata.logo_url' (error)='logoBroken.set(true)' alt=''/>
+        }
+    </div>
+    <div class='details'>
+        <span class='city'>{{ workspace_.metadata.city || workspace_.id }}</span>
+        <span class='slug'>{{ workspace_.id }}</span>
+    </div>
+    <div class='badges'>
+        @if (workspace_.metadata.city_links?.length) {
+            <span class='badge cluster'>אשכול</span>
+        }
+        @if (workspace_.favorite) {
+            <span class='badge favorite'>★ מועדפת</span>
+        }
+        <span class='badge' [class.active]='workspace_.active' [class.inactive]='!workspace_.active'>
+            {{ workspace_.active ? 'פעילה' : 'לא פעילה' }}
+        </span>
+    </div>
+</a>

@@ -1,0 +1,28 @@
+<p class='hint'>המפה של האשכול מציגה את הפריטים של כל הרשויות המקושרות.</p>
+<div class='chips'>
+    @for (id of selected(); track id) {
+        <span class='chip'>
+            {{ cityName()(id) }}
+            <span class='slug'>{{ id }}</span>
+            <button class='remove' (click)='remove(id)' title='הסרה'>&times;</button>
+        </span>
+    } @empty {
+        <span class='empty'>אין רשויות מקושרות</span>
+    }
+</div>
+<div class='add'>
+    <input type='text' placeholder='הוספת רשות לפי שם או מזהה...' [ngModel]='query()' (ngModelChange)='query.set($event)'/>
+    @if (suggestions().length > 0) {
+        <div class='results'>
+            @for (workspace of suggestions(); track workspace.id) {
+                <a class='result' (click)='add(workspace.id)'>
+                    {{ workspace.metadata.city || workspace.id }}
+                    <span class='slug'>{{ workspace.id }}</span>
+                </a>
+            }
+        </div>
+    }
+</div>
+@if (dirty()) {
+    <button class='save' (click)='save()'>שמירה</button>
+}

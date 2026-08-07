@@ -1,0 +1,73 @@
+@if (workspace(); as workspace_) {
+    <div class='page'>
+        <div class='top'>
+            <a class='back' routerLink='/'>&rsaquo; לרשימת הרשויות</a>
+            <h1>{{ workspace_.metadata.city || workspace_.id }} <span class='slug'>{{ workspace_.id }}</span></h1>
+            <span class='status'>
+                @if (saving()) { שומר... }
+                @if (saveError(); as error_) { <em class='error'>{{ error_ }}</em> }
+            </span>
+        </div>
+
+        <app-item-edit-section header='פרטים כלליים' [data]='generalData()' [fieldConfig]='GENERAL_FIELDS'
+            [editable]='true' [showAll]='true' (update)='onGeneralUpdate($event)'></app-item-edit-section>
+
+        <div class='section'>
+            <h3>לוגו</h3>
+            <app-logo-upload [workspaceId]='workspace_.id' [logoUrl]='workspace_.metadata.logo_url'></app-logo-upload>
+        </div>
+
+        <div class='section'>
+            <h3>תחום המפה (bounds)</h3>
+            <app-bounds-editor [bounds]='workspace_.metadata.bounds' (update)='onBoundsUpdate($event)'></app-bounds-editor>
+        </div>
+
+        <div class='section'>
+            <h3>שכונות</h3>
+            <app-neighborhoods-editor [neighborhoods]='workspace_.metadata.neighborhoods'
+                (update)='onNeighborhoodsUpdate($event)'></app-neighborhoods-editor>
+        </div>
+
+        <div class='section'>
+            <h3>קישורים בתפריט</h3>
+            <app-links-editor [links]='workspace_.metadata.links' (update)='onLinksUpdate($event)'></app-links-editor>
+        </div>
+
+        @if (workspace_.metadata.city_links) {
+            <div class='section'>
+                <h3>רשויות מקושרות (אשכול)</h3>
+                <app-city-links-editor [cityLinks]='workspace_.metadata.city_links' [workspaces]='api.workspaces()'
+                    [selfId]='workspace_.id' (update)='onCityLinksUpdate($event)'></app-city-links-editor>
+            </div>
+        }
+
+        <app-item-edit-section header='מסכי פתיחה' [data]='onboardingData()' [fieldConfig]='ONBOARDING_FIELDS'
+            [editable]='true' [showAll]='true' (update)='onOnboardingUpdate($event)'></app-item-edit-section>
+
+        <div class='section'>
+            <h3>קישורים להעתקה</h3>
+            @if (adminLink(); as link) {
+                <div class='copy-row'>
+                    <span class='label'>ממשק ניהול לרשות:</span>
+                    <code>{{ link }}</code>
+                    <button (click)='copy(link)'>{{ copied() === link ? 'הועתק ✓' : 'העתקה' }}</button>
+                </div>
+            }
+            @if (appLink(); as link) {
+                <div class='copy-row'>
+                    <span class='label'>אפליקציית המפה:</span>
+                    <code>{{ link }}</code>
+                    <button (click)='copy(link)'>{{ copied() === link ? 'הועתק ✓' : 'העתקה' }}</button>
+                </div>
+            }
+        </div>
+    </div>
+} @else {
+    <div class='missing'>
+        @if (api.loading()) {
+            טוען...
+        } @else {
+            הרשות לא נמצאה
+        }
+    </div>
+}

@@ -1,0 +1,10 @@
+<a class='brand' routerLink='/'>
+    <img src='/logo-header.svg' alt='מפת הטף'/>
+    <span>ניהול-על</span>
+</a>
+@if (auth.user(); as user) {
+    <div class='user'>
+        <span class='email'>{{ user.email }}</span>
+        <a class='sign-out' (click)='signOut()'>התנתקות</a>
+    </div>
+}

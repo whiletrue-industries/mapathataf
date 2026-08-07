@@ -1,0 +1,13 @@
+<app-header></app-header>
+<div class='content'>
+    <router-outlet></router-outlet>
+</div>
+@if (api.authorized() === 'no') {
+    <div class='denied'>
+        <div class='card'>
+            <h1>אין לך הרשאת גישה</h1>
+            <p>החשבון {{ auth.user()?.email }} אינו מורשה לניהול-על של מפת הטף.</p>
+            <button (click)='denySignOut()'>התנתקות</button>
+        </div>
+    </div>
+}

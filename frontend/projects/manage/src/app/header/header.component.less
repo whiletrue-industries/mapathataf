@@ -1,0 +1,39 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    background-color: @color-night;
+    color: @color-white;
+
+    .brand {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: 12px;
+        font-size: 18px;
+        font-weight: 700;
+
+        img {
+            height: 36px;
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    .user {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: 16px;
+        font-size: 14px;
+
+        .sign-out {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+}

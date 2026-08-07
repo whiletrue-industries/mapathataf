@@ -1,0 +1,97 @@
+@import '../common.less';
+
+:host {
+    display: block;
+
+    .page {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 24px;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px 16px;
+        color: @color-night;
+
+        .top {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: baseline;
+            gap: 16px;
+
+            .back {
+                font-size: 14px;
+                color: @color-gray-3;
+            }
+
+            h1 {
+                font-size: 28px;
+
+                .slug {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: @color-gray-3;
+                    direction: ltr;
+                }
+            }
+
+            .status {
+                font-size: 13px;
+                color: @color-gray-3;
+
+                .error {
+                    color: @color-d-tara;
+                }
+            }
+        }
+
+        .section {
+            display: flex;
+            flex-flow: column nowrap;
+            gap: 12px;
+
+            h3 {
+                margin: 0;
+                padding-bottom: 4px;
+                border-bottom: 1px solid @color-gray-1;
+                font-size: 18px;
+            }
+        }
+
+        .copy-row {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+
+            .label {
+                font-weight: 600;
+            }
+
+            code {
+                padding: 4px 8px;
+                border-radius: 6px;
+                background-color: @color-gray-1;
+                direction: ltr;
+                font-size: 13px;
+                overflow-wrap: anywhere;
+            }
+
+            button {
+                padding: 4px 12px;
+                border: none;
+                border-radius: 8px;
+                background-color: @color-night;
+                color: @color-white;
+                font-size: 13px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .missing {
+        padding: 48px;
+        text-align: center;
+        color: @color-gray-3;
+    }
+}

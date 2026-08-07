@@ -1,0 +1,15 @@
+<p class='hint'>ציירו מלבן על המפה (״ציור תחום״ ואז גרירה), או קבעו את התחום לפי התצוגה הנוכחית.</p>
+<div class='map' #mapContainer></div>
+<div class='actions'>
+    <button class='draw' [class.drawing]='drawing()' (click)='toggleDraw()'>{{ drawing() ? 'ביטול ציור' : 'ציור תחום' }}</button>
+    <button class='set' (click)='setFromView()'>קביעת התחום לפי התצוגה</button>
+    @if (dirty()) {
+        <button class='save' (click)='save()'>שמירה</button>
+        <button class='cancel' (click)='cancel()'>ביטול</button>
+    }
+    @if (display(); as bounds_) {
+        <code>[{{ bounds_.join(', ') }}]</code>
+    } @else {
+        <span class='none'>לא הוגדר תחום</span>
+    }
+</div>
