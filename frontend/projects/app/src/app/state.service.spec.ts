@@ -149,8 +149,28 @@ describe('StateService licensing default', () => {
   it('records a cleared licensing filter explicitly so the default cannot return', () => {
     state.section.set('education');
     state.clearFilter('licensing');
-    expect(state.filterLicensing()).not.toBeNull();
+    expect(state.filterLicensing()).toEqual([]);
+    expect(state.appliedValues('licensing')).toEqual([]);
     expect(state.items().map((i) => i.id)).toEqual(['licensed', 'unlicensed']);
+  });
+
+  it('carries a cleared licensing filter through the fragment', () => {
+    state.section.set('education');
+    state.clearFilter('licensing');
+    expect(state.fragment().split('/')[7]).toEqual('-');
+
+    const fragment = state.fragment();
+    state.filterLicensing.set(null);
+    state.updateStateFromFragment(fragment);
+    expect(state.filterLicensing()).toEqual([]);
+    expect(state.items().map((i) => i.id)).toEqual(['licensed', 'unlicensed']);
+  });
+
+  it('counts the licensing default as active, and stops once it is cleared', () => {
+    state.section.set('education');
+    expect(state.filterCount()).toEqual(1);
+    state.clearFilter('licensing');
+    expect(state.filterCount()).toEqual(0);
   });
 });
 

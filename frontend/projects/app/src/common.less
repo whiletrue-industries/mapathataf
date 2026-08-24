@@ -57,7 +57,9 @@
 
 /* Effect styles */
 @button-shadow:  0px 4px 24px rgba(0, 0, 0, 0.25);
-@sheet-shadow: 0px -4px 12px rgba(0, 0, 0, 0.25);
+// Sheets and the search-results list share one shadow. The offset is downward but the
+// 24px blur is what shows, so it also falls on whatever sits above them.
+@sheet-shadow: 0px 4px 24px rgba(0, 0, 0, 0.25);
 @detail-sheet-shadow: 0px 4px 16px rgba(12, 12, 13, 0.25);
 @float-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px rgba(0, 0, 0, 0.15);
 

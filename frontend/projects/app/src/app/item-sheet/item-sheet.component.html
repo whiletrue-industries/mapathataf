@@ -16,14 +16,14 @@
                 </span>
             </div>
         }
-        <div class='row action'>
-            <a class='button icon-share' (click)='shareRecord()' title='שיתוף רשומה'></a>
-            <span class='text'>שיתוף רשומה</span>
-        </div>
-        <div class='row action'>
-            <a class='button icon-warning' [href]='contactFormLink()' target='_blank' title='דיווח על טעות'></a>
+        <a class='row action' role='button' tabindex='0' (click)='shareRecord()' (keydown.enter)='shareRecord()'>
+            <span class='button icon-share'></span>
+            <span class='text'>{{ shareLabel() }}</span>
+        </a>
+        <a class='row action' [href]='contactFormLink()' target='_blank'>
+            <span class='button icon-warning'></span>
             <span class='text'>מצאת טעות בנתונים?</span>
-        </div>
+        </a>
         @if (selected.user?.photo) {
             <div class='photo'>
                 <img [src]='selected.user.photo' alt='תמונת המסגרת' />

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from './api.service';
 import { DOCUMENT } from '@angular/common';
 import { CONCRETE_SECTIONS, ConcreteSection, isConcreteSection, Section, SECTIONS, sectionDef } from './sections';
-import { DEFAULT_LICENSING, FilterKind, LICENSING_OPTIONS } from './filter-defs';
+import { DEFAULT_LICENSING, FilterKind } from './filter-defs';
 
 export type ResultItem = {
   name: string;
@@ -24,6 +24,9 @@ export type SectionCount = {
 };
 
 type Groups = Record<Section, any[]>;
+
+/** Fragment token for a filter the user emptied, as opposed to never set. */
+const EMPTY_FILTER = '-';
 
 @Injectable({
   providedIn: 'root'
@@ -135,7 +138,7 @@ export class StateService {
       'age_group',
       ...(section === 'all' ? SECTIONS.flatMap((s) => s.filters) : sectionDef(section).filters),
     ];
-    return kinds.filter((kind) => this.filterSignals[kind]() !== null).length;
+    return kinds.filter((kind) => (this.appliedValues(kind)?.length || 0) > 0).length;
   });
 
   /**
@@ -164,7 +167,7 @@ export class StateService {
       this.filterSubsidy(),
       this.filterMentoring()
     ]) {
-      parts.push(filter && filter.length > 0 ? filter.join(';') : '');
+      parts.push(filter === null ? '' : (filter.length > 0 ? filter.join(';') : EMPTY_FILTER));
     }
 
     const selectedId = this.selectedId();
@@ -213,7 +216,7 @@ export class StateService {
   private matchesSubFilters(item: any, kind: ConcreteSection, licensing: string[] | null): boolean {
     const resolved = item.resolved;
     if (kind === 'education') {
-      if (licensing && !licensing.includes(resolved.license_status_code)) {
+      if (licensing && licensing.length > 0 && !licensing.includes(resolved.license_status_code)) {
         return false;
       }
       const subsidy = this.filterSubsidy();
@@ -283,12 +286,13 @@ export class StateService {
       parts = parts.slice(3);
 
       if (parts.length >= 6) {
-        this.filterAgeGroup.set(parts[0] ? parts[0].split(';') : null);
-        this.filterHealthSubkind.set(parts[1] ? parts[1].split(';') : null);
-        this.filterCommunitySubkind.set(parts[2] ? parts[2].split(';') : null);
-        this.filterLicensing.set(parts[3] ? parts[3].split(';') : null);
-        this.filterSubsidy.set(parts[4] ? parts[4].split(';') : null);
-        this.filterMentoring.set(parts[5] ? parts[5].split(';') : null);
+        const values = (segment: string) => segment === EMPTY_FILTER ? [] : (segment ? segment.split(';') : null);
+        this.filterAgeGroup.set(values(parts[0]));
+        this.filterHealthSubkind.set(values(parts[1]));
+        this.filterCommunitySubkind.set(values(parts[2]));
+        this.filterLicensing.set(values(parts[3]));
+        this.filterSubsidy.set(values(parts[4]));
+        this.filterMentoring.set(values(parts[5]));
         parts = parts.slice(6);
         // A hand-trimmed url can leave a trailing empty segment; that is no selection.
         this.selectedId.set(parts[0] || null);
@@ -310,12 +314,9 @@ export class StateService {
 
   clearFilter(kind: FilterKind) {
     // Nulling a defaulted licensing filter would just hand the default straight back, so
-    // "cleared" has to be recorded as an explicit, all-inclusive selection.
-    if (kind === 'licensing' && this.filterLicensing() === null) {
-      this.filterLicensing.set(LICENSING_OPTIONS.map((option) => option.value));
-      return;
-    }
-    this.filterSignals[kind].set(null);
+    // clearing it records an explicit empty selection instead. Empty means "match
+    // everything" here, which is what an unset filter does anyway.
+    this.filterSignals[kind].set(kind === 'licensing' ? [] : null);
   }
 
   selectId(selectedId: any) {
