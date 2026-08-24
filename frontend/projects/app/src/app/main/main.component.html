@@ -1,18 +1,15 @@
-<app-header></app-header>
 <div class='content'>
-    @if (showMap) {
-        <app-map></app-map>
-    }   
-    <app-filters></app-filters>
+    @if (showMap) { <app-map></app-map> }
+    <app-search-bar></app-search-bar>
     @if (api.workspace().logo_url) {
-        <div class='logo'>
-            <img [src]='api.workspace().logo_url' />
-        </div>
+        <div class='logo'><img [src]='api.workspace().logo_url' /></div>
     }
-    <app-item-list></app-item-list>
+    <app-results-drawer></app-results-drawer>
+    <app-item-sheet [class.open]='state.selectedId()'></app-item-sheet>
 </div>
+<app-menu></app-menu>
 @if (state.filterOptions() !== null) {
-    <app-filter-dialog></app-filter-dialog>
+    <app-filter-sheet></app-filter-sheet>
 }
 @if (onboarding.visible()) {
     <app-onboarding></app-onboarding>

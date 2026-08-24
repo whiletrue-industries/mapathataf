@@ -1,0 +1,21 @@
+<div class='scrim' (click)='save()'></div>
+@let values = currentValues();
+@let filterDef = def();
+@if (filterDef) {
+    <div class='sheet'>
+        <div class='handle'></div>
+        <h2>{{ filterDef.label }}</h2>
+        <div class='options'>
+            @for (option of filterDef.options; track option.value) {
+                <div class='option' (click)='toggleValue(option.value)'>
+                    <div class='check' [class.checked]='values?.includes(option.value)'></div>
+                    <span class='name'>{{ option.label }}</span>
+                </div>
+            }
+        </div>
+        <div class='controls'>
+            <div class='clear' (click)='clear()'>ניקוי הסינון</div>
+            <div class='save' (click)='save()'>שמירה</div>
+        </div>
+    </div>
+}

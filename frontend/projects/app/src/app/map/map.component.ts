@@ -1,9 +1,15 @@
-import { AfterViewInit, Component, computed, effect, ElementRef, Input, OnDestroy, signal, Signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, ElementRef, Inject, Input, OnDestroy, signal, Signal, ViewChild, WritableSignal } from '@angular/core';
 import { MapboxService } from '../mapbox.service';
 import mapboxgl from 'mapbox-gl';
 import { PlatformService } from '../platform.service';
 import { ApiService } from '../api.service';
 import { StateService } from '../state.service';
+import { visibleBounds } from './visible-bounds';
+import { CONCRETE_SECTIONS, sectionPalette } from '../sections';
+import { DOCUMENT } from '@angular/common';
+
+// The chrome floats over the map now that the header is gone; pins must clear the search pill.
+const TOP_PADDING = 90;
 
 @Component({
   selector: 'app-map',
@@ -28,9 +34,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   data = computed<GeoJSON.GeoJSON>(() => {
     const activeId = this.state.selectedId();
+    const items = this.state.items();
+    // A selection reached by search or a shared link can sit outside the current filters;
+    // its pin still belongs on the map, otherwise the map flies to an empty spot.
+    const selected = this.state.selectedItem();
+    const shown = selected && !items.some((item) => item.id === selected.id)
+      ? [...items, selected]
+      : items;
     return {
       type: 'FeatureCollection',
-      features: this.state.items().filter((item) => {
+      features: shown.filter((item) => {
         return item.resolved && item.resolved.lng && item.resolved.lat;
       }).map((item) => {
         return {
@@ -50,7 +63,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   });
   initializedView = signal(false);
 
-  constructor(private mapboxService: MapboxService, private platform: PlatformService, private api: ApiService, private state: StateService) {
+  constructor(private mapboxService: MapboxService, private platform: PlatformService, private api: ApiService, private state: StateService,
+    @Inject(DOCUMENT) private document: Document) {
     console.log('MapComponent constructor');
     effect(() => {
       const data = this.data();
@@ -90,14 +104,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           this.initializedView.set(true);
         } else if (!initializedView && workspace) {
           if (workspace.bounds) {
-            map.fitBounds(workspace.bounds, {animate: false, padding: {bottom: padding, top: 58}});
+            map.fitBounds(workspace.bounds, {animate: false, padding: {bottom: padding, top: TOP_PADDING}});
             this.initializedView.set(true);
           }
         } else {
           map.jumpTo({
             center: map.getCenter(),
             zoom: map.getZoom(),
-            padding: { bottom: padding, top: 58}
+            padding: { bottom: padding, top: TOP_PADDING}
           });
         }
       }
@@ -163,9 +177,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             }
           }
 
-          map.on('moveend', () => {
+          this.paintSectionColors(map);
+
+          // One handler so the hash and the viewport-scope bounds never disagree.
+          const syncView = () => {
             this.state.mapState.set(map.getCenter().toArray().concat(map.getZoom()));
-          });
+            this.state.mapBounds.set(visibleBounds(map, TOP_PADDING, this.state.mapPaddingBottom()));
+          };
+          map.on('moveend', syncView);
+          syncView();
 
           this.map.set(map);
         });
@@ -177,6 +197,27 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         });
       }
     });
+  }
+
+  /**
+   * The Mapbox Studio style hardcodes the old category colours in the pin layers. Rather
+   * than keep a second copy of the palette in Studio, repaint them from the same custom
+   * properties the chips and badges use.
+   */
+  private paintSectionColors(map: mapboxgl.Map) {
+    const palette = sectionPalette(this.document.documentElement);
+    // If the stylesheet has not resolved, the custom properties come back empty and mapbox
+    // would reject the expression — leave the style's own colours in place instead.
+    if (CONCRETE_SECTIONS.some((key) => !palette[key].fill || !palette[key].border)) {
+      return;
+    }
+    const expression = (pick: 'fill' | 'border', fallback: string): any => [
+      'match', ['get', 'kind'],
+      ...CONCRETE_SECTIONS.flatMap((key) => [[key], palette[key][pick]]),
+      fallback,
+    ];
+    map.setPaintProperty('mh-inactive-aura', 'circle-color', expression('fill', '#9c999a'));
+    map.setPaintProperty('mh-inactive-aura', 'circle-stroke-color', expression('border', '#383838'));
   }
 
   ngOnDestroy() {

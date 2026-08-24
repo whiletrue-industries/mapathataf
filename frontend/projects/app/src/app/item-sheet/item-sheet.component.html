@@ -1,0 +1,33 @@
+@let selected = item();
+@if (selected) {
+    <div class='title'>
+        <h2>{{ selected.resolved.name }}</h2>
+    </div>
+    <div class='body'>
+        @for (row of rows(); track row.label) {
+            <div class='row'>
+                <span class='capsule' [class]='"icon-" + row.icon'></span>
+                <span class='text'>{{ row.label }}:
+                    @if (row.href) {
+                        <a [href]='row.href' target='_blank'>{{ row.value }}</a>
+                    } @else {
+                        {{ row.value }}
+                    }
+                </span>
+            </div>
+        }
+        <a class='row action' role='button' tabindex='0' (click)='shareRecord()' (keydown.enter)='shareRecord()'>
+            <span class='button icon-share'></span>
+            <span class='text'>{{ shareLabel() }}</span>
+        </a>
+        <a class='row action' [href]='contactFormLink()' target='_blank'>
+            <span class='button icon-warning'></span>
+            <span class='text'>מצאת טעות בנתונים?</span>
+        </a>
+        @if (selected.user?.photo) {
+            <div class='photo'>
+                <img [src]='selected.user.photo' alt='תמונת המסגרת' />
+            </div>
+        }
+    </div>
+}

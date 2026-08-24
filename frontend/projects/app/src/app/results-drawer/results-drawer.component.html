@@ -1,0 +1,10 @@
+<div class='handle' (click)='expanded.set(!expanded())'>
+    <div class='grip'>
+        <div class='chevron' [class.up]='!expanded()'></div>
+    </div>
+</div>
+<app-results-scope />
+<app-filter-panel />
+<div class='list' [class.open]='expanded()'>
+    <app-item-list />
+</div>

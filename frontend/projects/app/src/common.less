@@ -1,5 +1,5 @@
 .font-sans {
-    font-family: "Heebo", sans-serif;
+    font-family: "Noto Sans Hebrew", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -33,12 +33,62 @@
 @color-l-nude-60: lighten(@color-l-nude, 20%);
 
 
-@color-fk-education: @color-green-100;
-@color-fk-health: @color-l-nude;
-@color-fk-community: @color-l-sun;
+// Category palette (2026 redesign). Each section has a fill and a matching outline.
+// Values live in styles.less as custom properties (see the note there). These are plain
+// aliases — do not wrap them in lighten()/fade(), which cannot operate on var().
+@color-fk-education: var(--fk-education);
+@color-fk-education-border: var(--fk-education-border);
+@color-fk-health: var(--fk-health);
+@color-fk-health-border: var(--fk-health-border);
+@color-fk-community: var(--fk-community);
+@color-fk-community-border: var(--fk-community-border);
+@color-fk-all: var(--fk-all);
+@color-fk-all-border: var(--fk-all-border);
+
+// Bottom-sheet surfaces
+@color-sheet: #FFFCFD;
+@color-sheet-band: #FFFAFC;
+@color-handle: #E8E5E6;
+@color-pill: #D4D4D4;
+@color-badge-alert: #E2002D;
+@color-icon-capsule: rgba(180, 180, 180, 0.3);
+
+@sheet-radius: 20px;
+// Expanded height of the results drawer. Fixed on purpose — see results-drawer.less.
+@drawer-height: 56vh;
+
+/* Motion */
+// One curve for everything that opens, closes or resizes.
+@ease: 280ms cubic-bezier(0.4, 0, 0.2, 1);
 
 /* Effect styles */
 @button-shadow:  0px 4px 24px rgba(0, 0, 0, 0.25);
+// Separates the stacked sections inside the results drawer. The offset is downward but
+// the 24px blur is what reads, falling on the section above.
+@section-shadow: 0px 4px 24px rgba(0, 0, 0, 0.25);
+// The outer edge of a bottom sheet, against the map behind it.
+@sheet-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+@detail-sheet-shadow: 0px 4px 16px rgba(12, 12, 13, 0.25);
+@float-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px rgba(0, 0, 0, 0.15);
+
+// Paints an element with its section's fill + outline. Used by the category chips in the
+// filter panel and by the badges in the result list, which must stay in step.
+.section-palette() {
+    &.section-education { background-color: @color-fk-education; border-color: @color-fk-education-border; }
+    &.section-health    { background-color: @color-fk-health;    border-color: @color-fk-health-border;    }
+    &.section-community { background-color: @color-fk-community; border-color: @color-fk-community-border; }
+    &.section-all       { background-color: @color-fk-all;       border-color: @color-fk-all-border;       }
+}
+
+// A monochrome svg tinted via `color`; every icon-mi-* / icon-section-* asset paints with
+// currentColor. Paths are root-absolute because `public/` is copied to the output root —
+// a relative url() inside an imported mixin would be rewritten against the wrong file.
+.masked-icon(@url; @size) {
+    @mask: ~'url("@{url}") no-repeat center / @{size} @{size}';
+    -webkit-mask: @mask;
+    mask: @mask;
+    background-color: currentColor;
+}
 
 h1, h2, h3, h4, h5, h6, p {
     margin: 0;

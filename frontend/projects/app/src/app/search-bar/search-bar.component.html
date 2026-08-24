@@ -1,0 +1,36 @@
+@let selected = state.selectedItem();
+<div class='bar'>
+    <div class='field'>
+        <div class='sigil'></div>
+        @if (selected) {
+            <span class='name'>{{ selected.resolved.name }}</span>
+        } @else {
+            <input type='text' placeholder='חיפוש לפי כתובת או שם' [(ngModel)]='state.searchTerm' #input/>
+        }
+        @if (selected || state.searchTerm()) {
+            <div class='clear' (click)='clear()' title='ניקוי'></div>
+        }
+    </div>
+</div>
+@let searchResults = state.searchResults();
+@if (searchResults !== null) {
+    <div class='results'>
+        @for (r of searchResults; track r.id) {
+            <div class='result'>
+                @if (r.kind === 'item') {
+                    <a class='item' (click)='itemSelect(r)'>
+                        {{ r.name }}
+                        @if (r.outsideFilter) {
+                            <span class='outside'>מחוץ לסינון</span>
+                        }
+                    </a>
+                } @else if (r.kind === 'street') {
+                    <a class='street' (click)='autocompleteSelect(r)'>{{ r.name }}</a>
+                }
+            </div>
+        }
+        @if (searchResults.length === 0) {
+            <div class='no-results'>לא נמצאו תוצאות</div>
+        }
+    </div>
+}

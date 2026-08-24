@@ -1,4 +1,7 @@
-<app-header [kindSelection]='false'></app-header>
+<div class='bar'>
+    <app-menu></app-menu>
+    <a class='logo' [routerLink]="['/', state.workspaceId()]"></a>
+</div>
 <div class='content'>
     @switch (section()) {
         @case ("how-to-choose") {

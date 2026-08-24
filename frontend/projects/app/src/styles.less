@@ -1,5 +1,19 @@
 @import (css) 'fonts.css';
 
+:root {
+    /* Category palette — the single definition. common.less aliases these for LESS, and
+       MapComponent reads them to paint the map pins, so the two can never drift apart. */
+    --fk-education: #FF98D1;
+    --fk-education-border: #703623;
+    --fk-health: #9FD8C2;
+    --fk-health-border: #3A6753;
+    --fk-community: #F4C04C;
+    --fk-community-border: #7A6331;
+    --fk-all: #F2F2F2;
+    --fk-all-border: #D1D1D1;
+}
+
+
 html {
     margin: 0;
     padding: 0;
@@ -37,3 +51,11 @@ a, a:visited, a:hover {
     text-decoration: none;
 }
 /* You can add global styles to this file, and also import other style files */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

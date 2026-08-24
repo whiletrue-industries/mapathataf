@@ -1,0 +1,60 @@
+@import '../../../common.less';
+
+:host {
+    display: block;
+    background-color: @color-sheet;
+    box-shadow: @section-shadow;
+    // Owns its own scrolling: a wrapper with overflow would clip the shadow above it.
+    overflow-y: auto;
+    .no-scrollbars;
+
+    .item {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 20px;
+        cursor: pointer;
+
+        &.active {
+            background-color: fade(@color-night, 6%);
+        }
+
+        .name {
+            // Sits beside the badge and wraps leftward; growing would push the badge
+            // away to the far edge.
+            flex: 0 1 auto;
+            min-width: 0;
+            font-size: 17px;
+            letter-spacing: -0.425px;
+            color: @color-night;
+        }
+
+        .badge {
+            flex: 0 0 auto;
+            width: 35px;
+            height: 32px;
+            border-radius: 10px;
+            border: 1px solid;
+            color: @color-night;
+            .section-palette();
+
+            &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+            &.section-education::after { .masked-icon('/icon-section-education.svg'; 16px); }
+            &.section-health::after    { .masked-icon('/icon-section-health.svg';    16px); }
+            &.section-community::after { .masked-icon('/icon-section-community.svg'; 16px); }
+        }
+    }
+
+    .empty {
+        padding: 24px 20px;
+        text-align: center;
+        font-size: 15px;
+        color: @color-gray-2;
+    }
+}

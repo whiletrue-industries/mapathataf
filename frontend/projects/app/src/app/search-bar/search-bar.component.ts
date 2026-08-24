@@ -1,0 +1,90 @@
+import { Component, inject } from '@angular/core';
+import { ResultItem, StateService } from '../state.service';
+import { FormsModule } from '@angular/forms';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { debounceTime, forkJoin, from, of, switchMap } from 'rxjs';
+import { MapboxService } from '../mapbox.service';
+import { ApiService } from '../api.service';
+
+// The list now spans the whole city, so it needs a ceiling to stay usable.
+const MAX_ITEM_RESULTS = 8;
+
+@Component({
+  selector: 'app-search-bar',
+  imports: [
+    FormsModule
+  ],
+  templateUrl: './search-bar.component.html',
+  styleUrl: './search-bar.component.less'
+})
+export class SearchBarComponent {
+
+  state = inject(StateService);
+  mapbox = inject(MapboxService)
+  api = inject(ApiService);
+
+  constructor() {
+    toObservable(this.state.searchTerm).pipe(
+      switchMap(term => {
+        if (!term || term.length < 3) {
+          this.state.searchResults.set(null);
+          return from([]);
+        }
+        return of(term);
+      }),
+      debounceTime(500),
+      switchMap(term => {
+        // Searches every facility in the city, not just the filtered view: looking up a
+        // place by name should find it even when a filter or the map scope is hiding it.
+        // Matches you can currently see come first, the rest are flagged.
+        const visible = new Set(this.state.items().map(item => item.id));
+        const matches = this.api.items().filter(item => {
+          return (item.resolved.name || '').includes(term) ||
+            [item.resolved.address, item.resolved.formatted_address, item.resolved.original_address]
+              .some((address: string) => address && address.includes(term));
+        });
+        const toResult = (item: any): ResultItem => ({
+          name: item.resolved.name,
+          id: item.id,
+          kind: 'item',
+          outsideFilter: !visible.has(item.id),
+        });
+        const relevant: ResultItem[] = [
+          ...matches.filter(item => visible.has(item.id)),
+          ...matches.filter(item => !visible.has(item.id)),
+        ].slice(0, MAX_ITEM_RESULTS).map(toResult);
+        this.state.searchResults.set([...relevant]);
+        return forkJoin([
+          from([relevant]),
+          this.mapbox.autocomplete(term),
+        ]);
+      })
+    ).subscribe((results: [ResultItem[], ResultItem[]]) => {
+      if (this.state.searchTerm() && this.state.searchTerm().length) {
+        this.state.searchResults.set([...results[0], ...results[1]]);
+      } else {
+        this.state.searchResults.set(null);
+      }
+    });
+  }
+
+  itemSelect(result: ResultItem) {
+    this.state.searchResults.set(null);
+    this.state.selectedId.set(result.id);
+  }
+
+  autocompleteSelect(result: ResultItem) {
+    this.state.searchResults.set(null);
+    this.state.searchTerm.set('');
+    this.mapbox.autocompleteRetrieve(result.id);
+  }
+
+  // While an item is selected the field shows its name, so clearing means deselecting.
+  clear() {
+    if (this.state.selectedId()) {
+      this.state.selectedId.set(null);
+    } else {
+      this.state.searchTerm.set('');
+    }
+  }
+}

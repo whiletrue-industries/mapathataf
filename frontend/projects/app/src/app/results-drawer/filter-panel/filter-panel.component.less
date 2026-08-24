@@ -1,0 +1,191 @@
+@import '../../../common.less';
+
+:host {
+    display: block;
+
+    .header {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 10px 18px;
+        cursor: pointer;
+        font-size: 14px;
+        letter-spacing: -0.07px;
+        color: @color-night;
+
+        .chevron {
+            width: 20px;
+            height: 20px;
+            color: @color-night;
+            .masked-icon('/icon-mi-keyboard-arrow-down.svg'; 20px);
+            transition: transform 0.2s ease-in-out;
+
+            &.up {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    // Same 0fr -> 1fr collapse as the results list; the inner element clips so the
+    // bands inside do not spill while the row shrinks.
+    .panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows @ease;
+
+        &.open {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    .panel-inner {
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .chips {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 10px 13px;
+        background-color: @color-sheet-band;
+        overflow-x: auto;
+        .no-scrollbars;
+
+        .chip {
+            flex: 0 0 auto;
+            height: 30px;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            gap: 4px;
+            padding: 0 8px;
+            border-radius: 10px;
+            border: 1px solid;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: opacity 0.2s ease-in-out;
+
+            &.lit {
+                opacity: 1;
+            }
+
+            .section-palette();
+
+            .name {
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: -0.05px;
+                color: @color-black;
+                white-space: nowrap;
+            }
+
+            .count {
+                min-width: 21px;
+                height: 17px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 4px;
+                border-radius: 4px;
+                background-color: @color-night;
+                color: @color-white;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: -0.3px;
+            }
+        }
+    }
+
+    .pills {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background-color: @color-white;
+
+        .pill {
+            flex: 1 1 0;
+            min-width: 0;
+            // Four pills land at a quarter each; the cap stops a lone גיל pill (הכל mode)
+            // from stretching across the whole row.
+            max-width: calc(50% ~'-' 5px);
+            height: 34px;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            border-radius: 6px;
+            background-color: @color-pill;
+            cursor: pointer;
+
+            .name {
+                font-size: 12px;
+                letter-spacing: -0.06px;
+                color: @color-night;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .badge {
+                min-width: 21px;
+                height: 17px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 4px;
+                border-radius: 4px;
+                background-color: @color-badge-alert;
+                color: @color-white;
+                font-size: 14px;
+                font-weight: 700;
+                letter-spacing: -0.35px;
+            }
+
+            .chevron {
+                margin-inline-start: auto;
+                flex: 0 0 auto;
+                width: 16px;
+                height: 16px;
+                color: @color-gray-4;
+                .masked-icon('/icon-mi-keyboard-arrow-down.svg'; 16px);
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .active {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 4px 12px;
+        padding: 10px 12px 20px;
+        background-color: @color-white;
+
+        .value {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            gap: 4px;
+            font-size: 17px;
+            letter-spacing: -0.425px;
+            color: @color-night;
+
+            .remove {
+                width: 14px;
+                height: 14px;
+                cursor: pointer;
+                color: @color-night;
+                .masked-icon('/icon-close.svg'; 14px);
+            }
+        }
+    }
+}

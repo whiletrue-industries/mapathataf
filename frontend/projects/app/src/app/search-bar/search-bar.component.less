@@ -1,0 +1,111 @@
+@import '../../common.less';
+
+:host {
+    display: block;
+
+    .bar {
+        display: flex;
+        align-items: center;
+
+
+        .field {
+            flex: 1 1 auto;
+            min-width: 0;
+            height: 40px;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            gap: 8px;
+            padding: 0 13px;
+            border-radius: 360px;
+            background-color: @color-white;
+            box-shadow: @float-shadow;
+
+            .sigil {
+                flex: 0 0 auto;
+                order: -1;
+                width: 20px;
+                height: 24px;
+                .background-image;
+                background-image: url(../../../public/logo-header.svg);
+            }
+
+            input, .name {
+                flex: 1 1 auto;
+                min-width: 0;
+                border: none;
+                outline: none;
+                background: none;
+                padding: 0;
+                font-family: inherit;
+                font-size: 14px;
+                font-weight: 700;
+                letter-spacing: -0.07px;
+                color: @color-night;
+                text-align: right;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                &::placeholder {
+                    color: @color-night;
+                    opacity: 1;
+                }
+            }
+
+            .clear {
+                flex: 0 0 auto;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                color: @color-night;
+                .masked-icon('/icon-close.svg'; 16px);
+            }
+        }
+    }
+
+    .results {
+        margin-top: 8px;
+        background-color: @color-white;
+        border-radius: @sheet-radius;
+        box-shadow: @float-shadow;
+        overflow: hidden;
+        max-height: 50vh;
+        overflow-y: auto;
+        .no-scrollbars;
+
+        .result a, .no-results {
+            display: block;
+            padding: 10px 16px;
+            font-size: 17px;
+            letter-spacing: -0.425px;
+            color: @color-night;
+            text-align: right;
+            cursor: pointer;
+        }
+
+        .result a.item {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        // Says why a match is not on the map right now, rather than hiding it.
+        .outside {
+            flex: 0 0 auto;
+            font-size: 12px;
+            color: @color-gray-2;
+        }
+
+        .result a:hover {
+            background-color: @color-gray-1;
+        }
+
+        .no-results {
+            color: @color-gray-2;
+            cursor: default;
+        }
+    }
+}
