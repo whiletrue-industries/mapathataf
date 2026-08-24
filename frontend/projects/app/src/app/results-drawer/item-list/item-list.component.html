@@ -1,0 +1,10 @@
+@for (item of state.items(); track item.id) {
+    <a class='item' [attr.data-id]='item.id' [class.active]='state.selectedId() === item.id'
+       (click)='state.selectId(item.id)'>
+        <span class='name'>{{ item.resolved.name }}</span>
+        <span class='badge' [class]='"section-" + item.resolved.facility_kind'></span>
+    </a>
+}
+@if (state.items().length === 0) {
+    <div class='empty'>לא נמצאו תוצאות בסינון הנוכחי</div>
+}

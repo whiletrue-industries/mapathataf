@@ -1,9 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ApiService } from '../api.service';
 import { StateService } from '../state.service';
-import { OnboardingAddress, OnboardingQuestionKind, OnboardingService } from './onboarding.service';
+import { OnboardingQuestionKind, OnboardingService } from './onboarding.service';
 import { OnboardingOption, OnboardingQuestionComponent } from './onboarding-question/onboarding-question.component';
-import { OnboardingAddressComponent } from './onboarding-address/onboarding-address.component';
+import { isConcreteSection } from '../sections';
 import { AGE_GROUPS } from '../age-groups';
 
 type OnboardingScreen = 'welcome' | OnboardingQuestionKind | 'final';
@@ -12,7 +12,7 @@ const ONBOARDING_AGE_GROUP_IDS = ['birth_to_1', '1_to_2', '2_to_3'];
 
 @Component({
   selector: 'app-onboarding',
-  imports: [OnboardingQuestionComponent, OnboardingAddressComponent],
+  imports: [OnboardingQuestionComponent],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.less'
 })
@@ -37,7 +37,7 @@ export class OnboardingComponent {
     'אספנו הרבה מידע ויש המון מה לדעת, מאיפה נתחיל?');
   // "מעולה!" if the user answered anything, "אנחנו על זה!" otherwise
   finalTitle = computed(() => {
-    const answered = this.onboarding.answerAge() || this.onboarding.answerInterest() || this.onboarding.answerAddress();
+    const answered = this.onboarding.answerAge() || this.onboarding.answerInterest();
     return answered ? 'מעולה!' : 'אנחנו על זה!';
   });
   disclaimerText = computed(() => this.onboarding.config()?.disclaimer?.text ||
@@ -69,12 +69,8 @@ export class OnboardingComponent {
   }
 
   answerInterest(value: string | null) {
-    this.onboarding.answerInterest.set(value);
-    this.next();
-  }
-
-  answerAddress(value: OnboardingAddress | null) {
-    this.onboarding.answerAddress.set(value);
+    // The skip option carries no value, which is what leaves the map on הכל.
+    this.onboarding.answerInterest.set(isConcreteSection(value) ? value : null);
     this.next();
   }
 

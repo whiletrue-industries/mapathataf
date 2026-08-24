@@ -5,22 +5,17 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { OnboardingService } from './onboarding.service';
 import { ApiService } from '../api.service';
 import { StateService } from '../state.service';
-import { MapboxService } from '../mapbox.service';
 
 describe('OnboardingService', () => {
   let service: OnboardingService;
   let api: ApiService;
   let state: StateService;
   let route: ActivatedRoute;
-  let getItemSpy: jasmine.Spy;
-  let setItemSpy: jasmine.Spy;
 
   function setup(platformId: string = 'browser') {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(), provideRouter([]), {provide: PLATFORM_ID, useValue: platformId},
-        // mapbox-gl registers a global RTL plugin that cannot be initialized once per test
-        {provide: MapboxService, useValue: {map: null}},
       ],
     });
     service = TestBed.inject(OnboardingService);
@@ -31,13 +26,8 @@ describe('OnboardingService', () => {
     api.workspace.set({city: 'דימונה', onboarding: {enabled: true}});
   }
 
-  beforeEach(() => {
-    getItemSpy = spyOn(Storage.prototype, 'getItem').and.returnValue(null);
-    setItemSpy = spyOn(Storage.prototype, 'setItem');
-  });
-
   describe('trigger gating', () => {
-    it('shows when the param is present, there is no fragment and it was not seen', () => {
+    it('shows when the param is present and there is no fragment', () => {
       setup();
       service.considerTrigger(null, '1', route);
       expect(service.visible()).toBeTrue();
@@ -59,14 +49,6 @@ describe('OnboardingService', () => {
       setup();
       service.considerTrigger('education/34.5/31.5/14/////', '1', route);
       expect(service.visible()).toBeFalse();
-    });
-
-    it('does not show when already seen in this browser', () => {
-      getItemSpy.and.returnValue('2026-08-07T00:00:00.000Z');
-      setup();
-      service.considerTrigger(null, '1', route);
-      expect(service.visible()).toBeFalse();
-      expect(getItemSpy).toHaveBeenCalledWith('mapathataf-onboarding-done-dymonh');
     });
 
     it('does not show when the workspace has no onboarding config', () => {
@@ -92,9 +74,11 @@ describe('OnboardingService', () => {
       expect(service.visible()).toBeTrue();
     });
 
-    it('arms when localStorage is unavailable', () => {
-      getItemSpy.and.throwError('denied');
+    it('shows again on a repeat visit with the param', () => {
       setup();
+      service.considerTrigger(null, '1', route);
+      service.dismiss();
+      expect(service.visible()).toBeFalse();
       service.considerTrigger(null, '1', route);
       expect(service.visible()).toBeTrue();
     });
@@ -109,7 +93,7 @@ describe('OnboardingService', () => {
   describe('questions', () => {
     it('defaults to all questions', () => {
       setup();
-      expect(service.questions()).toEqual(['age', 'interest', 'address']);
+      expect(service.questions()).toEqual(['age', 'interest']);
     });
 
     it('follows the configured question list and drops unknown kinds', () => {
@@ -125,12 +109,11 @@ describe('OnboardingService', () => {
       service.considerTrigger(null, '1', route);
     });
 
-    it('dismiss marks as seen and hides without touching filters', () => {
+    it('dismiss hides without touching filters', () => {
       service.dismiss();
       expect(service.visible()).toBeFalse();
-      expect(setItemSpy).toHaveBeenCalledWith('mapathataf-onboarding-done-dymonh', jasmine.any(String));
       expect(state.filterAgeGroup()).toBeNull();
-      expect(state.section()).toEqual('education');
+      expect(state.section()).toEqual('all');
     });
 
     it('complete applies the collected answers', () => {
@@ -138,7 +121,6 @@ describe('OnboardingService', () => {
       service.answerInterest.set('health');
       service.complete();
       expect(service.visible()).toBeFalse();
-      expect(setItemSpy).toHaveBeenCalledWith('mapathataf-onboarding-done-dymonh', jasmine.any(String));
       expect(state.filterAgeGroup()).toEqual(['1_to_2']);
       expect(state.section()).toEqual('health');
     });
@@ -146,13 +128,12 @@ describe('OnboardingService', () => {
     it('complete leaves the age filter empty for skipped or all-ages answers', () => {
       service.complete();
       expect(state.filterAgeGroup()).toBeNull();
-      expect(state.section()).toEqual('education');
+      expect(state.section()).toEqual('all');
     });
 
-    it('complete asks the map to zoom to the chosen address when the map is not ready', () => {
-      service.answerAddress.set({name: 'תמר, דימונה', center: [35.03, 31.07]});
+    it('complete leaves the map at its default view', () => {
       service.complete();
-      expect(state.askZoom()).toEqual([35.03, 31.07, 16]);
+      expect(state.askZoom()).toBeNull();
     });
   });
 });

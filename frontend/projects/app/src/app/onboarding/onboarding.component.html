@@ -23,9 +23,6 @@
             @case ('interest') {
                 <app-onboarding-question title='מה מעניין אותך?' [options]='interestOptions' (selected)='answerInterest($event)'></app-onboarding-question>
             }
-            @case ('address') {
-                <app-onboarding-address (selected)='answerAddress($event)'></app-onboarding-address>
-            }
             @case ('final') {
                 <h1 class='title'>{{ finalTitle() }}</h1>
                 <p class='text'>{{ disclaimerText() }}</p>

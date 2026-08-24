@@ -22,3 +22,15 @@ export function normalizeAgeGroups(value: any): string[] | undefined {
   const normalized = values.includes('all_ages') ? AGE_GROUP_IDS.slice() : values.filter((v) => AGE_GROUP_IDS.includes(v));
   return normalized.length ? normalized : undefined;
 }
+
+// Compact label for a facility's age range, e.g. "1-2, 2-3" or "הכל".
+export function ageGroupLabel(ageGroups: string[] | undefined): string | null {
+  if (!ageGroups?.length) {
+    return null;
+  }
+  const known = AGE_GROUPS.filter((ag) => ageGroups.includes(ag.id));
+  if (known.length === AGE_GROUPS.length) {
+    return 'הכל';
+  }
+  return known.length ? known.map((ag) => ag.short).join(', ') : null;
+}

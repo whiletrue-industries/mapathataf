@@ -1,0 +1,43 @@
+<div class='header' (click)='state.filtersExpanded.set(!state.filtersExpanded())'>
+    <span>פילטרים מתקדמים</span>
+    <div class='chevron' [class.up]='state.filtersExpanded()'></div>
+</div>
+@if (state.filtersExpanded()) {
+    @let counts = state.sectionCounts();
+    <div class='chips'>
+        @for (section of SECTIONS; track section.key) {
+            <a class='chip' [class]='"section-" + section.key' [class.lit]='isLit(section.key)'
+               (click)='selectSection(section.key)'>
+                <span class='name'>{{ section.label }}</span>
+                <span class='count'>{{ counts[section.key].visible }}</span>
+            </a>
+        }
+        <a class='chip section-all' [class.lit]='state.section() === "all"' (click)='selectSection("all")'>
+            <span class='name'>הכל</span>
+            <span class='count'>{{ counts['all'].visible }}</span>
+        </a>
+    </div>
+    @let pillCounts = pillCount();
+    <div class='pills'>
+        @for (kind of pillKinds(); track kind) {
+            <a class='pill' (click)='state.filterOptions.set(kind)'>
+                <span class='name'>{{ FILTER_DEFS[kind].label }}</span>
+                @if (pillCounts[kind]) {
+                    <span class='badge'>{{ pillCounts[kind] }}</span>
+                }
+                <div class='chevron'></div>
+            </a>
+        }
+    </div>
+    @let active = activeFilters();
+    @if (active.length) {
+        <div class='active'>
+            @for (filter of active; track filter.kind) {
+                <span class='value'>
+                    {{ filter.label }}
+                    <a class='remove' (click)='state.clearFilter(filter.kind)' title='הסרת הסינון'></a>
+                </span>
+            }
+        </div>
+    }
+}

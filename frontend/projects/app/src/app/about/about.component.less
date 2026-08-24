@@ -7,6 +7,23 @@
     display: relative;
     background-color: @color-white;
     
+    .bar {
+        flex: 0 0 auto;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 14px 16px;
+
+        .logo {
+            width: 36px;
+            height: 38px;
+            .background-image;
+            background-image: url(../../../public/logo-header.svg);
+        }
+    }
+
     .content {
         flex: 1 1 auto;
         height: 100%;

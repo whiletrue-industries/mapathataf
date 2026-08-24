@@ -6,18 +6,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapboxService } from '../mapbox.service';
-import { ItemListComponent } from "../item-list/item-list.component";
-import { HeaderComponent } from "../header/header.component";
+import { ResultsDrawerComponent } from "../results-drawer/results-drawer.component";
+import { MenuComponent } from "../menu/menu.component";
 import { StateService } from '../state.service';
-import { FiltersComponent } from "../filters/filters.component";
-import { FilterDialogComponent } from "../filter-dialog/filter-dialog.component";
+import { SearchBarComponent } from "../search-bar/search-bar.component";
+import { FilterSheetComponent } from "../filter-sheet/filter-sheet.component";
+import { ItemSheetComponent } from "../item-sheet/item-sheet.component";
 import { DOCUMENT } from '@angular/common';
 import { ONBOARDING_QUERY_PARAM, OnboardingService } from '../onboarding/onboarding.service';
 import { OnboardingComponent } from '../onboarding/onboarding.component';
 
 @Component({
   selector: 'app-main',
-  imports: [MapComponent, ItemListComponent, HeaderComponent, FiltersComponent, FilterDialogComponent, OnboardingComponent],
+  imports: [MapComponent, ResultsDrawerComponent, ItemSheetComponent, MenuComponent, SearchBarComponent, FilterSheetComponent, OnboardingComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.less'
 })
@@ -34,7 +35,6 @@ export class MainComponent implements AfterViewInit {
     public onboarding: OnboardingService,
     @Inject(DOCUMENT) private document: Document,
   ) {
-    console.log('MainComponent constructor');
     this.route.params.pipe(
       takeUntilDestroyed(),
     ).subscribe((params) => {
@@ -57,7 +57,6 @@ export class MainComponent implements AfterViewInit {
           return this.mapboxService.init;
         })
       ).subscribe(() => {
-        console.log('MainComponent browser');
         this.showMap = true;
       });
     });

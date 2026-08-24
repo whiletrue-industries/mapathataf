@@ -20,8 +20,6 @@ describe('OnboardingComponent', () => {
     });
     api = TestBed.inject(ApiService);
     api.workspace.set({city: 'דימונה', onboarding: {enabled: true}});
-    spyOn(Storage.prototype, 'getItem').and.returnValue(null);
-    spyOn(Storage.prototype, 'setItem');
   });
 
   function create(): OnboardingComponent {
@@ -32,7 +30,7 @@ describe('OnboardingComponent', () => {
 
   it('walks welcome, all questions and the final screen by default', () => {
     const component = create();
-    expect(component.screens()).toEqual(['welcome', 'age', 'interest', 'address', 'final']);
+    expect(component.screens()).toEqual(['welcome', 'age', 'interest', 'final']);
   });
 
   it('only shows the configured questions', () => {

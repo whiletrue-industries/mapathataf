@@ -5,6 +5,7 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+
     .content {
         display: flex;
         flex-direction: column;
@@ -13,32 +14,45 @@
         overflow: hidden;
         position: relative;
 
-        app-filters { 
+        // The map is full-bleed; everything else floats over it.
+        // Positions are physical, matching the design's 430px frame.
+        app-search-bar {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1;
+            top: 30px;
+            left: 20px;
+            right: 80px;
+            z-index: 2;
         }
 
-        app-item-list {
+        app-menu {
             position: absolute;
-            bottom: 0;
-            width: 100%;
+            top: 30px;
+            right: 20px;
+            z-index: 2;
         }
 
         .logo {
             position: absolute;
-            top: 74px;
-            left: 16px;
-            width: 124px;
-            height: 100px;
+            top: 84px;
+            left: 21px;
+            width: 143px;
+            height: 70px;
+            z-index: 1;
+            pointer-events: none;
 
             img {
                 object-fit: contain;
+                object-position: left center;
                 width: 100%;
                 height: 100%;
             }
+        }
+
+        app-results-drawer, app-item-sheet {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            z-index: 3;
         }
     }
 }
