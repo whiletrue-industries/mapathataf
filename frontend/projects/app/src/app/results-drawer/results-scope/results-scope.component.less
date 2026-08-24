@@ -41,13 +41,31 @@
 
     .scope {
         flex: 0 0 auto;
+        position: relative;
         display: flex;
         flex-flow: row nowrap;
         border: 1px solid @color-night;
         border-radius: 4px;
         overflow: hidden;
 
+        // The fill slides between the halves instead of jumping. Anchored physically to
+        // the right, where the first (RTL-start) option sits.
+        .indicator {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 50%;
+            background-color: @color-night;
+            transition: transform @ease;
+        }
+
+        &.map .indicator {
+            transform: translateX(-100%);
+        }
+
         .option {
+            position: relative;
             width: 94px;
             height: 23px;
             display: flex;
@@ -59,8 +77,9 @@
             cursor: pointer;
             white-space: nowrap;
 
+            transition: color @ease;
+
             &.selected {
-                background-color: @color-night;
                 color: @color-white;
                 font-weight: 700;
                 letter-spacing: -0.35px;

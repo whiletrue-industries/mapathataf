@@ -4,11 +4,8 @@
     @if (api.workspace().logo_url) {
         <div class='logo'><img [src]='api.workspace().logo_url' /></div>
     }
-    @if (state.selectedId()) {
-        <app-item-sheet></app-item-sheet>
-    } @else {
-        <app-results-drawer></app-results-drawer>
-    }
+    <app-results-drawer></app-results-drawer>
+    <app-item-sheet [class.open]='state.selectedId()'></app-item-sheet>
 </div>
 <app-menu></app-menu>
 @if (state.filterOptions() !== null) {

@@ -2,7 +2,8 @@
     <div class='chevron' [class.up]='state.filtersExpanded()'></div>
     <span>פילטרים מתקדמים</span>
 </div>
-@if (state.filtersExpanded()) {
+<div class='panel' [class.open]='state.filtersExpanded()'>
+    <div class='panel-inner'>
     @let counts = state.sectionCounts();
     <div class='chips'>
         @for (section of SECTIONS; track section.key) {
@@ -40,4 +41,5 @@
             }
         </div>
     }
-}
+    </div>
+</div>

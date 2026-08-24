@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ApiService } from '../api.service';
 import { StateService } from '../state.service';
@@ -34,7 +34,19 @@ export class ItemSheetComponent {
   private static readonly SHARE_LABEL = 'שיתוף רשומה';
   shareLabel = signal(ItemSheetComponent.SHARE_LABEL);
 
-  item = this.state.selectedItem;
+  // Holds on to the last selection so the sheet still has something to draw while it
+  // slides out of view.
+  private shown = signal<any>(null);
+  item = this.shown.asReadonly();
+
+  constructor() {
+    effect(() => {
+      const selected = this.state.selectedItem();
+      if (selected) {
+        this.shown.set(selected);
+      }
+    });
+  }
 
   /**
    * Built here rather than as a wall of template conditionals: every field is the same

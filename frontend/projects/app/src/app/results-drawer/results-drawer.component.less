@@ -47,8 +47,25 @@
         background-color: @color-sheet;
     }
 
-    app-item-list {
+    // 0fr -> 1fr is the one way to transition to a content-driven height. The list
+    // clips itself (it owns its scrolling), so this wrapper must not add overflow —
+    // that would cut off the section shadow. Fading it out instead keeps the shadow
+    // from lingering as a band once the row collapses to zero.
+    .list {
         flex: 1 1 auto;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition: grid-template-rows @ease, opacity @ease;
+
+        &.open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+        }
+    }
+
+    app-item-list {
         min-height: 0;
     }
 }

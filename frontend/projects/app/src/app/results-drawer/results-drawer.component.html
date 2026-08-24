@@ -5,6 +5,6 @@
 </div>
 <app-results-scope />
 <app-filter-panel />
-@if (expanded()) {
+<div class='list' [class.open]='expanded()'>
     <app-item-list />
-}
+</div>

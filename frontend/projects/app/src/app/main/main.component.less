@@ -57,5 +57,20 @@
             width: 100%;
             z-index: 3;
         }
+
+        // The detail sheet rides over the list and slides away rather than vanishing,
+        // which is why both stay mounted.
+        app-item-sheet {
+            z-index: 4;
+            transform: translateY(100%);
+            transition: transform @ease, visibility 0s @ease;
+            visibility: hidden;
+
+            &.open {
+                transform: translateY(0);
+                visibility: visible;
+                transition: transform @ease, visibility 0s;
+            }
+        }
     }
 }

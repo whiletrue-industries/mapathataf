@@ -51,3 +51,11 @@ a, a:visited, a:hover {
     text-decoration: none;
 }
 /* You can add global styles to this file, and also import other style files */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

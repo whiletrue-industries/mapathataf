@@ -28,6 +28,23 @@
         }
     }
 
+    // Same 0fr -> 1fr collapse as the results list; the inner element clips so the
+    // bands inside do not spill while the row shrinks.
+    .panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows @ease;
+
+        &.open {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    .panel-inner {
+        min-height: 0;
+        overflow: hidden;
+    }
+
     .chips {
         display: flex;
         flex-flow: row nowrap;

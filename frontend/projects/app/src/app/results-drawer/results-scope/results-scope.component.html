@@ -7,7 +7,8 @@
     }
 </div>
 <div class='label'>תוצאות</div>
-<div class='scope'>
+<div class='scope' [class.map]='state.mapScope() === "map"'>
+    <span class='indicator'></span>
     <a class='option' [class.selected]='state.mapScope() === "city"' (click)='setScope("city")'>בכל הרשות</a>
     <a class='option' [class.selected]='state.mapScope() === "map"' (click)='setScope("map")'>באיזור המפה</a>
 </div>
