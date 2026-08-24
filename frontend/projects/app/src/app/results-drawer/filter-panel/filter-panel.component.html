@@ -1,6 +1,6 @@
 <div class='header' (click)='state.filtersExpanded.set(!state.filtersExpanded())'>
-    <span>פילטרים מתקדמים</span>
     <div class='chevron' [class.up]='state.filtersExpanded()'></div>
+    <span>פילטרים מתקדמים</span>
 </div>
 @if (state.filtersExpanded()) {
     @let counts = state.sectionCounts();

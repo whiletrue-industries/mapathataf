@@ -7,6 +7,7 @@
     <div class='body'>
         @for (row of rows(); track row.label) {
             <div class='row'>
+                <span class='capsule' [class]='"icon-" + row.icon'></span>
                 <span class='text'>{{ row.label }}:
                     @if (row.href) {
                         <a [href]='row.href' target='_blank'>{{ row.value }}</a>
@@ -14,16 +15,15 @@
                         {{ row.value }}
                     }
                 </span>
-                <span class='capsule' [class]='"icon-" + row.icon'></span>
             </div>
         }
         <div class='row action'>
-            <span class='text'>שיתוף רשומה</span>
             <a class='button icon-share' (click)='shareRecord()' title='שיתוף רשומה'></a>
+            <span class='text'>שיתוף רשומה</span>
         </div>
         <div class='row action'>
-            <span class='text'>מצאת טעות בנתונים?</span>
             <a class='button icon-warning' [href]='contactFormLink()' target='_blank' title='דיווח על טעות'></a>
+            <span class='text'>מצאת טעות בנתונים?</span>
         </div>
         @if (selected.user?.photo) {
             <div class='photo'>
