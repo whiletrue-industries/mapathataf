@@ -9,6 +9,8 @@ export type ResultItem = {
   name: string;
   id: string;
   kind: 'item' | 'street';
+  /** A facility that exists in this city but is hidden by the filters or the map scope. */
+  outsideFilter?: boolean;
 };
 
 export type MapScope = 'city' | 'map';

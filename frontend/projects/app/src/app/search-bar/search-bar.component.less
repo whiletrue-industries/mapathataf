@@ -84,6 +84,21 @@
             cursor: pointer;
         }
 
+        .result a.item {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        // Says why a match is not on the map right now, rather than hiding it.
+        .outside {
+            flex: 0 0 auto;
+            font-size: 12px;
+            color: @color-gray-2;
+        }
+
         .result a:hover {
             background-color: @color-gray-1;
         }

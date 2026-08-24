@@ -34,9 +34,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   data = computed<GeoJSON.GeoJSON>(() => {
     const activeId = this.state.selectedId();
+    const items = this.state.items();
+    // A selection reached by search or a shared link can sit outside the current filters;
+    // its pin still belongs on the map, otherwise the map flies to an empty spot.
+    const selected = this.state.selectedItem();
+    const shown = selected && !items.some((item) => item.id === selected.id)
+      ? [...items, selected]
+      : items;
     return {
       type: 'FeatureCollection',
-      features: this.state.items().filter((item) => {
+      features: shown.filter((item) => {
         return item.resolved && item.resolved.lng && item.resolved.lat;
       }).map((item) => {
         return {

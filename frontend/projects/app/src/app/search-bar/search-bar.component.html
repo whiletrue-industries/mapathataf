@@ -18,7 +18,12 @@
         @for (r of searchResults; track r.id) {
             <div class='result'>
                 @if (r.kind === 'item') {
-                    <a class='item' (click)='itemSelect(r)'>{{ r.name }}</a>
+                    <a class='item' (click)='itemSelect(r)'>
+                        {{ r.name }}
+                        @if (r.outsideFilter) {
+                            <span class='outside'>מחוץ לסינון</span>
+                        }
+                    </a>
                 } @else if (r.kind === 'street') {
                     <a class='street' (click)='autocompleteSelect(r)'>{{ r.name }}</a>
                 }
