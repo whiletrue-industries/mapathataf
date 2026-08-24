@@ -21,7 +21,9 @@
         flex-direction: column;
         height: 100%;
         width: 100%;
-        overflow: hidden;
+        // clip, not hidden: both clip, but `hidden` is a scroll container and could be
+        // scrolled programmatically, which shifted everything positioned inside it.
+        overflow: clip;
         position: relative;
 
         // The map is full-bleed; everything else floats over it.

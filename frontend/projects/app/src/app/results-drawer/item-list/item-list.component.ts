@@ -26,9 +26,17 @@ export class ItemListComponent {
         return;
       }
       timer(0).subscribe(() => {
-        this.el?.nativeElement?.querySelector(`[data-id="${selectedId}"]`)?.scrollIntoView({
-          behavior: 'smooth',
-        });
+        const container = this.el?.nativeElement as HTMLElement | undefined;
+        const row = container?.querySelector(`[data-id="${selectedId}"]`) as HTMLElement | null;
+        if (!container || !row) {
+          return;
+        }
+        // Deliberately not scrollIntoView: that scrolls every scrollable ancestor, which
+        // dragged the whole map layer out of position. Scroll only this list.
+        const top = row.getBoundingClientRect().top
+          - container.getBoundingClientRect().top
+          + container.scrollTop;
+        container.scrollTo({ top, behavior: 'smooth' });
       });
     });
   }
