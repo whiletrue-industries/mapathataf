@@ -101,15 +101,18 @@
     @glyph: 16px;
     .icon-library-books::after  { .masked-icon('/icon-mi-library-books.svg';  @glyph); }
     .icon-access-time::after    { .masked-icon('/icon-mi-access-time.svg';    @glyph); }
-    .icon-person::after         { .masked-icon('/icon-mi-person.svg';         @glyph); }
+    .icon-person::after         { .masked-icon('/icon-person.svg';            @glyph); }
     .icon-perm-phone-msg::after { .masked-icon('/icon-mi-perm-phone-msg.svg'; @glyph); }
     .icon-email::after          { .masked-icon('/icon-mi-email.svg';          @glyph); }
     .icon-link::after           { .masked-icon('/icon-mi-link.svg';           @glyph); }
     .icon-location-city::after  { .masked-icon('/icon-mi-location-city.svg';  @glyph); }
     
     
-    .icon-share::after           { .masked-icon('/icon-mi-share.svg';           20px); }
-    .icon-warning::after         { .masked-icon('/icon-mi-warning.svg';         20px); }
+    // Two-tone by design — a mask would flatten them, so the colours are baked in and
+    // these sit on the white action buttons rather than being tinted. Scoped under .row to
+    // outrank the `background-size: contain` the shared ::after rule sets there.
+    .row .icon-share::after   { background-image: url(../../../public/icon-share.svg); background-size: 20px; }
+    .row .icon-warning::after { background-image: url(../../../public/icon-alert.svg); background-size: 20px; }
 
     // Every licensing status shares the checkbox glyph, as the design does: the row's own
     // text already names the status, and status-coloured artwork broke up the icon column.

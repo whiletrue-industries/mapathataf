@@ -6,6 +6,16 @@
     width: 100%;
     height: 100%;
 
+    // Deliberately a sibling of .content, not a child: the slide-down panel has to cover
+    // the sheets, and nesting it in the map layer left it hostage to that stacking
+    // context — desktop Chrome honoured the z-index, Android did not.
+    app-menu {
+        position: fixed;
+        top: 30px;
+        right: 20px;
+        z-index: 20;
+    }
+
     .content {
         display: flex;
         flex-direction: column;
@@ -22,15 +32,6 @@
             left: 20px;
             right: 80px;
             z-index: 2;
-        }
-
-        app-menu {
-            position: absolute;
-            top: 30px;
-            right: 20px;
-            // Above the sheets: the slide-down panel is a child of this stacking context,
-            // so it can only cover the drawer if the host outranks it.
-            z-index: 4;
         }
 
         .logo {

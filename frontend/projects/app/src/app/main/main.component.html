@@ -1,7 +1,6 @@
 <div class='content'>
     @if (showMap) { <app-map></app-map> }
     <app-search-bar></app-search-bar>
-    <app-menu></app-menu>
     @if (api.workspace().logo_url) {
         <div class='logo'><img [src]='api.workspace().logo_url' /></div>
     }
@@ -11,6 +10,7 @@
         <app-results-drawer></app-results-drawer>
     }
 </div>
+<app-menu></app-menu>
 @if (state.filterOptions() !== null) {
     <app-filter-sheet></app-filter-sheet>
 }
