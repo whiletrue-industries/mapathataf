@@ -5,29 +5,8 @@
 
     .bar {
         display: flex;
-        // Under RTL, row-reverse lays children left-to-right: the back button sits on
-        // the physical left, the field fills the rest.
-        flex-direction: row-reverse;
         align-items: center;
-        gap: 10px;
 
-        .back {
-            flex: 0 0 auto;
-            width: 40px;
-            height: 40px;
-            border-radius: 360px;
-            background-color: @color-white;
-            box-shadow: @float-shadow;
-            cursor: pointer;
-            color: @color-night;
-            &::after {
-                content: '';
-                display: block;
-                width: 100%;
-                height: 100%;
-                .masked-icon('/icon-mi-arrow-back-ios-new.svg'; 16px);
-            }
-        }
 
         .field {
             flex: 1 1 auto;

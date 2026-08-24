@@ -13,9 +13,22 @@
         background-color: @color-white;
         box-shadow: @float-shadow;
         cursor: pointer;
+        color: @color-night;
         .background-image;
         background-size: 20px 14px;
         background-image: url(../../../public/icon-menu.svg);
+
+        &.closing {
+            background-image: none;
+
+            &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 100%;
+                .masked-icon('/icon-mi-close.svg'; 20px);
+            }
+        }
     }
 
     .menu {

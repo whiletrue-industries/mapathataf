@@ -1,8 +1,5 @@
 @let selected = state.selectedItem();
 <div class='bar'>
-    @if (selected) {
-        <a class='back' (click)='state.selectedId.set(null)' title='חזרה לרשימת התוצאות'></a>
-    }
     <div class='field'>
         <div class='sigil'></div>
         @if (selected) {

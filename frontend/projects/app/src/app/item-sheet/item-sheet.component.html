@@ -2,7 +2,6 @@
 @if (selected) {
     <div class='title'>
         <h2>{{ selected.resolved.name }}</h2>
-        <a class='close' (click)='state.selectedId.set(null)' title='סגירה'></a>
     </div>
     <div class='body'>
         @for (row of rows(); track row.label) {

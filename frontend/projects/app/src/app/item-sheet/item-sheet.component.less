@@ -16,7 +16,7 @@
         align-items: center;
         gap: 8px;
         min-height: 60px;
-        padding: 10px 20px 10px 34px;
+        padding: 10px 20px;
 
         h2 {
             flex: 1 1 auto;
@@ -27,14 +27,6 @@
             color: @color-night;
         }
 
-        .close {
-            flex: 0 0 auto;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            color: @color-night;
-            .masked-icon('/icon-mi-close.svg'; 20px);
-        }
     }
 
     .body {
@@ -64,28 +56,26 @@
         }
 
         .capsule {
+            // Fixed, never stretched: a wrapped value used to inflate its own capsule and
+            // the column stopped reading as one set of icons.
             flex: 0 0 auto;
             width: 32px;
-            align-self: stretch;
-            min-height: 27px;
-            padding: 6px 0;
+            height: 27px;
+            align-self: flex-start;
             border-radius: 30px;
             background-color: @color-icon-capsule;
             color: @color-night;
         }
 
         // The glyph lives on ::after so the mask's own background-color cannot eat the
-        // capsule's grey fill (or the action button's white circle and shadow). Giving it
-        // a fixed height keeps the glyph at the top of a capsule stretched by a long value.
+        // capsule's grey fill (or the action button's white circle and shadow).
         .capsule::after, .button::after {
             content: '';
             display: block;
             width: 100%;
+            height: 100%;
             .background-image;
         }
-
-        .capsule::after { height: 15px; }
-        .button::after { height: 100%; }
 
         &.action {
             .text {
@@ -106,24 +96,28 @@
         }
     }
 
-    // Material glyphs are masked so they take the sheet's navy; the licensing icons are
-    // status-coloured artwork and are drawn as-is.
-    .icon-library-books::after   { .masked-icon('/icon-mi-library-books.svg';   15px); }
-    .icon-access-time::after     { .masked-icon('/icon-mi-access-time.svg';     15px); }
-    .icon-person::after          { .masked-icon('/icon-mi-person.svg';          15px); }
-    .icon-perm-phone-msg::after  { .masked-icon('/icon-mi-perm-phone-msg.svg';  15px); }
-    .icon-email::after           { .masked-icon('/icon-mi-email.svg';           15px); }
-    .icon-link::after            { .masked-icon('/icon-mi-link.svg';            15px); }
-    .icon-location-city::after   { .masked-icon('/icon-mi-location-city.svg';   20px); }
+    // Material glyphs are masked so they take the sheet's navy, all at one size so the
+    // icon column reads as a set. The licensing icons are status-coloured artwork.
+    @glyph: 16px;
+    .icon-library-books::after  { .masked-icon('/icon-mi-library-books.svg';  @glyph); }
+    .icon-access-time::after    { .masked-icon('/icon-mi-access-time.svg';    @glyph); }
+    .icon-person::after         { .masked-icon('/icon-mi-person.svg';         @glyph); }
+    .icon-perm-phone-msg::after { .masked-icon('/icon-mi-perm-phone-msg.svg'; @glyph); }
+    .icon-email::after          { .masked-icon('/icon-mi-email.svg';          @glyph); }
+    .icon-link::after           { .masked-icon('/icon-mi-link.svg';           @glyph); }
+    .icon-location-city::after  { .masked-icon('/icon-mi-location-city.svg';  @glyph); }
+    
+    
     .icon-share::after           { .masked-icon('/icon-mi-share.svg';           20px); }
     .icon-warning::after         { .masked-icon('/icon-mi-warning.svg';         20px); }
 
-    // Licensing artwork is status-coloured, so it is drawn as a background rather than masked.
-    .icon-licensing-valid::after         { background-image: url(../../../public/icon-licensing-valid.svg); }
-    .icon-licensing-in_progress::after   { background-image: url(../../../public/icon-licensing-in-progress.svg); }
-    .icon-licensing-did_not_apply::after { background-image: url(../../../public/icon-licensing-did-not-apply.svg); }
-    .icon-licensing-not_needed::after    { .masked-icon('/icon-mi-check-box.svg'; 20px); }
-    .icon-licensing-none::after          { background-image: url(../../../public/icon-licensing-none.svg); }
+    // Every licensing status shares the checkbox glyph, as the design does: the row's own
+    // text already names the status, and status-coloured artwork broke up the icon column.
+    .icon-licensing-valid::after,
+    .icon-licensing-in_progress::after,
+    .icon-licensing-did_not_apply::after,
+    .icon-licensing-not_needed::after,
+    .icon-licensing-none::after { .masked-icon('/icon-mi-check-box.svg'; @glyph); }
 
     .photo {
         padding: 18px 0;

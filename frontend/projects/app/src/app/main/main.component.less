@@ -28,7 +28,9 @@
             position: absolute;
             top: 30px;
             right: 20px;
-            z-index: 2;
+            // Above the sheets: the slide-down panel is a child of this stacking context,
+            // so it can only cover the drawer if the host outranks it.
+            z-index: 4;
         }
 
         .logo {

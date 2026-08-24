@@ -25,4 +25,13 @@ export class MenuComponent {
   ]
 
   constructor(public api: ApiService, public state: StateService) {}
+
+  // The detail view has no chrome of its own, so this button doubles as its close control.
+  press() {
+    if (this.state.selectedId()) {
+      this.state.selectedId.set(null);
+    } else {
+      this.active = true;
+    }
+  }
 }

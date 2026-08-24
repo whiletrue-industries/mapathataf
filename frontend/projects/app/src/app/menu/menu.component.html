@@ -1,4 +1,5 @@
-<div class='menu-button' (click)='active = true'></div>
+<div class='menu-button' [class.closing]='state.selectedId()' (click)='press()'
+     [title]='state.selectedId() ? "סגירה" : "תפריט"'></div>
 <div class='menu' [class.active]='active' (click)='active=false; true'>
     @for (link of commonLinks || []; track link) {
         <a class='internal' [routerLink]='link.routerLink'>{{link.title}}</a>
