@@ -3,6 +3,10 @@
 :host {
     display: block;
     background-color: @color-sheet;
+    box-shadow: @section-shadow;
+    // Owns its own scrolling: a wrapper with overflow would clip the shadow above it.
+    overflow-y: auto;
+    .no-scrollbars;
 
     .item {
         display: flex;
