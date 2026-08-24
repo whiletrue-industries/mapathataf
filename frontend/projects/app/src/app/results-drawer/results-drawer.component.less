@@ -4,7 +4,7 @@
     display: flex;
     flex-flow: column;
     // Leaves the map roughly the top 44% of the screen, as in the design.
-    max-height: 56vh;
+    max-height: @drawer-height;
     background-color: @color-sheet;
     border-radius: @sheet-radius @sheet-radius 0 0;
     box-shadow: @sheet-shadow;
@@ -47,25 +47,32 @@
         background-color: @color-sheet;
     }
 
-    // 0fr -> 1fr is the one way to transition to a content-driven height. The list
-    // clips itself (it owns its scrolling), so this wrapper must not add overflow —
-    // that would cut off the section shadow. Fading it out instead keeps the shadow
-    // from lingering as a band once the row collapses to zero.
+    // The open height is the drawer's own max, not the content height, which pins the
+    // expanded drawer to exactly @drawer-height however many results there are. That
+    // matters for more than tidiness: a content-driven height fed a loop — taller drawer
+    // -> more map hidden behind it -> fewer results inside the viewport -> shorter drawer
+    // -> and back — which oscillated whenever a pin sat on the visible-area boundary.
+    // Flex shrink then hands the list whatever the chrome above it does not use.
+    //
+    // No overflow here: the list clips itself, and hiding overflow would cut off the
+    // section shadow. Fading instead keeps that shadow from lingering as a band at zero.
     .list {
         flex: 1 1 auto;
         min-height: 0;
-        display: grid;
-        grid-template-rows: 0fr;
+        height: 0;
+        display: flex;
+        flex-direction: column;
         opacity: 0;
-        transition: grid-template-rows @ease, opacity @ease;
+        transition: height @ease, opacity @ease;
 
         &.open {
-            grid-template-rows: 1fr;
+            height: @drawer-height;
             opacity: 1;
         }
     }
 
     app-item-list {
+        flex: 1 1 auto;
         min-height: 0;
     }
 }
