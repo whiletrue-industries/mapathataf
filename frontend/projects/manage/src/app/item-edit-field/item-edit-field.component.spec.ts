@@ -7,7 +7,7 @@ describe('ItemEditFieldComponent', () => {
     { id: 'birth_to_1', display: 'לידה עד 1' },
     { id: '1_to_2', display: '1-2' },
     { id: '2_to_3', display: '2-3' },
-    { id: '3_to_6', display: '3-6' },
+    { id: '3_to_6', display: '+3' },
   ];
 
   let fixture: ComponentFixture<ItemEditFieldComponent>;
