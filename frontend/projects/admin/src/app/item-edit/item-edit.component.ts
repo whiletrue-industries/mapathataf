@@ -171,6 +171,15 @@ export class ItemEditComponent {
     {  name: 'org_name',        type: 'text',    label: 'ארגון מפעיל'     },
     {  name: 'org',        type: 'text',    label: 'ארגון מפעיל'     },
     {  name: 'phone',       type: 'text',    label: 'טלפון'  },
+    {  name: 'phone_numbers', type: 'text',  label: 'כל הטלפונים'  },
+    {  name: 'fax',         type: 'text',    label: 'פקס'  },
+    {  name: 'email',       type: 'text',    label: 'דוא"ל'  },
+    {  name: 'activity_hours', type: 'text', label: 'שעות פעילות'  },
+    {  name: 'more_details', type: 'text',   label: 'פרטים נוספים'  },
+    {  name: 'address_comments', type: 'text', label: 'הערות לכתובת'  },
+    {  name: 'status',      type: 'text',    label: 'סטטוס'  },
+    {  name: 'district',    type: 'text',    label: 'נפה'  },
+    {  name: 'region',      type: 'text',    label: 'מחוז'  },
 
     {  name: 'admission_committee',     type: 'boolean',    label: 'ועדת קבלה'   },
     {  name: 'facility_type',     type: 'text',    label: 'סוג מוסד'   },
@@ -197,6 +206,10 @@ export class ItemEditComponent {
 
 
     {  name: 'mol_symbol' , hide: true },
+    {  name: 'status_code', hide: true },
+    {  name: 'folder_num',  hide: true },
+    {  name: 'city_code',   hide: true },
+    {  name: 'owner_code',  hide: true },
     {  name: 'symbol',      hide: true },
     {  name: 'office',      hide: true },
     {  name: 'symbol_text', hide: true },

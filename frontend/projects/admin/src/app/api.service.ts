@@ -105,6 +105,8 @@ export class ApiService {
         official.office = 'משרד הרווחה';
       } else if (source === 'moe') {
         official.office = 'משרד החינוך';
+      } else if (source === 'moh') {
+        official.office = 'משרד הבריאות';
       }
       if (official.symbol && official.office) {
         official.symbol_text = `${official.symbol} (${official.office})`;

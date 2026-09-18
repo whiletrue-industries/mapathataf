@@ -72,7 +72,8 @@ export class ItemSheetComponent {
     add('library-books', 'סוג בעלות', OWNER_KIND_LABELS[resolved.owner_kind]);
     add('library-books', 'פרטים נוספים', resolved.more_details);
     add('access-time', 'שעות פעילות', resolved.activity_hours);
-    add('library-books', 'סמל מעון', resolved.symbol_text);
+    // Ministry of Health records are Tipat Halav stations, not daycares
+    add('library-books', resolved.source === 'moh' ? 'סמל תחנה' : 'סמל מעון', resolved.symbol_text);
     if (resolved.license_status) {
       rows.push({
         icon: 'licensing-' + (resolved.license_status_code || 'none'),
