@@ -136,3 +136,19 @@ describe('resolveItem location resolution', () => {
     expect(item.resolved.address).toBe('ליד המרכז');
   });
 });
+
+describe('resolveItem symbol_text', () => {
+  const resolved = (official: any) => {
+    const item: any = { official: [official] };
+    resolveItem(item);
+    return item.resolved;
+  };
+
+  it('names the ministry of a Tipat Halav (moh) record', () => {
+    expect(resolved({ source: 'moh', symbol: '5120000395' }).symbol_text).toBe('5120000395 (משרד הבריאות)');
+  });
+
+  it('keeps the bare symbol for sources without a ministry label', () => {
+    expect(resolved({ source: 'moe', symbol: '10393' }).symbol_text).toBe('10393');
+  });
+});

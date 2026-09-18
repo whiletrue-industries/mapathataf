@@ -80,6 +80,8 @@ export function resolveItem(item: any): any {
       item.resolved.symbol_text = `${item.resolved.symbol} (משרד העבודה)`;
     } else if (item.resolved.source === 'welfare') {
       item.resolved.symbol_text = `${item.resolved.symbol} (משרד הרווחה)`;
+    } else if (item.resolved.source === 'moh') {
+      item.resolved.symbol_text = `${item.resolved.symbol} (משרד הבריאות)`;
     } else {
       item.resolved.symbol_text = `${item.resolved.symbol}`
     }
