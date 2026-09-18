@@ -24,9 +24,14 @@
             <span class='button icon-warning'></span>
             <span class='text'>מצאת טעות בנתונים?</span>
         </a>
-        @if (selected.user?.photo) {
-            <div class='photo'>
-                <img [src]='selected.user.photo' alt='תמונת המסגרת' />
+        @if (photos().length) {
+            <div class='photos' [class.single]='photos().length === 1'>
+                @for (photo of photos(); track $index) {
+                    <button type='button' class='photo' (click)='openPhoto($index, $event.currentTarget)'
+                        [attr.aria-label]='"הגדלת תמונה " + ($index + 1) + " מתוך " + photos().length'>
+                        <img [src]='photo' alt='' />
+                    </button>
+                }
             </div>
         }
     </div>

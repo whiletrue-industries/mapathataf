@@ -27,4 +27,12 @@ describe('fieldValue', () => {
     expect(fieldValue({ age_group: '1_to_2' }, enumField)).toBe('1-2');
     expect(fieldValue({ age_group: 'bogus' }, enumField)).toBe('לא הוזן');
   });
+
+  it('lists photos, reading a legacy single photo too, and is null when there are none', () => {
+    const photosField: Field = { name: 'photos', type: 'images' };
+    expect(fieldValue({ photos: ['a', 'b'] }, photosField)).toEqual(['a', 'b']);
+    expect(fieldValue({ photo: 'a' }, photosField)).toEqual(['a']);
+    expect(fieldValue({ photos: [] }, photosField)).toBeNull();
+    expect(fieldValue({}, photosField)).toBeNull();
+  });
 });

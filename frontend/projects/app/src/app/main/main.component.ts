@@ -15,10 +15,12 @@ import { ItemSheetComponent } from "../item-sheet/item-sheet.component";
 import { DOCUMENT } from '@angular/common';
 import { ONBOARDING_QUERY_PARAM, OnboardingService } from '../onboarding/onboarding.service';
 import { OnboardingComponent } from '../onboarding/onboarding.component';
+import { LightboxComponent } from '../lightbox/lightbox.component';
+import { LightboxService } from '../lightbox/lightbox.service';
 
 @Component({
   selector: 'app-main',
-  imports: [MapComponent, ResultsDrawerComponent, ItemSheetComponent, MenuComponent, SearchBarComponent, FilterSheetComponent, OnboardingComponent],
+  imports: [MapComponent, ResultsDrawerComponent, ItemSheetComponent, MenuComponent, SearchBarComponent, FilterSheetComponent, OnboardingComponent, LightboxComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.less'
 })
@@ -33,6 +35,7 @@ export class MainComponent implements AfterViewInit {
     private mapboxService: MapboxService,
     public state: StateService,
     public onboarding: OnboardingService,
+    public lightbox: LightboxService,
     @Inject(DOCUMENT) private document: Document,
   ) {
     this.route.params.pipe(

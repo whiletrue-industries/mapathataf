@@ -75,15 +75,22 @@
                 }
             }
         }
-        img.value {
-            width: 100%;
+        .thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            padding-top: 8px;
 
-            &.editable {
-                cursor: pointer;
-                &:hover {
-                    opacity: 0.8;
-                }
+            img {
+                display: block;
+                width: 100%;
+                aspect-ratio: 4 / 3;
+                object-fit: cover;
+                border-radius: 4px;
             }
+        }
+        .editable .thumbnails:hover {
+            opacity: 0.8;
         }
 
         &.multi-enum {
@@ -117,7 +124,7 @@
             }
         }
 
-        &.image {
+        &.images {
             align-items: flex-start;
             span.value.editable {
                 background-position: top 7px right;

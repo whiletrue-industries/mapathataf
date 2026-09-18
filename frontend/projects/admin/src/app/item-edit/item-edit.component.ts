@@ -6,6 +6,7 @@ import { debounceTime, Subject, timer } from 'rxjs';
 import dayjs from 'dayjs';
 import { ItemEditFieldComponent } from "../item-edit-field/item-edit-field.component";
 import { AGE_GROUPS } from '../../../../app/src/app/age-groups';
+import { MAX_PHOTOS } from '../../../../app/src/app/photos';
 import { geocodeStatusText, resolvedLocationText } from './location-status';
 
 @Component({
@@ -81,9 +82,9 @@ export class ItemEditComponent {
         {  name: 'phone', type: 'text', label: 'טלפון' },
         {  name: 'email', type: 'text', label: 'דוא"ל' },
 
-      {  name: 'תמונת המסגרת', type: 'section' },
-        {  name: 'photo',   type: 'image',    label: 'תמונה מייצגת של המסגרת' },
-        
+      {  name: 'תמונות המסגרת', type: 'section' },
+        {  name: 'photos',   type: 'images',    label: `תמונות של המסגרת (עד ${MAX_PHOTOS})` },
+
     ];
   });
   FIELD_CONFIG_USER_EDUCATION = computed<Field[]>(() => [
