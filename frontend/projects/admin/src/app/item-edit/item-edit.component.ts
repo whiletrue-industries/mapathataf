@@ -56,9 +56,6 @@ export class ItemEditComponent {
       ]}]
   };
 
-  PHOTOS_SECTION: Field = { name: 'תמונות המסגרת', type: 'section' };
-  PHOTOS_FIELD: Field = { name: 'photos', type: 'images', label: `תמונות של המסגרת (עד ${MAX_PHOTOS})` };
-
   itemKind = computed(() => {
     const item = this.api.item();
     console.log('ItemEditComponent: itemKind', item?.resolved?.facility_kind);
@@ -85,8 +82,9 @@ export class ItemEditComponent {
         {  name: 'phone', type: 'text', label: 'טלפון' },
         {  name: 'email', type: 'text', label: 'דוא"ל' },
 
-      this.PHOTOS_SECTION,
-      this.PHOTOS_FIELD,
+      {  name: 'תמונות המסגרת', type: 'section' },
+        {  name: 'photos',   type: 'images',    label: `תמונות של המסגרת (עד ${MAX_PHOTOS})` },
+
     ];
   });
   FIELD_CONFIG_USER_EDUCATION = computed<Field[]>(() => [
@@ -145,8 +143,6 @@ export class ItemEditComponent {
         {  name: 'email', type: 'text', label: 'דוא"ל' },
         {  name: '_private_contact_details', type: 'text', label: 'פרטי קשר נוספים' },
 
-      this.PHOTOS_SECTION,
-      this.PHOTOS_FIELD,
     ];
   });
   FIELD_CONFIG_ADMIN_EDUCATION = computed<Field[]>(() => [

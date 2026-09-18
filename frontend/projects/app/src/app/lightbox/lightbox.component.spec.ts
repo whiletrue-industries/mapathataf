@@ -7,8 +7,10 @@ const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
 
 describe('LightboxService', () => {
   let service: LightboxService;
+  let back: jasmine.Spy;
 
   beforeEach(() => {
+    back = spyOn(history, 'back');
     service = TestBed.inject(LightboxService);
   });
 
@@ -29,12 +31,63 @@ describe('LightboxService', () => {
     service.close();
     expect(service.content()).toBeNull();
   });
+
+  describe('back button', () => {
+    it('opens onto a history entry of its own, at the same URL', () => {
+      const url = location.href;
+      const before = history.length;
+      service.open(['a']);
+      expect(history.state.lightbox).toBeTrue();
+      expect(history.length).toBe(before + 1);
+      expect(location.href).toBe(url);
+    });
+
+    it('keeps what the router had stored on the entry', () => {
+      history.replaceState({ navigationId: 7 }, '');
+      service.open(['a']);
+      expect(history.state.navigationId).toBe(7);
+    });
+
+    it('pushes once, however many times it is opened', () => {
+      const push = spyOn(history, 'pushState').and.callThrough();
+      service.open(['a', 'b'], 0);
+      service.open(['a', 'b'], 1);
+      expect(push).toHaveBeenCalledTimes(1);
+    });
+
+    it('closes when the browser goes back, without going back a second time', () => {
+      service.open(['a']);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      expect(service.content()).toBeNull();
+      expect(back).not.toHaveBeenCalled();
+    });
+
+    it('takes its entry off the stack when closed from the inside', () => {
+      service.open(['a']);
+      service.close();
+      expect(back).toHaveBeenCalledTimes(1);
+    });
+
+    it('leaves the history alone if the router has navigated since it opened', () => {
+      service.open(['a']);
+      history.replaceState({ navigationId: 8 }, '');
+      service.close();
+      expect(back).not.toHaveBeenCalled();
+    });
+
+    it('does not touch the history when closed while already closed', () => {
+      service.close();
+      expect(back).not.toHaveBeenCalled();
+    });
+  });
 });
 
 describe('LightboxComponent', () => {
   let service: LightboxService;
   let fixture: ComponentFixture<LightboxComponent>;
   let element: HTMLElement;
+
+  beforeEach(() => spyOn(history, 'back'));
 
   function open(photos: string[], index = 0) {
     service = TestBed.inject(LightboxService);
@@ -119,6 +172,23 @@ describe('LightboxComponent', () => {
     fixture.componentInstance.go(1);
     const sign = getComputedStyle(track).direction === 'rtl' ? -1 : 1;
     expect(scrollTo.calls.mostRecent().args[0]).toEqual(jasmine.objectContaining({ left: sign * track.clientWidth }));
+  });
+
+  it('locks the track while a photo is zoomed, and unzooms before moving on', () => {
+    open([PIXEL, PIXEL]);
+    const image = element.querySelector<HTMLElement>('.slide img')!;
+    image.dispatchEvent(new MouseEvent('dblclick', { clientX: 10, clientY: 10 }));
+    fixture.detectChanges();
+    expect(image.classList).toContain('zoomed');
+    expect(element.querySelector('.track')!.classList).toContain('locked');
+
+    element.querySelector<HTMLElement>('.slide')!.click();
+    expect(service.content()).withContext('a click around a zoomed photo').not.toBeNull();
+
+    fixture.componentInstance.go(1);
+    fixture.detectChanges();
+    expect(image.classList).not.toContain('zoomed');
+    expect(element.querySelector('.track')!.classList).not.toContain('locked');
   });
 
   it('does not scroll past either end', () => {

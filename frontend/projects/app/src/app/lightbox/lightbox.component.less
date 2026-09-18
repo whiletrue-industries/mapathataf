@@ -23,6 +23,10 @@
         scroll-snap-type: x mandatory;
         overscroll-behavior: contain;
         .no-scrollbars;
+
+        &.locked {
+            overflow-x: hidden;
+        }
     }
 
     .slide {
@@ -38,6 +42,9 @@
         justify-content: center;
         scroll-snap-align: center;
         scroll-snap-stop: always;
+        // A zoomed photo may fill the whole slide, padding included, but must not spill
+        // into the track's scrollable width.
+        overflow: hidden;
 
         // max-*, not width/height: a stored photo is at most 1024px on its long edge, and
         // on a desktop screen it reads better at its own size than stretched soft.
@@ -48,6 +55,16 @@
             object-fit: contain;
             user-select: none;
             -webkit-user-drag: none;
+            // Inline styles from appPinchZoom switch this off while fingers are down.
+            transition: transform @ease;
+            // Swipes go to the track; pinches and double-taps are ours, not the browser's.
+            touch-action: pan-x;
+            cursor: zoom-in;
+
+            &.zoomed {
+                touch-action: none;
+                cursor: grab;
+            }
         }
     }
 

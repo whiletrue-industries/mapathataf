@@ -39,16 +39,24 @@ Map of services for ages 0-3, per municipality. Python data pipelines in the rep
   `display_address` → `formatted_address` → raw `address`; coords via layer precedence
   user → admin → info → official. Admin geocode-status text lives in
   `admin/src/app/item-edit/location-status.ts`. Server counterpart: mapathataf-server.
-- Photos (Sep 2026): up to 5 per layer, stored as JPEG **data-URIs inside the item doc**
-  (`user.photos` / `admin.photos`; legacy single `photo` still read, nulled on first
-  edit). The server is untouched — it merges whatever keys it is sent. Everything about
-  the model is in `app/src/app/photos.ts` (admin imports it); `MAX_PHOTO_CHARS` exists
-  because of Firestore's 1 MiB doc cap, and `admin/.../image-upload/encode-photo.ts`
-  enforces it. `GET /items` ships every photo of every item on app load — moving photos
-  to storage (like `/manage` logos) is the real fix if payloads grow.
+- Photos (Sep 2026): up to 5, **owner layer only**, stored as JPEG data-URIs inside the
+  item doc (`user.photos`; legacy single `user.photo` still read, nulled on first edit).
+  The server is untouched — it merges whatever keys it is sent. The model is
+  `app/src/app/photos.ts` (admin imports it); `MAX_PHOTO_CHARS` exists because of
+  Firestore's 1 MiB doc cap and `admin/.../image-upload/encode-photo.ts` enforces it.
+  `GET /items` ships every photo of every item on app load — moving photos to storage
+  (like `/manage` logos) is the real fix if payloads grow.
 - `app/src/app/lightbox/` is mounted in `MainComponent` beside the menu and opened via
   `LightboxService`, never rendered inside the item sheet: the sheet is transformed, and
   a transformed ancestor becomes the containing block for `position: fixed`.
+  - Back button: `open()` pushes a same-URL history entry, any `popstate` closes. The
+    router ignores a same-URL popstate, so the fragment grammar is not involved. The
+    state effect's `router.navigate` *pushes* (no `replaceUrl`), so an inside-close only
+    calls `history.back()` while `history.state.lightbox` is still set.
+  - `appPinchZoom` uses **touch events, not pointer events**: a pinch must be claimed
+    with `preventDefault()` on a non-passive `touchmove`, or the browser scrolls the track
+    / zooms the page and cancels the pointers. Pan bounds are measured from the frame, not
+    from where the photo rests — slide padding is uneven, so the two centres differ.
 - Tests: karma specs per project, `npm run test:ci` (`.github/workflows/tests.yml` runs
   them on PRs); locally `npx ng test <project> --watch=false --browsers=ChromeHeadless`.
 

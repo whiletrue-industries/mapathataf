@@ -1,9 +1,9 @@
 export const MAX_PHOTOS = 5;
 
 // Photos are data-URIs stored inside the item's Firestore document, which is capped at
-// 1 MiB. Two layers (owner + municipality) of MAX_PHOTOS each have to fit under that
-// together with everything else in the document, hence the per-photo budget.
-export const MAX_PHOTO_CHARS = 90_000;
+// 1 MiB. MAX_PHOTOS of them have to fit under that together with everything else in the
+// document, hence the per-photo budget.
+export const MAX_PHOTO_CHARS = 150_000;
 
 // A layer holds either the current `photos` list or the legacy single `photo`.
 export function layerPhotos(layer: any): string[] {
@@ -24,13 +24,8 @@ export function photosUpdate(layer: any, photos: string[]): Record<string, any> 
   return update;
 }
 
-// Same precedence as every other field: the owner's photos win over the municipality's.
+// Photos belong to the owner layer only: the owner's personal link is the one place they
+// can be edited.
 export function itemPhotos(item: any): string[] {
-  for (const layer of [item?.user, item?.admin]) {
-    const photos = layerPhotos(layer);
-    if (photos.length) {
-      return photos;
-    }
-  }
-  return [];
+  return layerPhotos(item?.user);
 }

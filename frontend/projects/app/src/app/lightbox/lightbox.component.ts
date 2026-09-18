@@ -1,6 +1,7 @@
-import { afterNextRender, Component, computed, ElementRef, HostListener, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { afterNextRender, Component, computed, ElementRef, HostListener, inject, OnDestroy, signal, viewChild, viewChildren } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { LightboxService } from './lightbox.service';
+import { PinchZoomDirective } from './pinch-zoom.directive';
 
 /**
  * Full-viewport photo viewer. The photos sit in a native scroll-snap track, so swiping
@@ -9,7 +10,7 @@ import { LightboxService } from './lightbox.service';
  */
 @Component({
   selector: 'app-lightbox',
-  imports: [],
+  imports: [PinchZoomDirective],
   templateUrl: './lightbox.component.html',
   styleUrl: './lightbox.component.less',
   host: {
@@ -26,10 +27,14 @@ export class LightboxComponent implements OnDestroy {
 
   private track = viewChild<ElementRef<HTMLElement>>('track');
   private closeButton = viewChild<ElementRef<HTMLElement>>('closeButton');
+  private zoomables = viewChildren(PinchZoomDirective);
 
   photos = computed(() => this.lightbox.content()?.photos || []);
   alt = computed(() => this.lightbox.content()?.alt || '');
   index = signal(this.lightbox.content()?.index || 0);
+  // While a photo is zoomed the track is locked, so one finger pans the photo instead of
+  // swiping to the next one.
+  zoomed = signal(false);
 
   private opener = this.lightbox.content()?.opener;
 
@@ -73,6 +78,7 @@ export class LightboxComponent implements OnDestroy {
   go(delta: number): void {
     const index = this.index() + delta;
     if (index >= 0 && index < this.photos().length) {
+      this.zoomables().forEach((zoomable) => zoomable.reset());
       this.scrollTo(index);
     }
   }
@@ -82,8 +88,10 @@ export class LightboxComponent implements OnDestroy {
   }
 
   // A tap on the dark area around a photo dismisses; a tap on the photo itself does not.
+  // Nor does anything while zoomed: a mouse pan that is let go off the photo ends in a
+  // click on the slide.
   slideClicked(event: MouseEvent): void {
-    if (!(event.target instanceof HTMLImageElement)) {
+    if (!this.zoomed() && !(event.target instanceof HTMLImageElement)) {
       this.close();
     }
   }

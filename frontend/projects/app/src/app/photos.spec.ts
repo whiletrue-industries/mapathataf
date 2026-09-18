@@ -28,13 +28,13 @@ describe('photos', () => {
   });
 
   describe('itemPhotos', () => {
-    it('lets the owner layer win over the admin layer', () => {
-      expect(itemPhotos({ user: { photos: ['u'] }, admin: { photos: ['a'] } })).toEqual(['u']);
+    it('reads the owner layer, legacy photo included', () => {
+      expect(itemPhotos({ user: { photos: ['u1', 'u2'] } })).toEqual(['u1', 'u2']);
+      expect(itemPhotos({ user: { photo: 'legacy' } })).toEqual(['legacy']);
     });
 
-    it('falls through to the admin layer when the owner has none', () => {
-      expect(itemPhotos({ user: { photos: [] }, admin: { photos: ['a'] } })).toEqual(['a']);
-      expect(itemPhotos({ admin: { photo: 'legacy' } })).toEqual(['legacy']);
+    it('ignores photos on any other layer', () => {
+      expect(itemPhotos({ user: {}, admin: { photos: ['a'] } })).toEqual([]);
     });
 
     it('is empty for an item with no photos, or no item', () => {
