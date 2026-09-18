@@ -1,4 +1,4 @@
-<a class='card' [routerLink]="[item.id]" [queryParamsHandling]="'preserve'">
+<a class='card' [routerLink]="['/', api.workspaceId(), item.id]" [queryParamsHandling]="'preserve'">
     <div class='header'>
         <div [class]='"name " + item.resolved?.facility_kind' >{{ item.resolved.name }}</div>
         @if (!!item.resolved?.symbol_text) {

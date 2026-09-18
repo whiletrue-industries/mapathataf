@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-item-list-item',
@@ -11,4 +12,6 @@ import { RouterLink } from '@angular/router';
 })
 export class ItemListItemComponent {
   @Input() item: any;
+
+  constructor(public api: ApiService) { }
 }
