@@ -202,6 +202,12 @@ constructor — it runs before the first effect flush, so the parse can't be clo
   injector reaches `MapboxService` must stub it:
   `{provide: MapboxService, useValue: {map: null}}`.
 
+- Specs that dispatch events at viewport coordinates must measure where their fixture
+  landed, never assume `(0, 0)`: the Linux CI runner has a classic 15px scrollbar gutter
+  that macOS (overlay scrollbars) does not, so such a spec passes locally and fails on CI.
+- `npm run test:ci` chains the four suites with `&&` — a failure in `app` means `admin`,
+  `landing` and `manage` never ran; a red CI says nothing about them either way.
+
 ## Dev-server gotchas
 
 - **Never run two `ng serve` instances at once.** They share `.angular/cache` and fight over
