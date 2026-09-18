@@ -85,4 +85,41 @@ describe('ItemEditFieldComponent', () => {
       expect(component.optionSelected('3_to_6')).toBeFalse();
     });
   });
+
+  describe('images', () => {
+    const PHOTOS_FIELD: Field = { name: 'photos', type: 'images' };
+
+    it('reads a legacy single photo as a list of one', () => {
+      setup({ photo: 'legacy' }, PHOTOS_FIELD);
+      expect(component.value()).toEqual(['legacy']);
+    });
+
+    it('does not emit when a legacy photo was left as it was', () => {
+      setup({ photo: 'legacy' }, PHOTOS_FIELD);
+      component.save();
+      expect(updates).toEqual([]);
+    });
+
+    it('migrates the legacy photo away in the same update that stores the list', () => {
+      const data: any = { photo: 'legacy' };
+      setup(data, PHOTOS_FIELD);
+      component.value.set(['legacy', 'second']);
+      component.save();
+      expect(updates).toEqual([{ photos: ['legacy', 'second'], photo: null }]);
+      expect(data).toEqual({ photos: ['legacy', 'second'], photo: null });
+    });
+
+    it('stores an emptied list, so removing every photo sticks', () => {
+      const data: any = { photos: ['a'] };
+      setup(data, PHOTOS_FIELD);
+      component.value.set([]);
+      component.save();
+      expect(updates).toEqual([{ photos: [] }]);
+    });
+
+    it('shows a thumbnail per photo', () => {
+      setup({ photos: ['data:,a', 'data:,b'] }, { ...PHOTOS_FIELD, value: ['data:,a', 'data:,b'] });
+      expect(fixture.nativeElement.querySelectorAll('.thumbnails img').length).toBe(2);
+    });
+  });
 });

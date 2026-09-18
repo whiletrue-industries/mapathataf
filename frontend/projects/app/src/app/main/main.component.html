@@ -11,6 +11,9 @@
 @if (state.filterOptions() !== null) {
     <app-filter-sheet></app-filter-sheet>
 }
+@if (lightbox.content()) {
+    <app-lightbox></app-lightbox>
+}
 @if (onboarding.visible()) {
     <app-onboarding></app-onboarding>
 }

@@ -2,7 +2,7 @@
 @if (field_) {
     <div class='field' [class.text]='field_.type === "text" || field_.type === "readonly"'
         [class.boolean]='field_.type === "boolean"'
-        [class.image]='field_.type === "image"'
+        [class.images]='field_.type === "images"'
         [class.enum]='field_.type === "enum"'
         [class.multi-enum]='field_.type === "multi-enum"'>
         <label [class.private]='privateField()' [class.editable]='editable() && field_.type !== "readonly"'>{{field_.label}}:</label>
@@ -32,18 +32,22 @@
                         <button type='button' class='multi-enum-done' (click)='editing.set(false)'>סגור</button>
                     </div>
                 }
-                @case ('image') {
+                @case ('images') {
                     <app-image-upload [value]='value' (update)='save()'></app-image-upload>
                 }
             }
         } @else {
             @if (editable() && field_.type !== 'readonly') {
                 @if (field_.value !== undefined && field_.value !== null) {
-                    @if (field_.type !== 'image') {
+                    @if (field_.type !== 'images') {
                         <span class='value editable' (click)='editing.set(true)'>{{field_.value}}</span>
                     } @else {
-                        <span class='value editable initial'>לחץ על התמונה לעריכה
-                            <img [src]='field_.value' class='value editable' (click)='editing.set(true)'/>
+                        <span class='value editable initial' (click)='editing.set(true)'>לחיצה על התמונות לעריכה
+                            <span class='thumbnails'>
+                                @for (photo of field_.value; track $index) {
+                                    <img [src]='photo' [alt]='"תמונה " + ($index + 1)'/>
+                                }
+                            </span>
                         </span>
                     }
                 } @else {
@@ -51,10 +55,14 @@
                 }
             } @else {
                 @if (field_.value !== undefined && field_.value !== null) {
-                    @if (field_.type !== 'image') {
+                    @if (field_.type !== 'images') {
                         <span class='value'>{{field_.value}}</span>
                     } @else {
-                        <img [src]='field_.value' class='value'/>
+                        <span class='value thumbnails'>
+                            @for (photo of field_.value; track $index) {
+                                <img [src]='photo' [alt]='"תמונה " + ($index + 1)'/>
+                            }
+                        </span>
                     }
                 } @else {
                     <span class='value initial'>לא הוזן</span>

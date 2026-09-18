@@ -1,3 +1,5 @@
+import { layerPhotos } from '../../../app/src/app/photos';
+
 export type Option = {
   id: string;
   display: string;
@@ -5,7 +7,7 @@ export type Option = {
 
 export type Field = {
   name: string;
-  type?: 'text' | 'boolean' | 'enum' | 'multi-enum' | 'section' | 'image' | 'readonly';
+  type?: 'text' | 'boolean' | 'enum' | 'multi-enum' | 'section' | 'images' | 'readonly';
   label?: string;
   options?: Option[];
   hide?: boolean;
@@ -24,6 +26,9 @@ export function fieldValue(data: any, field: Field): any {
         const values: string[] = Array.isArray(data[field.name]) ? data[field.name] : [];
         const displays = field.options.filter((opt: Option) => values.includes(opt.id)).map((opt: Option) => opt.display);
         return displays.length ? displays.join(', ') : 'לא הוזן';
+      } else if (field.type === 'images') {
+        const photos = layerPhotos(data);
+        return photos.length ? photos : null;
       } else {
         return data[field.name] || null;
       }

@@ -1,11 +1,33 @@
-<input type="file" id="fileInput" accept="image/*" (change)='processImage($event)' (cancel)='cancel()' #fileInput />
-@if (dataUrl()) {
-    <div class="image-preview">
-        <img [src]="dataUrl()" alt="Image Preview" />
-    </div>
-    <div class='controls'>
-        <button (click)='clicker()'>החלפת תמונה</button>
-        <button (click)='save()'>שמירה</button>
-        <button (click)='cancel()'>ביטול</button>
+<input type="file" accept="image/*" multiple (change)='processImages($event)' (cancel)='pickerCancelled()' #fileInput />
+@if (photos().length) {
+    <div class='photos'>
+        @for (photo of photos(); track $index) {
+            <div class='photo' [class.primary]='$first'>
+                <img [src]='photo' [alt]='"תמונה " + ($index + 1)' />
+                <div class='photo-controls'>
+                    @if ($first) {
+                        <span class='primary-tag'>תמונה ראשית</span>
+                    } @else {
+                        <button type='button' (click)='makePrimary($index)'>הפיכה לראשית</button>
+                    }
+                    <button type='button' (click)='remove($index)'>הסרה</button>
+                </div>
+            </div>
+        }
     </div>
 }
+<div class='status'>
+    @if (busy()) {
+        <span>מעבד תמונות...</span>
+    } @else {
+        <span>{{ photos().length }} מתוך {{ MAX_PHOTOS }} תמונות</span>
+    }
+    @if (message()) {
+        <span class='message' role='alert'>{{ message() }}</span>
+    }
+</div>
+<div class='controls'>
+    <button type='button' (click)='clicker()' [disabled]='full() || busy()'>הוספת תמונות</button>
+    <button type='button' (click)='save()' [disabled]='busy()'>שמירה</button>
+    <button type='button' (click)='cancel()' [disabled]='busy()'>ביטול</button>
+</div>

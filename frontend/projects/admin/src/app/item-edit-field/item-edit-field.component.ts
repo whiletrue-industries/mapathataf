@@ -3,6 +3,7 @@ import { Field, fieldValue } from '../fields';
 import { FormsModule } from '@angular/forms';
 import { timer } from 'rxjs';
 import { ImageUploadComponent } from "../image-upload/image-upload.component";
+import { layerPhotos, photosUpdate } from '../../../../app/src/app/photos';
 
 function sameValue(a: any, b: any): boolean {
   if (Array.isArray(a) && Array.isArray(b)) {
@@ -53,6 +54,8 @@ export class ItemEditFieldComponent {
         if (field.type === 'multi-enum') {
           const value = data[field.name];
           this.value.set(Array.isArray(value) ? [...value] : (value ? [value] : []));
+        } else if (field.type === 'images') {
+          this.value.set(layerPhotos(data));
         } else {
           this.value.set(data[field.name]);
         }
@@ -66,10 +69,14 @@ export class ItemEditFieldComponent {
     const field = this.field();
     const data = this.data();
     if (this.editable() && field && data) {
-      if (!sameValue(data[field.name], this.value())) {
-        data[field.name] = this.value();
-        console.log('ItemEditFieldComponent: save', field.name, this.value());
-        this.update.emit({ [field.name]: this.value() });
+      // Photos compare against the normalized list, so a legacy single `photo` that was
+      // not touched does not read as a change.
+      const current = field.type === 'images' ? layerPhotos(data) : data[field.name];
+      if (!sameValue(current, this.value())) {
+        const update = field.type === 'images' ? photosUpdate(data, this.value()) : { [field.name]: this.value() };
+        Object.assign(data, update);
+        console.log('ItemEditFieldComponent: save', field.name);
+        this.update.emit(update);
         field.value = fieldValue(data, field);
       }
       this.editing.set(!!keepEditing);

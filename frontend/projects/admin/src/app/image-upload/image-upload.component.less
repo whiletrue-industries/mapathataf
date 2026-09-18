@@ -1,21 +1,75 @@
+@import '../common.less';
+
 :host {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    flex: 1 1 100%;
+    min-width: 0;
 
     input[type='file'] {
         display: none;
     }
 
-    .image-preview {
-        img {
-            width: 100%;
+    .photos {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+
+        .photo {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            img {
+                display: block;
+                width: 100%;
+                aspect-ratio: 4 / 3;
+                object-fit: cover;
+                border-radius: 4px;
+            }
+
+            &.primary img {
+                outline: 2px solid @color-text;
+                outline-offset: 1px;
+            }
+
+            .photo-controls {
+                display: flex;
+                flex-flow: row wrap;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+
+                button {
+                    font-size: 13px;
+                    cursor: pointer;
+                }
+
+                .primary-tag {
+                    font-weight: 600;
+                    color: @color-text;
+                }
+            }
+        }
+    }
+
+    .status {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 4px 16px;
+        font-size: 14px;
+        font-weight: 300;
+        color: @color-text;
+
+        .message {
+            font-weight: 600;
         }
     }
 
     .controls {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
         gap: 16px;
     }
 }

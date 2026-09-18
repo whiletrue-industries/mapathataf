@@ -1,0 +1,13 @@
+<div class='track' #track (scroll)='onScroll()'>
+    @for (photo of photos(); track $index) {
+        <div class='slide' (click)='slideClicked($event)'>
+            <img [src]='photo' [alt]='alt() + " - תמונה " + ($index + 1) + " מתוך " + photos().length' draggable='false' />
+        </div>
+    }
+</div>
+<button type='button' class='control close' aria-label='סגירה' (click)='close()' #closeButton></button>
+@if (photos().length > 1) {
+    <button type='button' class='control nav prev' aria-label='התמונה הקודמת' [disabled]='index() === 0' (click)='go(-1)'></button>
+    <button type='button' class='control nav next' aria-label='התמונה הבאה' [disabled]='index() === photos().length - 1' (click)='go(1)'></button>
+    <div class='counter' aria-live='polite'>{{ index() + 1 }} / {{ photos().length }}</div>
+}

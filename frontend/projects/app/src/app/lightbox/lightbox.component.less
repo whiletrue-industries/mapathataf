@@ -1,0 +1,121 @@
+@import '../../common.less';
+
+@backdrop: rgba(3, 22, 34, 0.97);
+@control-size: 44px;
+@edge: 16px;
+
+:host {
+    position: fixed;
+    inset: 0;
+    // Over the sheets and the menu, under nothing: it is modal while it is open.
+    z-index: 1000;
+    display: block;
+    background-color: @backdrop;
+    animation: lightbox-in @ease both;
+
+    .track {
+        display: flex;
+        flex-flow: row nowrap;
+        width: 100%;
+        height: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        overscroll-behavior: contain;
+        .no-scrollbars;
+    }
+
+    .slide {
+        flex: 0 0 100%;
+        min-width: 0;
+        height: 100%;
+        box-sizing: border-box;
+        // Keeps the photo clear of the close button above and the counter below.
+        padding: ~'calc(@{control-size} + 2 * @{edge} + env(safe-area-inset-top, 0px))' 0
+                 ~'calc(@{control-size} + @{edge} + env(safe-area-inset-bottom, 0px))';
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+
+        // max-*, not width/height: a stored photo is at most 1024px on its long edge, and
+        // on a desktop screen it reads better at its own size than stretched soft.
+        img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+    }
+
+    .control {
+        .button-image;
+        position: absolute;
+        width: @control-size;
+        height: @control-size;
+        border-radius: 360px;
+        background-color: fade(@color-white, 92%);
+        box-shadow: @float-shadow;
+        color: @color-night;
+        transition: opacity @ease;
+
+        // The glyph is masked on ::after so the mask cannot eat the button's own fill.
+        &::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        &:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+
+        &:focus-visible {
+            outline: 2px solid @color-white;
+            outline-offset: 2px;
+        }
+    }
+
+    .close {
+        top: ~'calc(@{edge} + env(safe-area-inset-top, 0px))';
+        right: @edge;
+
+        &::after { .masked-icon('/icon-close.svg'; 14px); }
+    }
+
+    // Physical sides on purpose: the track is RTL, so the next photo really is to the left.
+    .nav {
+        top: 50%;
+        margin-top: -(@control-size / 2);
+
+        &::after { .masked-icon('/icon-mi-keyboard-arrow-down.svg'; 28px); }
+
+        &.next { left: @edge;  &::after { transform: rotate(90deg); } }
+        &.prev { right: @edge; &::after { transform: rotate(-90deg); } }
+    }
+
+    .counter {
+        position: absolute;
+        bottom: ~'calc(@{edge} + env(safe-area-inset-bottom, 0px))';
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 4px 14px;
+        border-radius: 360px;
+        background-color: fade(@color-black, 45%);
+        color: @color-white;
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        direction: ltr;
+        pointer-events: none;
+    }
+}
+
+@keyframes lightbox-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

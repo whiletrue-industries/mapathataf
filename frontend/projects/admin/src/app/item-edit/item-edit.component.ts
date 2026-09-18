@@ -6,6 +6,7 @@ import { debounceTime, Subject, timer } from 'rxjs';
 import dayjs from 'dayjs';
 import { ItemEditFieldComponent } from "../item-edit-field/item-edit-field.component";
 import { AGE_GROUPS } from '../../../../app/src/app/age-groups';
+import { MAX_PHOTOS } from '../../../../app/src/app/photos';
 import { geocodeStatusText, resolvedLocationText } from './location-status';
 
 @Component({
@@ -55,6 +56,9 @@ export class ItemEditComponent {
       ]}]
   };
 
+  PHOTOS_SECTION: Field = { name: 'תמונות המסגרת', type: 'section' };
+  PHOTOS_FIELD: Field = { name: 'photos', type: 'images', label: `תמונות של המסגרת (עד ${MAX_PHOTOS})` };
+
   itemKind = computed(() => {
     const item = this.api.item();
     console.log('ItemEditComponent: itemKind', item?.resolved?.facility_kind);
@@ -81,9 +85,8 @@ export class ItemEditComponent {
         {  name: 'phone', type: 'text', label: 'טלפון' },
         {  name: 'email', type: 'text', label: 'דוא"ל' },
 
-      {  name: 'תמונת המסגרת', type: 'section' },
-        {  name: 'photo',   type: 'image',    label: 'תמונה מייצגת של המסגרת' },
-        
+      this.PHOTOS_SECTION,
+      this.PHOTOS_FIELD,
     ];
   });
   FIELD_CONFIG_USER_EDUCATION = computed<Field[]>(() => [
@@ -142,6 +145,8 @@ export class ItemEditComponent {
         {  name: 'email', type: 'text', label: 'דוא"ל' },
         {  name: '_private_contact_details', type: 'text', label: 'פרטי קשר נוספים' },
 
+      this.PHOTOS_SECTION,
+      this.PHOTOS_FIELD,
     ];
   });
   FIELD_CONFIG_ADMIN_EDUCATION = computed<Field[]>(() => [

@@ -4,6 +4,8 @@ import { ApiService } from '../api.service';
 import { StateService } from '../state.service';
 import { ageGroupLabel } from '../age-groups';
 import { FILTER_DEFS } from '../filter-defs';
+import { itemPhotos } from '../photos';
+import { LightboxService } from '../lightbox/lightbox.service';
 
 type DetailRow = {
   /** Suffix of an `.icon-*` class in the stylesheet. */
@@ -30,6 +32,7 @@ export class ItemSheetComponent {
   state = inject(StateService);
   api = inject(ApiService);
   private document = inject(DOCUMENT);
+  private lightbox = inject(LightboxService);
 
   private static readonly SHARE_LABEL = 'שיתוף רשומה';
   shareLabel = signal(ItemSheetComponent.SHARE_LABEL);
@@ -86,6 +89,12 @@ export class ItemSheetComponent {
     add('location-city', 'כתובת', resolved.address);
     return rows;
   });
+
+  photos = computed(() => itemPhotos(this.item()));
+
+  openPhoto(index: number, opener: EventTarget | null) {
+    this.lightbox.open(this.photos(), index, this.item()?.resolved?.name || '', opener as HTMLElement);
+  }
 
   contactFormLink = computed(() => {
     const item = this.item();
