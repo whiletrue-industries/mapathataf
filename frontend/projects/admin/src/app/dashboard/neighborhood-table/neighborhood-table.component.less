@@ -1,0 +1,68 @@
+@import '../../common.less';
+
+@track: fade(@color-gray-2, 25%);
+
+:host {
+    display: block;
+    width: 100%;
+    color: @color-text;
+}
+
+button {
+    .button-image;
+    color: inherit;
+    font-size: inherit;
+}
+
+.table {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+
+    .row {
+        display: grid;
+        grid-template-columns: minmax(110px, 1.2fr) 32px 3fr 64px 64px;
+        align-items: center;
+        gap: 12px;
+        padding: 6px 0;
+        font-size: 14px;
+        text-align: start;
+        border-bottom: 1px solid @track;
+
+        &.header {
+            font-size: 12px;
+            font-weight: 300;
+        }
+
+        strong { font-weight: 700; color: @color-night; text-align: end; }
+        > :nth-child(n + 4) { text-align: end; }
+        &:hover .label { text-decoration: underline; }
+    }
+
+    .track {
+        height: 12px;
+        border-radius: 4px;
+        background-color: @track;
+        display: flex;
+
+        i {
+            min-width: 2px;
+            border-radius: 4px;
+            background-color: @color-night;
+        }
+    }
+}
+
+.more {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 8px 24px;
+    padding-top: 4px;
+
+    button {
+        font-size: 14px;
+        font-weight: 500;
+        color: @color-night;
+        text-decoration: underline;
+    }
+}

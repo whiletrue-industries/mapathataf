@@ -1,0 +1,24 @@
+<div class='table'>
+    <div class='row header'>
+        <span>שכונה</span><span>מענים</span><span></span><span>מקומות</span><span>פנויים</span>
+    </div>
+    @for (row of shown(); track row.key) {
+        <button type='button' class='row' (click)='pick.emit(row)'>
+            <span class='label'>{{ row.label }}</span>
+            <strong>{{ row.count | number }}</strong>
+            <span class='track'><i [style.width.%]='100 * row.count / max()'></i></span>
+            <span>{{ row.places ? (row.places | number) : '–' }}</span>
+            <span>{{ row.places ? (row.available | number) : '–' }}</span>
+        </button>
+    }
+</div>
+<div class='more'>
+    @if (hidden()) {
+        <button type='button' (click)='all.set(!all())'>
+            {{ all() ? 'הצגת פחות שכונות' : 'הצגת ' + hidden() + ' שכונות נוספות' }}
+        </button>
+    }
+    @if (unassigned(); as none) {
+        <button type='button' (click)='pick.emit(none)'>{{ none.count | number }} מענים טרם שויכו לשכונה</button>
+    }
+</div>

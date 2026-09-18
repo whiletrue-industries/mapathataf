@@ -1,0 +1,31 @@
+@import '../../common.less';
+
+:host {
+    display: flex;
+    flex-flow: column;
+    gap: 4px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: @color-white;
+    box-shadow: @card-shadow;
+    min-width: 0;
+
+    .value {
+        font-size: 40px;
+        line-height: 44px;
+        font-weight: 700;
+        color: @color-night;
+    }
+
+    .label {
+        font-size: 16px;
+        font-weight: 600;
+        color: @color-night;
+    }
+
+    .hint {
+        font-size: 14px;
+        font-weight: 300;
+        color: @color-text;
+    }
+}

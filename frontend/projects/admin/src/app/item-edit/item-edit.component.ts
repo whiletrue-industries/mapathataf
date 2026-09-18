@@ -269,7 +269,7 @@ export class ItemEditComponent {
     this.queueUpdate({_private_deleted: deleted});
     if (deleted) {
       timer(1000).subscribe(() => {
-        this.router.navigate(['/', this.api.workspaceId()], { queryParamsHandling: 'preserve'});
+        this.router.navigate(['/', this.api.workspaceId(), 'items'], { queryParamsHandling: 'preserve'});
       });
     }
   }

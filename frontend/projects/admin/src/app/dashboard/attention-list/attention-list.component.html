@@ -1,0 +1,14 @@
+@if (figures.length) {
+    <ul>
+        @for (figure of figures; track figure.key) {
+            <li>
+                <button type='button' (click)='pick.emit(figure)'>
+                    <strong>{{ figure.count | number }}</strong>
+                    <span>{{ figure.label }}</span>
+                </button>
+            </li>
+        }
+    </ul>
+} @else {
+    <p>כל הכבוד – לא מצאנו מענים שדורשים טיפול.</p>
+}

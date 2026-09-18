@@ -68,6 +68,22 @@
                     border-color: @color-night;
                 }
             }
+
+            .extra-filter {
+                .button-image;
+                font-size: 14px;
+                font-weight: 500;
+                color: @color-white;
+                padding: 4px 16px;
+                border-radius: 100px;
+                background-color: @color-night;
+
+                &::after {
+                    content: '✕';
+                    margin-right: 8px;
+                    font-size: 12px;
+                }
+            }
         }
     }
 

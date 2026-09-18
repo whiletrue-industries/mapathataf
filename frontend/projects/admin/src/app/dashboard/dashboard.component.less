@@ -1,0 +1,197 @@
+@import '../common.less';
+
+@track: fade(@color-gray-2, 25%);
+
+:host {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    padding: 32px;
+    color: @color-text;
+
+    .mobile({
+        padding: 24px 12px;
+    });
+
+    > * {
+        width: 100%;
+        max-width: @mobile-threshold;
+    }
+}
+
+button {
+    .button-image;
+    color: inherit;
+    font-size: inherit;
+}
+
+.title {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    h2 {
+        font-size: 24px;
+        font-weight: 300;
+        color: @color-night;
+        strong { font-weight: 700; }
+    }
+
+    .scope {
+        display: flex;
+        padding: 3px;
+        border-radius: 100px;
+        border: 1px solid @color-gray-2;
+        background-color: @color-white;
+
+        button {
+            padding: 4px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            color: @color-night;
+
+            &.active {
+                color: @color-white;
+                background-color: @color-night;
+            }
+        }
+    }
+}
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+
+    .clickable {
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+        &:hover { transform: translateY(-2px); }
+    }
+
+    .kinds {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 4px;
+        margin-top: 4px;
+
+        button {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background-color: @color-grey-200;
+            color: @color-text;
+
+            strong { font-weight: 700; }
+            &.education { background-color: @color-fk-education; }
+            &.health { background-color: @color-fk-health; }
+            &.community { background-color: @color-fk-community; }
+            &:hover { text-decoration: underline; }
+        }
+    }
+}
+
+.pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    align-items: stretch;
+
+    // The section draws its own box one level down; stretch it so a pair lines up.
+    app-item-edit-section { display: flex; }
+}
+
+.breakdowns {
+    display: flex;
+    flex-flow: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.note, .footnote {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.footnote { text-align: center; }
+
+.bands {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+
+    li {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        align-items: center;
+        gap: 2px 12px;
+        font-size: 14px;
+    }
+
+    .track {
+        display: flex;
+        gap: 2px;
+        height: 12px;
+    }
+
+    .value {
+        grid-column: 2;
+        font-weight: 300;
+        strong { font-weight: 700; color: @color-night; }
+    }
+}
+
+.taken, .free {
+    display: block;
+    min-width: 2px;
+    background-color: @color-night;
+    border-radius: 0 4px 4px 0;
+}
+
+.free {
+    background-color: @color-green-300;
+    border-radius: 4px 0 0 4px;
+}
+
+.key {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 4px 20px;
+    font-size: 14px;
+
+    span { display: flex; align-items: center; gap: 6px; }
+    i { width: 10px; height: 10px; min-width: 10px; border-radius: 3px; }
+}
+
+.recent {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    li {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 6px 0;
+        font-size: 14px;
+        border-bottom: 1px solid @track;
+
+        a { font-weight: 600; color: @color-night; &:hover { text-decoration: underline; } }
+        span { flex: 0 0 auto; font-weight: 300; }
+    }
+}
+
+.message {
+    text-align: center;
+}

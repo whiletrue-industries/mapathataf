@@ -172,6 +172,29 @@ constructor — it runs before the first effect flush, so the parse can't be clo
   sit on the container, not the images: the animated track's `transform` creates a stacking
   context that blocks per-image blending.
 
+## Admin dashboard (admin project, Sep 2026)
+
+- Routes: `/<ws>` = `dashboard/` (תמונת מצב, the landing tab), `/<ws>/items` = the list,
+  `/<ws>/<itemId>` = editor. `items` must stay ahead of `:itemId` in `app.routes.ts`. The tab
+  row lives in `header/` and only renders in admin mode (owners on `?item-key=` never see it).
+- `item-filter.ts` `filterItems()` is the **single predicate** behind the list, and
+  `dashboard/dashboard-stats.ts` counts with it: every `Figure` carries the `filter` that
+  reproduces its `count`, and a click does `StateService.apply(filter)` (a full reset, not a
+  merge) then navigates to the list. So a figure always equals the list's count pill — a spec
+  asserts it for every figure. New dashboard numbers should be `figure()`s, not ad-hoc counts.
+- Filters the list has no `<select>` for (ownership, shelter, neighbourhood, age, sub-kind,
+  subsidy) travel as `ItemFilters.extra` and show in the list as a dismissible chip.
+- Real data to keep in mind: capacity exists only in `official[source=mol]`
+  (`total/available_places_{babies,toddlers,adults}`; "adults" = בוגרים, the oldest daycare
+  class); `admin.app_publication` absent means published (`prepare()` defaults it);
+  `info.updated_at` is a nightly heartbeat, not a change date; there is no population,
+  enrolment or history data, so no per-capita or trend KPIs without server work.
+- Charts are CSS-only (flex widths); colours are class "tones" defined in
+  `dashboard/tones.less`. Admin component styles have a 4 kB budget — hence the small
+  `stat-tile` / `bar-breakdown` / `attention-list` / `neighborhood-table` components.
+- The items API wants the key as an `Authorization` header (`?key=` on the API returns
+  privilege 0 and only ten items) — handy when profiling a city with curl.
+
 ## Onboarding overlay (app project, Aug 2026)
 
 - `app/src/app/onboarding/` — wizard overlay (welcome → questions → final screen; the

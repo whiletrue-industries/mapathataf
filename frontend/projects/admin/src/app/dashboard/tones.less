@@ -1,0 +1,19 @@
+@import '../common.less';
+
+// Chart colours, all from the site palette. Orders were checked with the dataviz palette
+// validator for colour-blind separation between neighbours; several of these are too pale
+// to stand on their own against the page, which is why every bar ships with a labelled,
+// numbered legend and a 2px gap between segments.
+@tone-neutral: #B5B2B3;
+
+.tones() {
+    &.tone-good { background-color: @color-green-300; }
+    &.tone-progress { background-color: @color-l-sun; }
+    &.tone-warn { background-color: @color-medium-orange; }
+    &.tone-bad { background-color: @color-d-tara; }
+    &.tone-neutral { background-color: @tone-neutral; }
+    &.tone-c1 { background-color: @color-night; }
+    &.tone-c2 { background-color: @color-l-sun; }
+    &.tone-c3 { background-color: @color-green-400; }
+    &.tone-c4 { background-color: @color-d-tara; }
+}

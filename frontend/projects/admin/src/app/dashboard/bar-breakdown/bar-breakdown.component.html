@@ -1,0 +1,36 @@
+@if (mode === 'stacked') {
+    <div class='head'>
+        <h4 [class.private]='breakdown.isPrivate' [title]='breakdown.isPrivate ? "מידע לשימוש פנימי, אינו מוצג לציבור" : ""'>{{ breakdown.title }}</h4>
+        <span class='total'>{{ breakdown.total | number }} {{ unit }}</span>
+    </div>
+    <div class='bar'>
+        @for (segment of breakdown.segments; track segment.key) {
+            <button type='button' [class]='"segment tone-" + segment.tone' [style.flex-grow]='segment.count'
+                    [title]='tooltip(segment)' [attr.aria-label]='tooltip(segment)' (click)='pick.emit(segment)'></button>
+        }
+    </div>
+    <ul class='legend'>
+        @for (segment of breakdown.segments; track segment.key) {
+            <li>
+                <button type='button' (click)='pick.emit(segment)'>
+                    <i [class]='"swatch tone-" + segment.tone'></i>
+                    <span class='label'>{{ segment.label }}</span>
+                    <strong>{{ segment.count | number }}</strong>
+                    <span class='percent'>{{ percent(segment) }}%</span>
+                </button>
+            </li>
+        }
+    </ul>
+} @else {
+    <ul class='rows'>
+        @for (segment of breakdown.segments; track segment.key) {
+            <li>
+                <button type='button' [title]='tooltip(segment)' (click)='pick.emit(segment)'>
+                    <span class='label'>{{ segment.label }}</span>
+                    <span class='track'><i [class]='"fill tone-" + segment.tone' [style.width.%]='percent(segment)'></i></span>
+                    <strong>{{ segment.count | number }}</strong>
+                </button>
+            </li>
+        }
+    </ul>
+}

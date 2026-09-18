@@ -1,5 +1,22 @@
 import { resolveItem } from './api.service';
 
+describe('resolveItem mentoring_type resolution', () => {
+  it('folds the admin editor spelling into the one the filters use', () => {
+    const item: any = { user: {}, admin: { mentoring_type: 'not_mentored' }, info: {}, official: [] };
+    resolveItem(item);
+    expect(item.resolved.mentoring_type).toBe('not-mentored');
+  });
+
+  it('defaults to not-mentored and leaves real values alone', () => {
+    const unset: any = { user: {}, admin: {}, info: {}, official: [] };
+    const municipal: any = { user: {}, admin: { mentoring_type: 'municipal' }, info: {}, official: [] };
+    resolveItem(unset);
+    resolveItem(municipal);
+    expect(unset.resolved.mentoring_type).toBe('not-mentored');
+    expect(municipal.resolved.mentoring_type).toBe('municipal');
+  });
+});
+
 describe('resolveItem age_group resolution', () => {
   function itemWith(parts: any): any {
     return { user: {}, admin: {}, info: {}, official: [], ...parts };

@@ -3,7 +3,7 @@
 @if (item) {
     <div class='content'>
         @if (mode === 'admin') {
-            <a [routerLink]="['/', api.workspaceId()]" [queryParamsHandling]="'merge'">➤ חזרה לכל הפריטים של <strong>{{api.workspace().city}}</strong></a>
+            <a [routerLink]="['/', api.workspaceId(), 'items']" [queryParamsHandling]="'merge'">➤ חזרה לכל הפריטים של <strong>{{api.workspace().city}}</strong></a>
             <div class='heading'>
                 <h2>
                     <span>עריכת נתונים עבור: <strong>{{item.resolved.name}}</strong></span>

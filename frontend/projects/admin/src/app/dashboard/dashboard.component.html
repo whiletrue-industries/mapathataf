@@ -1,0 +1,121 @@
+@if (api.mode() === 'admin') {
+    @let s = stats();
+    <div class='title'>
+        <h2>תמונת מצב – <strong>הגיל הרך ב{{ api.cityName() }}</strong></h2>
+        <div class='scope' role='group' aria-label='אילו מענים לספור'>
+            <button type='button' [class.active]='scope() === "published"' (click)='scope.set("published")'>מוצגים במפה</button>
+            <button type='button' [class.active]='scope() === "active"' (click)='scope.set("active")'>כל המענים</button>
+        </div>
+    </div>
+
+    <div class='tiles'>
+        <app-stat-tile [value]='s.total.count' [label]='scope() === "published" ? "מענים מוצגים לציבור במפה" : "מענים פעילים בעיר"'>
+            <div class='kinds'>
+                @for (kind of s.kinds; track kind.key) {
+                    <button type='button' [class]='kind.tone' (click)='open(kind)'><strong>{{ kind.count | number }}</strong> {{ kind.label }}</button>
+                }
+            </div>
+        </app-stat-tile>
+        @if (s.education.count) {
+            <app-stat-tile class='clickable' [value]='s.education.count' label='מסגרות חינוך' (click)='open(s.education)'
+                [hint]='percent(s.licensed, s.education.count) + "% מהן ברישיון, בתהליך רישוי או פטורות"'></app-stat-tile>
+        }
+        @if (s.capacity; as capacity) {
+            <app-stat-tile [value]='capacity.total' label='מקומות במסגרות מפוקחות'
+                [hint]='(capacity.available | number) + " מהם פנויים (" + percent(capacity.available, capacity.total) + "%)"'></app-stat-tile>
+        }
+        <app-stat-tile class='clickable' [value]='s.owners.updated.count' label='מענים שבעליהם עדכנו פרטים' (click)='open(s.owners.updated)'
+            [hint]='percent(s.owners.updated.count, s.total.count) + "% מהמענים"'></app-stat-tile>
+    </div>
+
+    <app-item-edit-section header='דורש טיפול'>
+        <app-attention-list [figures]='s.attention' (pick)='open($event)'></app-attention-list>
+    </app-item-edit-section>
+
+    @if (s.breakdowns.length) {
+        <app-item-edit-section header='מסגרות חינוך'>
+            <div class='breakdowns'>
+                @for (breakdown of s.breakdowns; track breakdown.title) {
+                    <app-bar-breakdown [breakdown]='breakdown' (pick)='open($event)'></app-bar-breakdown>
+                }
+            </div>
+        </app-item-edit-section>
+    }
+
+    <div class='pair'>
+        @if (s.capacity; as capacity) {
+            <app-item-edit-section header='היצע מקומות'>
+                <ul class='bands'>
+                    @for (band of capacity.bands; track band.label) {
+                        <li>
+                            <span class='label'>{{ band.label }}</span>
+                            <span class='track' [title]='band.label + ": " + band.available + " פנויים מתוך " + band.total'>
+                                <i class='taken' [style.width.%]='100 * (band.total - band.available) / bandMax()'></i>
+                                <i class='free' [style.width.%]='100 * band.available / bandMax()'></i>
+                            </span>
+                            <span class='value'><strong>{{ band.available | number }}</strong> פנויים מתוך {{ band.total | number }}</span>
+                        </li>
+                    }
+                </ul>
+                <div class='key'>
+                    <span><i class='taken'></i>מקומות תפוסים</span>
+                    <span><i class='free'></i>מקומות פנויים</span>
+                </div>
+                <p class='note'>
+                    לפי נתוני משרד העבודה, עבור {{ capacity.facilities | number }} מסגרות בפיקוחו
+                    ({{ typesText() }}).
+                    מסגרות אחרות אינן מדווחות על מספר מקומות.
+                </p>
+            </app-item-edit-section>
+        }
+        @if (s.ages; as ages) {
+            <app-item-edit-section header='מסגרות חינוך לפי גיל'>
+                <app-bar-breakdown [breakdown]='ages' mode='rows' (pick)='open($event)'></app-bar-breakdown>
+                <p class='note'>מסגרת המקבלת כמה גילאים נספרת בכל אחד מהם.</p>
+            </app-item-edit-section>
+        }
+    </div>
+
+    @if (s.neighborhoods.length) {
+        <app-item-edit-section header='פריסה לפי שכונות'>
+            <app-neighborhood-table [rows]='s.neighborhoods' [unassigned]='s.noNeighborhood' (pick)='open($event)'></app-neighborhood-table>
+        </app-item-edit-section>
+    }
+
+    <div class='pair'>
+        <app-item-edit-section header='עדכונים אחרונים של בעלי מסגרות'>
+            @if (s.owners.recent.length) {
+                <ul class='recent'>
+                    @for (update of s.owners.recent; track update.id) {
+                        <li>
+                            <a [routerLink]="['/', api.workspaceId(), update.id]" queryParamsHandling='preserve'>{{ update.name }}</a>
+                            <span>{{ date(update.updatedAt) }}</span>
+                        </li>
+                    }
+                </ul>
+                <p class='note'>
+                    עדכוני בעלים מתפרסמים במפה מיד, ללא אישור – כדאי לעבור עליהם.
+                    @if (s.owners.withPhoto) { {{ s.owners.withPhoto | number }} מענים כוללים תמונה. }
+                </p>
+            } @else {
+                <p class='note'>אף בעל מסגרת עוד לא עדכן פרטים. אפשר לשלוח לכל מסגרת קישור עריכה אישי מתוך עמוד המסגרת.</p>
+            }
+        </app-item-edit-section>
+        @if (s.subKinds.length) {
+            <app-item-edit-section header='בריאות, פנאי וקהילה'>
+                <div class='breakdowns'>
+                    @for (breakdown of s.subKinds; track breakdown.title) {
+                        <app-bar-breakdown [breakdown]='breakdown' unit='מענים' (pick)='open($event)'></app-bar-breakdown>
+                    }
+                </div>
+            </app-item-edit-section>
+        }
+    </div>
+
+    <p class='footnote'>
+        כל מספר מוביל לרשימת המענים שמאחוריו.
+        @if (s.syncedAt) { המידע הרשמי ממשרדי הממשלה סונכרן לאחרונה ב־{{ date(s.syncedAt) }}. }
+    </p>
+} @else if (loaded()) {
+    <div class='message'>אין לכם הרשאות לצפות בעמוד זה</div>
+}

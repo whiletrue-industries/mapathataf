@@ -51,7 +51,8 @@ export function resolveItem(item: any): any {
     facility_sub_kind: resolve(item, 'facility_sub_kind'),
     facility_kind_editable: !item.info?.facility_kind,
     age_group: normalizeAgeGroups(resolve(item, 'age_group')),
-    mentoring_type: resolve(item, 'mentoring_type') || 'not-mentored',
+    // The admin editor stores 'not_mentored'; every filter speaks 'not-mentored'.
+    mentoring_type: (resolve(item, 'mentoring_type') || 'not-mentored').replace('_', '-'),
     school_year: resolve(item, 'school_year'),
     subsidized: item?.official?.some((o: any) => o.source === 'mol') || false,
     activity_hours: resolve(item, 'activity_hours'),
