@@ -73,7 +73,7 @@ describe('clampPan', () => {
 @Component({
   imports: [PinchZoomDirective],
   template: `
-    <div style='position: fixed; top: 0; left: 0; width: 400px; height: 600px; display: flex; align-items: center; justify-content: center'>
+    <div style='position: fixed; top: 11px; left: 37px; width: 400px; height: 600px; display: flex; align-items: center; justify-content: center'>
       <div appPinchZoom (zoomedChange)='changes.push($event)' style='width: 400px; height: 300px; flex: none'></div>
     </div>`,
 })
@@ -86,8 +86,12 @@ describe('PinchZoomDirective', () => {
   let target: HTMLElement;
   let directive: PinchZoomDirective;
 
-  // The photo rests centred in the frame: its centre is at (200, 300).
+  // Every coordinate in these tests is relative to the frame's top-left corner, where the
+  // photo rests centred at (200, 300). Where the frame itself lands in the viewport is not
+  // ours to assume — a classic scrollbar gutter moves it, which is what CI has and macOS
+  // does not — so the frame is deliberately placed off the corner and measured.
   const CENTRE = { x: 200, y: 300 };
+  let origin: { x: number, y: number };
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HostComponent);
@@ -95,10 +99,13 @@ describe('PinchZoomDirective', () => {
     const debug = fixture.debugElement.children[0].children[0];
     target = debug.nativeElement;
     directive = debug.injector.get(PinchZoomDirective);
+    const frame = target.parentElement!.getBoundingClientRect();
+    origin = { x: frame.left, y: frame.top };
   });
 
   function touch(type: string, points: [number, number][], changed: [number, number][] = points): TouchEvent {
-    const make = ([clientX, clientY]: [number, number], identifier: number) => new Touch({ identifier, target, clientX, clientY });
+    const make = ([x, y]: [number, number], identifier: number) =>
+      new Touch({ identifier, target, clientX: origin.x + x, clientY: origin.y + y });
     const event = new TouchEvent(type, {
       touches: points.map(make), changedTouches: changed.map(make), cancelable: true, bubbles: true,
     });
@@ -116,7 +123,7 @@ describe('PinchZoomDirective', () => {
 
   function centre() {
     const rect = target.getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, width: rect.width };
+    return { x: rect.left + rect.width / 2 - origin.x, y: rect.top + rect.height / 2 - origin.y, width: rect.width };
   }
 
   it('scales with the distance between two fingers, and claims the gesture', () => {
@@ -137,7 +144,7 @@ describe('PinchZoomDirective', () => {
 
   it('leaves a gesture the browser already owns alone', () => {
     touch('touchstart', [[150, 300], [250, 300]]);
-    const make = (clientX: number, identifier: number) => new Touch({ identifier, target, clientX, clientY: 300 });
+    const make = (x: number, identifier: number) => new Touch({ identifier, target, clientX: origin.x + x, clientY: origin.y + 300 });
     target.dispatchEvent(new TouchEvent('touchmove', { touches: [make(100, 0), make(300, 1)], cancelable: false }));
     expect(directive.scale).toBe(1);
   });
@@ -183,12 +190,13 @@ describe('PinchZoomDirective', () => {
   });
 
   it('zooms on a trackpad pinch (ctrl + wheel) but leaves a plain wheel alone', () => {
-    const plain = new WheelEvent('wheel', { deltaY: -100, clientX: 200, clientY: 300, cancelable: true });
+    const at = { clientX: origin.x + 200, clientY: origin.y + 300 };
+    const plain = new WheelEvent('wheel', { deltaY: -100, ...at, cancelable: true });
     target.dispatchEvent(plain);
     expect(directive.scale).toBe(1);
     expect(plain.defaultPrevented).toBeFalse();
 
-    const ctrl = new WheelEvent('wheel', { deltaY: -100, ctrlKey: true, clientX: 200, clientY: 300, cancelable: true });
+    const ctrl = new WheelEvent('wheel', { deltaY: -100, ctrlKey: true, ...at, cancelable: true });
     target.dispatchEvent(ctrl);
     expect(directive.scale).toBeGreaterThan(1);
     expect(ctrl.defaultPrevented).toBeTrue();
