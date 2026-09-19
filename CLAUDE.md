@@ -79,6 +79,12 @@ layout is right (see the `figma-diff` skill).
   drawer on `.open`. Swapping them with `@if/@else` cost the close animation and reset the
   drawer's `expanded` state on every selection. The sheet keeps the last selection in a
   signal so it still has something to draw on the way out.
+- The sheet's detail rows come from `item-sheet/detail-rows.ts`: one ordered `FIELDS` list (the
+  client's fixed order — licensing, symbol, mentoring, address, age, hours, details, website,
+  manager, phone, email; name is the title, photos come after the action buttons). A row is
+  dropped when it has no entered value or its `kinds` excludes the facility kind (licensing,
+  symbol and mentoring are education-only). `resolveItem()`'s placeholders count as "no value":
+  license code `none` ("לא ידוע") and mentoring `not-mentored`. Owner kind is deliberately not shown.
 - `results-drawer/` is a shell over `results-scope/` (count + `[באיזור המפה | בכל הרשות]`),
   `filter-panel/` and `item-list/`. Only the drawer reports its height to
   `state.mapPaddingBottom`; the map uses it as bottom padding *and* to trim the rectangle for
