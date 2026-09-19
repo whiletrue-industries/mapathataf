@@ -79,6 +79,10 @@ layout is right (see the `figma-diff` skill).
   drawer on `.open`. Swapping them with `@if/@else` cost the close animation and reset the
   drawer's `expanded` state on every selection. The sheet keeps the last selection in a
   signal so it still has something to draw on the way out.
+  While an item is open the drawer gets `.covered` and slides out (transform + delayed
+  `visibility`), because a sheet with few rows is shorter than the drawer and the list showed
+  around it. Transform only, on purpose: the drawer's box and `state.mapPaddingBottom` do not
+  change, so opening an item neither re-pads the map nor re-filters "in the map area".
 - The sheet's detail rows come from `item-sheet/detail-rows.ts`: one ordered `FIELDS` list (the
   client's fixed order — licensing, symbol, mentoring, address, age, hours, details, website,
   manager, phone, email; name is the title, photos come after the action buttons). A row is

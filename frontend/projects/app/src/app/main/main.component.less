@@ -60,6 +60,20 @@
             z-index: 3;
         }
 
+        // A detail sheet with few fields is shorter than the list drawer, which then showed
+        // around it - so the drawer steps out of the way while an item is open. It moves by
+        // transform only: its box, and with it state.mapPaddingBottom, stay put, so the map
+        // neither re-pads nor re-filters "in the map area" while an item is being viewed.
+        app-results-drawer {
+            transition: transform @ease, visibility 0s;
+
+            &.covered {
+                transform: translateY(100%);
+                visibility: hidden;
+                transition: transform @ease, visibility 0s @ease;
+            }
+        }
+
         // The detail sheet rides over the list and slides away rather than vanishing,
         // which is why both stay mounted.
         app-item-sheet {
