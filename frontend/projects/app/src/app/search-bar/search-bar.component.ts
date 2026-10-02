@@ -79,12 +79,10 @@ export class SearchBarComponent {
     this.mapbox.autocompleteRetrieve(result.id);
   }
 
-  // While an item is selected the field shows its name, so clearing means deselecting.
+  // While an item is selected the field shows its name, so clearing also deselects — and
+  // must still drop the term underneath, or it reappears the moment the item closes.
   clear() {
-    if (this.state.selectedId()) {
-      this.state.selectedId.set(null);
-    } else {
-      this.state.searchTerm.set('');
-    }
+    this.state.selectedId.set(null);
+    this.state.searchTerm.set('');
   }
 }
