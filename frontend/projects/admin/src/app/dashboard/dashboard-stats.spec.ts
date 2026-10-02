@@ -52,11 +52,31 @@ describe('computeStats', () => {
     expect(hidden?.count).toBe(1);
   });
 
+  it('counts neighbourhood places from the owner, then the municipality, then the ministry', () => {
+    const layered = [
+      // Owner beats both the municipality and the ministry.
+      makeItem('own', { info: education, official: [mol(10, 4)], admin: { neighborhood: 'צפון', children_count: '20' }, user: { children_count: '12' } }),
+      // The municipality beats the ministry.
+      makeItem('muni', { info: education, official: [mol(10, 4)], admin: { neighborhood: 'צפון', children_count: '7' } }),
+      // Only the ministry.
+      makeItem('mol', { info: education, official: [mol(5, 5)], admin: { neighborhood: 'צפון' } }),
+      // No number anywhere; an unparseable owner entry falls through.
+      makeItem('none', { info: education, admin: { neighborhood: 'צפון' }, user: { children_count: 'לא ידוע' } }),
+      // Facilities without ministry data count too.
+      makeItem('plain', { info: education, admin: { neighborhood: 'דרום' }, user: { children_count: 'כ-40 ילדים' } }),
+    ];
+    const stats = computeStats(layered, workspace, 'active');
+    expect(stats.neighborhoods.find(row => row.label === 'צפון')?.places).toBe(12 + 7 + 5);
+    expect(stats.neighborhoods.find(row => row.label === 'דרום')?.places).toBe(40);
+    // The subsidised-daycare section stays ministry-only.
+    expect(stats.capacity?.total).toBe(25);
+  });
+
   it('sums capacity over the scope, per band and per neighbourhood', () => {
     const published = computeStats(items, workspace, 'published');
     expect(published.capacity).toEqual(jasmine.objectContaining({ facilities: 1, total: 30, available: 9 }));
     expect(published.capacity?.bands[0]).toEqual({ label: 'תינוקות', total: 10, available: 4 });
-    expect(published.neighborhoods[0]).toEqual(jasmine.objectContaining({ label: 'צפון', count: 2, places: 30, available: 9 }));
+    expect(published.neighborhoods[0]).toEqual(jasmine.objectContaining({ label: 'צפון', count: 2, places: 30 }));
     expect(computeStats(items, workspace, 'active').capacity?.total).toBe(36);
   });
 

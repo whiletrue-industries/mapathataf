@@ -16,7 +16,7 @@ export type Breakdown = { title: string; total: number; segments: Figure[]; isPr
 
 export type CapacityBand = { label: string; total: number; available: number };
 
-export type NeighborhoodRow = Figure & { places: number; available: number };
+export type NeighborhoodRow = Figure & { places: number };
 
 export type RecentUpdate = { id: string; name: string; updatedAt: string };
 
@@ -147,16 +147,28 @@ export function computeStats(items: any[], workspace: any, scope: Scope): Dashbo
     return { total, available };
   };
 
-  const rows: { [name: string]: { places: number; available: number } } = {};
+  // A neighbourhood's places follow the usual layer precedence: the owner's own count, then
+  // the municipality's, then the Ministry of Labor's — which is also the only source of
+  // vacancies, so those stay in the subsidised-daycare section and out of this table.
+  const ownCount = (item: any): number | null => {
+    for (const layer of [item.user, item.admin]) {
+      const count = Number(String(layer?.children_count ?? '').match(/\d+/)?.[0]);
+      if (count > 0) {
+        return count;
+      }
+    }
+    return null;
+  };
+
+  const rows: { [name: string]: { places: number } } = {};
   let placesTotal = 0, placesAvailable = 0;
   for (const item of inScope) {
     const places = placesOf(item);
     placesTotal += places.total;
     placesAvailable += places.available;
     const name = neighborhoodOf(item);
-    rows[name] = rows[name] || { places: 0, available: 0 };
-    rows[name].places += places.total;
-    rows[name].available += places.available;
+    rows[name] = rows[name] || { places: 0 };
+    rows[name].places += ownCount(item) ?? places.total;
   }
   const capacity = placesTotal > 0 ? {
     facilities, total: placesTotal, available: placesAvailable, bands,
@@ -168,7 +180,6 @@ export function computeStats(items: any[], workspace: any, scope: Scope): Dashbo
     return {
       ...figure(name, label, filter),
       places: rows[name]?.places || 0,
-      available: rows[name]?.available || 0,
     };
   };
   const hasNeighborhoods = Object.keys(rows).some(name => name !== UNSET);

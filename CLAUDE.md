@@ -195,9 +195,11 @@ constructor — it runs before the first effect flush, so the parse can't be clo
   asserts it for every figure. New dashboard numbers should be `figure()`s, not ad-hoc counts.
 - Filters the list has no `<select>` for (ownership, shelter, neighbourhood, age, sub-kind,
   subsidy) travel as `ItemFilters.extra` and show in the list as a dismissible chip.
-- Real data to keep in mind: capacity exists only in `official[source=mol]`
-  (`total/available_places_{babies,toddlers,adults}`; "adults" = בוגרים, the oldest daycare
-  class); `admin.app_publication` absent means published (`prepare()` defaults it);
+- Real data to keep in mind: official capacity and all vacancy data exist only in
+  `official[source=mol]` (`total/available_places_{babies,toddlers,adults}`; "adults" = בוגרים,
+  the oldest daycare class) — the מעונות מסובסדים section. Owners also enter a free-text
+  `user.children_count` (מספר ילדים); the neighbourhood table's מקומות takes it first, then
+  `admin.children_count`, then the MoL total (designer's call, Oct 2026). `admin.app_publication` absent means published (`prepare()` defaults it);
   `info.updated_at` is a nightly heartbeat, not a change date; there is no population,
   enrolment or history data, so no per-capita or trend KPIs without server work.
 - Charts are CSS-only (flex widths); colours are class "tones" defined in
