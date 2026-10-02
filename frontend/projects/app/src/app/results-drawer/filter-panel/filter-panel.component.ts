@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, output } from '@angular/core';
 import { StateService } from '../../state.service';
 import { SECTIONS, Section, sectionDef } from '../../sections';
 import { activeFilterChips, FILTER_DEFS, FilterChip, FilterKind } from '../../filter-defs';
@@ -16,6 +16,8 @@ type ActiveFilter = FilterChip & {
 export class FilterPanelComponent {
 
   state = inject(StateService);
+
+  sectionSelected = output<Section>();
 
   SECTIONS = SECTIONS;
   FILTER_DEFS = FILTER_DEFS;
@@ -55,6 +57,7 @@ export class FilterPanelComponent {
 
   selectSection(section: Section) {
     this.state.section.set(section);
+    this.sectionSelected.emit(section);
   }
 
   // A chip is lit when it is part of what the list is showing — so in הכל mode, all of them.

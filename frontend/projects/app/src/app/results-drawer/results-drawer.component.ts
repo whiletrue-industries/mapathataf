@@ -22,6 +22,13 @@ export class ResultsDrawerComponent implements AfterViewInit {
 
   expanded = signal(false);
 
+  // Picking a category while scoped to the map area opens the list (city scope leaves it).
+  onSectionSelected() {
+    if (this.state.mapScope() === 'map') {
+      this.expanded.set(true);
+    }
+  }
+
   ngAfterViewInit() {
     this.platform.browser(() => {
       // The map reads this as bottom padding, and it also trims the viewport rectangle

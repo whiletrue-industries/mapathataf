@@ -4,7 +4,7 @@
     </div>
 </div>
 <app-results-scope />
-<app-filter-panel />
+<app-filter-panel (sectionSelected)='onSectionSelected()' />
 <div class='list' [class.open]='expanded()'>
     <app-item-list />
 </div>
