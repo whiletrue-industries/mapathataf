@@ -59,8 +59,8 @@ export const FILTER_DEFS: Record<FilterKind, FilterDef> = {
     kind: 'mentoring',
     label: 'הדרכה',
     options: [
-      { value: 'municipal', label: 'עירונית' },
-      { value: 'private', label: 'פרטית' },
+      { value: 'municipal', label: 'הדרכה עירונית' },
+      { value: 'private', label: 'הדרכה פרטית' },
       { value: 'not-mentored', label: 'אינו מודרך/לא ידוע' },
     ],
   },
