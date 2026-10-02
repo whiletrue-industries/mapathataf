@@ -22,6 +22,9 @@ export class FilterSheetComponent {
     return kind ? this.state.appliedValues(kind) : null;
   });
 
+  // Something to clean: any option ticked, the licensing default included.
+  canClear = computed(() => !!this.currentValues()?.length);
+
   toggleValue(value: string) {
     const kind = this.kind();
     if (!kind) {
@@ -43,6 +46,9 @@ export class FilterSheetComponent {
   }
 
   clear() {
+    if (!this.canClear()) {
+      return;
+    }
     const kind = this.kind();
     if (kind) {
       this.state.clearFilter(kind);

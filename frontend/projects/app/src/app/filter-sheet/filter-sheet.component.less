@@ -96,13 +96,28 @@
             .clear, .save {
                 padding: 6px 16px;
                 border-radius: 8px;
-                background-color: @color-gray-1;
-                color: @color-gray-3;
                 font-size: 16px;
                 cursor: pointer;
             }
 
+            // Disabled until there is a selection to clear. The border is always there,
+            // transparent when disabled, so enabling it does not change its size.
+            .clear {
+                border: 1px solid transparent;
+                background-color: @color-gray-1;
+                color: @color-gray-3;
+                cursor: default;
+
+                &.enabled {
+                    border-color: @color-night;
+                    background-color: @color-white;
+                    color: @color-night;
+                    cursor: pointer;
+                }
+            }
+
             .save {
+                border: 1px solid @color-night;
                 background-color: @color-night;
                 color: @color-white;
                 font-weight: 600;

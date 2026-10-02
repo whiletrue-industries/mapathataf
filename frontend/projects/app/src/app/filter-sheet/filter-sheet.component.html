@@ -14,7 +14,8 @@
             }
         </div>
         <div class='controls'>
-            <div class='clear' (click)='clear()'>ניקוי הסינון</div>
+            <div class='clear' [class.enabled]='canClear()' [attr.aria-disabled]='!canClear()'
+                (click)='clear()'>ניקוי הסינון</div>
             <div class='save' (click)='save()'>שמירה</div>
         </div>
     </div>
