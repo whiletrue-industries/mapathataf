@@ -7,7 +7,7 @@
         @for (row of rows(); track row.label) {
             <div class='row'>
                 <span class='capsule' [class]='"icon-" + row.icon'></span>
-                <span class='text'>{{ row.label }}:
+                <span class='text'><span class='label'>{{ row.label }}: </span>
                     @if (row.href) {
                         <a [href]='row.href' target='_blank'>{{ row.value }}</a>
                     } @else {
