@@ -143,7 +143,8 @@ layout is right (see the `figma-diff` skill).
 - Filter signals have **three** states: `null` = never set, `[]` = explicitly emptied, a list =
   a selection. The distinction exists for licensing, which falls back to `DEFAULT_LICENSING`
   via `effectiveLicensing()` when unset — that default shapes מסגרות חינוך but not `הכל`, so
-  the headline count is the true total and `הכל` ≠ the sum of the chips while it is in force.
+  the headline count is the true total and `הכל`'s count ≠ the sum of the chips while it is
+  in force. (The `הכל` chip itself shows no count since Oct 2026, by design request.)
   Clearing it has to record `[]`, or the default just comes back.
 - `selectedItem` resolves against `api.items()`, not the filtered list, and `MapComponent`
   always draws the selected pin — a facility reached by search or a shared link must open and

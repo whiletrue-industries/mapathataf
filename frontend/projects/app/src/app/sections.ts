@@ -13,7 +13,8 @@ export type SectionDef = {
   filters: FilterKind[];
 };
 
-// Display order, right to left under RTL: מסגרות חינוך, התפתחות הילד, אחה״צ, then הכל.
+// Display order, right to left under RTL: הכל (drawn by the filter panel), then מסגרות
+// חינוך, התפתחות הילד, אחה״צ.
 export const SECTIONS: SectionDef[] = [
   {
     key: 'education',

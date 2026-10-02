@@ -6,6 +6,9 @@
     <div class='panel-inner'>
     @let counts = state.sectionCounts();
     <div class='chips'>
+        <a class='chip section-all' [class.lit]='state.section() === "all"' (click)='selectSection("all")'>
+            <span class='name'>הכל</span>
+        </a>
         @for (section of SECTIONS; track section.key) {
             <a class='chip' [class]='"section-" + section.key' [class.lit]='isLit(section.key)'
                (click)='selectSection(section.key)'>
@@ -13,10 +16,6 @@
                 <span class='count'>{{ counts[section.key].visible }}</span>
             </a>
         }
-        <a class='chip section-all' [class.lit]='state.section() === "all"' (click)='selectSection("all")'>
-            <span class='name'>הכל</span>
-            <span class='count'>{{ counts['all'].visible }}</span>
-        </a>
     </div>
     @let pillCounts = pillCount();
     <div class='pills'>
