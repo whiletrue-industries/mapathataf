@@ -52,6 +52,18 @@ describe('StateService age group filtering', () => {
     state.filterAgeGroup.set(['birth_to_1', '1_to_2', '2_to_3', '3_to_6']);
     expect(state.items().map((i) => i.id)).toEqual(['babies', 'toddlers', 'everything']);
   });
+
+  it('removes a single age and keeps the others', () => {
+    state.filterAgeGroup.set(['birth_to_1', '1_to_2']);
+    state.removeFilterValue('age_group', 'birth_to_1');
+    expect(state.filterAgeGroup()).toEqual(['1_to_2']);
+  });
+
+  it('unsets the age filter when its last age is removed', () => {
+    state.filterAgeGroup.set(['1_to_2']);
+    state.removeFilterValue('age_group', '1_to_2');
+    expect(state.filterAgeGroup()).toBeNull();
+  });
 });
 
 describe('StateService sections and counts', () => {
@@ -164,6 +176,19 @@ describe('StateService licensing default', () => {
     state.updateStateFromFragment(fragment);
     expect(state.filterLicensing()).toEqual([]);
     expect(state.items().map((i) => i.id)).toEqual(['licensed', 'unlicensed']);
+  });
+
+  it('turns the default into an explicit selection when one status is removed', () => {
+    state.section.set('education');
+    state.removeFilterValue('licensing', 'valid');
+    expect(state.filterLicensing()).toEqual(DEFAULT_LICENSING.filter((v) => v !== 'valid'));
+    expect(state.items().map((i) => i.id)).toEqual([]);
+  });
+
+  it('records an empty licensing selection when its last status is removed', () => {
+    state.filterLicensing.set(['valid']);
+    state.removeFilterValue('licensing', 'valid');
+    expect(state.filterLicensing()).toEqual([]);
   });
 
   it('counts the licensing default as active, and stops once it is cleared', () => {

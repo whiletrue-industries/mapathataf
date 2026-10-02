@@ -321,6 +321,17 @@ export class StateService {
     this.filterSignals[kind].set(kind === 'licensing' ? [] : null);
   }
 
+  // Removes one option from what the filter is applying — for licensing in מסגרות חינוך
+  // that may be the default, which this turns into an explicit selection of the rest.
+  removeFilterValue(kind: FilterKind, value: string) {
+    const remaining = (this.appliedValues(kind) || []).filter((v) => v !== value);
+    if (remaining.length) {
+      this.filterSignals[kind].set(remaining);
+    } else {
+      this.clearFilter(kind);
+    }
+  }
+
   selectId(selectedId: any) {
     this.selectedId.update((value) => {
       if (value === selectedId) {

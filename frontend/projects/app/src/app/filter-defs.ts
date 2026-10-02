@@ -68,19 +68,22 @@ export const FILTER_DEFS: Record<FilterKind, FilterDef> = {
 
 export const ALL_AGES_LABEL = 'כל הגילאים';
 
+export type FilterChip = {
+  label: string;
+  // The option the chip removes; null removes the whole filter.
+  value: string | null;
+};
+
 /**
- * One removable chip stands for one active filter, so its label has to summarise the
- * whole selection: the value itself when there is only one, "כל הגילאים" when an age
- * filter covers every group, and otherwise the filter's own name.
+ * The removable chips for one active filter: one per selected option, in the filter's own
+ * option order — except an age filter covering every group, which is a single
+ * "כל הגילאים" chip, since it narrows nothing and four chips would be noise.
  */
-export function activeFilterLabel(kind: FilterKind, values: string[]): string {
+export function activeFilterChips(kind: FilterKind, values: string[]): FilterChip[] {
   const def = FILTER_DEFS[kind];
   const selected = def.options.filter((option) => values.includes(option.value));
   if (kind === 'age_group' && selected.length === def.options.length) {
-    return ALL_AGES_LABEL;
+    return [{ label: ALL_AGES_LABEL, value: null }];
   }
-  if (selected.length === 1) {
-    return selected[0].label;
-  }
-  return def.label;
+  return selected.map((option) => ({ label: option.label, value: option.value }));
 }

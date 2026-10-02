@@ -1,11 +1,10 @@
 import { Component, computed, inject } from '@angular/core';
 import { StateService } from '../../state.service';
 import { SECTIONS, Section, sectionDef } from '../../sections';
-import { activeFilterLabel, FILTER_DEFS, FilterKind } from '../../filter-defs';
+import { activeFilterChips, FILTER_DEFS, FilterChip, FilterKind } from '../../filter-defs';
 
-type ActiveFilter = {
+type ActiveFilter = FilterChip & {
   kind: FilterKind;
-  label: string;
 };
 
 @Component({
@@ -40,11 +39,19 @@ export class FilterPanelComponent {
     for (const kind of this.pillKinds()) {
       const values = this.state.appliedValues(kind);
       if (values && values.length) {
-        active.push({ kind, label: activeFilterLabel(kind, values) });
+        active.push(...activeFilterChips(kind, values).map((chip) => ({ kind, ...chip })));
       }
     }
     return active;
   });
+
+  remove(filter: ActiveFilter) {
+    if (filter.value === null) {
+      this.state.clearFilter(filter.kind);
+    } else {
+      this.state.removeFilterValue(filter.kind, filter.value);
+    }
+  }
 
   selectSection(section: Section) {
     this.state.section.set(section);

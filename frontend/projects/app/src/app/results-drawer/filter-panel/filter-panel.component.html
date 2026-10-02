@@ -32,10 +32,10 @@
     @let active = activeFilters();
     @if (active.length) {
         <div class='active'>
-            @for (filter of active; track filter.kind) {
+            @for (filter of active; track filter.kind + ':' + filter.value) {
                 <span class='value'>
                     {{ filter.label }}
-                    <a class='remove' (click)='state.clearFilter(filter.kind)' title='הסרת הסינון'></a>
+                    <a class='remove' (click)='remove(filter)' title='הסרת הסינון'></a>
                 </span>
             }
         </div>
