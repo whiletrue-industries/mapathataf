@@ -36,6 +36,10 @@ export class ItemSheetComponent {
     });
   }
 
+  close() {
+    this.state.selectedId.set(null);
+  }
+
   rows = computed<DetailRow[]>(() => detailRows(this.item()));
 
   photos = computed(() => itemPhotos(this.item()));

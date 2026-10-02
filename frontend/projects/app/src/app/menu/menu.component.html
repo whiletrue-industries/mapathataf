@@ -1,5 +1,4 @@
-<div class='menu-button' [class.closing]='state.selectedId()' (click)='press()'
-     [title]='state.selectedId() ? "סגירה" : "תפריט"'></div>
+<div class='menu-button' (click)='active = true' title='תפריט'></div>
 @if (active) {
     <div class='scrim' (click)='active = false'></div>
 }

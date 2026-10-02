@@ -2,6 +2,7 @@
 @if (selected) {
     <div class='title'>
         <h2>{{ selected.resolved.name }}</h2>
+        <button type='button' class='close' aria-label='סגירה' (click)='close()'></button>
     </div>
     <div class='body'>
         @for (row of rows(); track row.label) {
