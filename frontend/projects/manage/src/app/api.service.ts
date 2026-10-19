@@ -18,6 +18,7 @@ export type WorkspaceMetadata = {
   links?: WorkspaceLink[];
   onboarding?: any;
   city_links?: string[];
+  city_page?: {title?: string; subtitle?: string; content?: string};
   [key: string]: any;
 };
 

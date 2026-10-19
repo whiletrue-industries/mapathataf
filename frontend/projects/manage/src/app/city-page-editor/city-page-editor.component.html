@@ -1,0 +1,21 @@
+<label>
+    <span>כותרת</span>
+    <input type='text' [placeholder]='"הגיל הרך ב" + (city() || "")' [ngModel]='title()' (ngModelChange)='title.set($event); dirty.set(true)'/>
+</label>
+<label>
+    <span>כותרת משנה</span>
+    <input type='text' [ngModel]='subtitle()' (ngModelChange)='subtitle.set($event); dirty.set(true)'/>
+</label>
+<div class='field'>
+    <span>תוכן</span>
+    <app-rich-text-editor [markdown]='content()' (markdownChange)='content.set($event); dirty.set(true)'></app-rich-text-editor>
+</div>
+<p class='hint'>
+    הדף מופיע בתפריט רק כשיש בו תוכן.
+    כותרת משנה שמזכירה חינוך, בריאות/התפתחות או קהילה/פנאי מקבלת את אייקון הקטגוריה.
+</p>
+@if (dirty()) {
+    <div class='actions'>
+        <button class='save' (click)='save()'>שמירה</button>
+    </div>
+}

@@ -1,0 +1,36 @@
+@import '../common.less';
+
+:host {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+
+    label, .field {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 4px;
+        font-size: 14px;
+
+        input {
+            padding: 6px 8px;
+            border: 1px solid @color-gray-1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+    }
+
+    .hint {
+        font-size: 13px;
+        color: @color-gray-3;
+    }
+
+    .actions .save {
+        padding: 6px 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: @color-green-300;
+        color: @color-white;
+        cursor: pointer;
+    }
+}

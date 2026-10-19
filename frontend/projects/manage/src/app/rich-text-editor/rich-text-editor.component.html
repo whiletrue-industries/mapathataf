@@ -1,0 +1,7 @@
+<div class='toolbar' role='toolbar'>
+    @for (command of commands; track command.label) {
+        <button type='button' [title]='command.title' [class.active]='command.active?.()'
+            (mousedown)='$event.preventDefault()' (click)='run(command)'>{{ command.label }}</button>
+    }
+</div>
+<div class='host' #host></div>

@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Subject } from 'rxjs';
 import { ApiService, WorkspaceLink, WorkspacePatch } from '../api.service';
-import { adminLink, appLink } from '../links';
+import { adminLink, appLink, appOnboardingLink } from '../links';
 import { Field } from '../fields';
 import { ItemEditSectionComponent } from '../item-edit-section/item-edit-section.component';
 import { LogoUploadComponent } from '../logo-upload/logo-upload.component';
@@ -12,6 +12,7 @@ import { BoundsEditorComponent } from '../bounds-editor/bounds-editor.component'
 import { NeighborhoodsEditorComponent } from '../neighborhoods-editor/neighborhoods-editor.component';
 import { LinksEditorComponent } from '../links-editor/links-editor.component';
 import { CityLinksEditorComponent } from '../city-links-editor/city-links-editor.component';
+import { CityPage, CityPageEditorComponent } from '../city-page-editor/city-page-editor.component';
 
 export const GENERAL_FIELDS: Field[] = [
   {name: 'city', type: 'text', label: 'שם הרשות'},
@@ -24,13 +25,10 @@ export const ONBOARDING_FIELDS: Field[] = [
   {name: 'questions', type: 'multi-enum', label: 'שאלות', options: [
     {id: 'age', display: 'גיל הילד'},
     {id: 'interest', display: 'תחום עניין'},
-    {id: 'address', display: 'כתובת מגורים'},
   ]},
   {name: 'welcome_title', type: 'text', label: 'כותרת פתיחה'},
   {name: 'welcome_intro', type: 'textarea', label: 'פסקת פתיחה'},
   {name: 'welcome_tagline', type: 'text', label: 'שורת סיום מודגשת'},
-  {name: 'welcome_prompt', type: 'text', label: 'שאלת פתיחה'},
-  {name: 'disclaimer_text', type: 'textarea', label: 'טקסט הבהרה'},
 ];
 
 export function flattenOnboarding(onboarding: any): any {
@@ -40,8 +38,6 @@ export function flattenOnboarding(onboarding: any): any {
     welcome_title: onboarding?.welcome?.title,
     welcome_intro: onboarding?.welcome?.intro,
     welcome_tagline: onboarding?.welcome?.tagline,
-    welcome_prompt: onboarding?.welcome?.prompt,
-    disclaimer_text: onboarding?.disclaimer?.text,
   };
 }
 
@@ -51,7 +47,7 @@ export function buildOnboarding(flat: any): any {
     onboarding.questions = flat.questions;
   }
   const welcome: any = {};
-  for (const key of ['title', 'intro', 'tagline', 'prompt']) {
+  for (const key of ['title', 'intro', 'tagline']) {
     const value = flat['welcome_' + key];
     if (value) {
       welcome[key] = value;
@@ -60,16 +56,14 @@ export function buildOnboarding(flat: any): any {
   if (Object.keys(welcome).length) {
     onboarding.welcome = welcome;
   }
-  if (flat.disclaimer_text) {
-    onboarding.disclaimer = {text: flat.disclaimer_text};
-  }
   return onboarding;
 }
 
 @Component({
   selector: 'app-city-edit',
   imports: [RouterLink, ItemEditSectionComponent, LogoUploadComponent,
-    BoundsEditorComponent, NeighborhoodsEditorComponent, LinksEditorComponent, CityLinksEditorComponent],
+    BoundsEditorComponent, NeighborhoodsEditorComponent, LinksEditorComponent, CityLinksEditorComponent,
+    CityPageEditorComponent],
   templateUrl: './city-edit.component.html',
   styleUrl: './city-edit.component.less'
 })
@@ -100,6 +94,12 @@ export class CityEditComponent {
   appLink = computed(() => {
     const workspace = this.workspace();
     return workspace ? appLink(workspace) : null;
+  });
+
+  // Only offered while the onboarding is enabled - otherwise the link opens the plain map
+  appOnboardingLink = computed(() => {
+    const workspace = this.workspace();
+    return workspace?.metadata.onboarding?.enabled ? appOnboardingLink(workspace) : null;
   });
 
   saving = signal(false);
@@ -173,6 +173,10 @@ export class CityEditComponent {
 
   onNeighborhoodsUpdate(neighborhoods: string[]) {
     this.queue({metadata: {neighborhoods: neighborhoods.length ? neighborhoods : null}});
+  }
+
+  onCityPageUpdate(page: CityPage | null) {
+    this.queue({metadata: {city_page: page}});
   }
 
   onLinksUpdate(links: WorkspaceLink[]) {

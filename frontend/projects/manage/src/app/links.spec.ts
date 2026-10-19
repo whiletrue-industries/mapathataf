@@ -1,5 +1,5 @@
 import { Workspace } from './api.service';
-import { adminLink, appLink } from './links';
+import { adminLink, appLink, appOnboardingLink } from './links';
 
 describe('copy links', () => {
   const workspace: Workspace = {id: 'dymonh', key: 'secret-key', favorite: false, active: true, metadata: {}};
@@ -14,5 +14,9 @@ describe('copy links', () => {
 
   it('builds the app link', () => {
     expect(appLink(workspace)).toEqual('https://app.tafmap.org.il/dymonh');
+  });
+
+  it('builds the app link that opens the onboarding', () => {
+    expect(appOnboardingLink(workspace)).toEqual('https://app.tafmap.org.il/dymonh?onboarding');
   });
 });

@@ -4,8 +4,7 @@ describe('onboarding flatten/build round-trip', () => {
   const onboarding = {
     enabled: true,
     questions: ['age', 'interest'],
-    welcome: {title: 'שלום', intro: 'ברוכים הבאים', tagline: 'סלוגן', prompt: 'מאיפה נתחיל?'},
-    disclaimer: {text: 'הבהרה'},
+    welcome: {title: 'שלום', intro: 'ברוכים הבאים', tagline: 'סלוגן'},
   };
 
   it('round-trips a full config', () => {
@@ -26,7 +25,12 @@ describe('onboarding flatten/build round-trip', () => {
     });
   });
 
-  it('omits empty welcome/disclaimer objects', () => {
+  it('omits an empty welcome object', () => {
     expect(buildOnboarding({enabled: true})).toEqual({enabled: true});
+  });
+
+  it('drops the retired prompt and disclaimer texts', () => {
+    const legacy = {...onboarding, welcome: {...onboarding.welcome, prompt: 'מאיפה נתחיל?'}, disclaimer: {text: 'הבהרה'}};
+    expect(buildOnboarding(flattenOnboarding(legacy))).toEqual(onboarding);
   });
 });

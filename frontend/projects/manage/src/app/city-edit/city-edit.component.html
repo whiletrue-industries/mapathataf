@@ -29,6 +29,12 @@
         </div>
 
         <div class='section'>
+            <h3>דף הרשות בתפריט</h3>
+            <app-city-page-editor [page]='workspace_.metadata.city_page' [city]='workspace_.metadata.city'
+                (update)='onCityPageUpdate($event)'></app-city-page-editor>
+        </div>
+
+        <div class='section'>
             <h3>קישורים בתפריט</h3>
             <app-links-editor [links]='workspace_.metadata.links' (update)='onLinksUpdate($event)'></app-links-editor>
         </div>
@@ -56,6 +62,13 @@
             @if (appLink(); as link) {
                 <div class='copy-row'>
                     <span class='label'>אפליקציית המפה:</span>
+                    <code>{{ link }}</code>
+                    <button (click)='copy(link)'>{{ copied() === link ? 'הועתק ✓' : 'העתקה' }}</button>
+                </div>
+            }
+            @if (appOnboardingLink(); as link) {
+                <div class='copy-row'>
+                    <span class='label'>אפליקציית המפה עם אונבורדינג:</span>
                     <code>{{ link }}</code>
                     <button (click)='copy(link)'>{{ copied() === link ? 'הועתק ✓' : 'העתקה' }}</button>
                 </div>
