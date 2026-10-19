@@ -208,6 +208,24 @@ constructor — it runs before the first effect flush, so the parse can't be clo
 - The items API wants the key as an `Authorization` header (`?key=` on the API returns
   privilege 0 and only ten items) — handy when profiling a city with curl.
 
+## Menu and content pages (app project, Oct 2026)
+
+- The menu is a full-page overlay (`menu/menu-page/`) opened by `MenuComponent`, not a
+  route, so the map survives it. Same history trick as the lightbox (`history.state.menu`);
+  a `MenuComponent` constructed on a flagged entry starts open, which is how closing a
+  content page lands back on the menu. Pages opened from the menu carry
+  `history.state.fromMenu`; `AboutComponent.close()` only does `history.back()` on such an
+  entry — on a cold load the StateService effect pushes a `#all/...` entry onto `/about/*`,
+  so a blind back would just strip the fragment.
+- Items (`menu/menu-items.ts`): shared pages above the navy divider; below it the city's
+  page, its `external` links, its `whatsapp` link. Muni `internal` links are legacy and
+  ignored. The city page is `metadata.city_page = {title?, subtitle?, content}` (markdown),
+  edited in manage's `city-page-editor/`, served at `/about/city?workspace=<id>` (the
+  param makes reloads/shared links work). It renders through Angular's sanitizer; files
+  under `public/content/` are trusted. `about/markdown/render.ts`: `accordion` turns `##`
+  sections into `<details>` (איך לבחור), `categoryIcons` badges `###` headings that name a
+  category.
+
 ## Onboarding overlay (app project, Aug 2026)
 
 - `app/src/app/onboarding/` — wizard overlay (Oct 2026 design: welcome → questions → map).

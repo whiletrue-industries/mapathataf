@@ -2,7 +2,6 @@
 
 // Measurements follow the design's 430px frame. The welcome screen and the questions have
 // different backdrops.
-@bg-welcome: linear-gradient(180deg, #F4F9F4 0%, #D4EDF9 50%, #E5D8F5 100%);
 @bg-questions: linear-gradient(180deg, #CBE2F6 0%, #E3EEF6 32%, #EFF0F0 64%, #F0E0CF 100%);
 
 :host {
@@ -38,7 +37,7 @@
         background: @bg-questions;
 
         &.welcome {
-            background: @bg-welcome;
+            background: @page-backdrop;
         }
 
         .desktop({

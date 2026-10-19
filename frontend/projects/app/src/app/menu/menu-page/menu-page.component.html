@@ -1,0 +1,27 @@
+<app-page-header (close)='close.emit()'></app-page-header>
+<h1 class='title'>תפריט הגיל הרך</h1>
+<p class='subtitle'>מידע שיעזור לכם לחפש טוב יותר במפת הטף ולקבל מידע ושירות ממקורות נוספים</p>
+<nav class='items'>
+    @for (item of generalItems; track item.title) {
+        <ng-container *ngTemplateOutlet='pill; context: {$implicit: item}'></ng-container>
+    }
+    @if (cityItems().length) {
+        <div class='divider'></div>
+        @for (item of cityItems(); track $index) {
+            <ng-container *ngTemplateOutlet='pill; context: {$implicit: item}'></ng-container>
+        }
+    }
+</nav>
+<div class='footer'>
+    <a [routerLink]='["/about", "terms-of-use"]' [state]='fromMenu'>תנאי שימוש</a>
+    <a [routerLink]='["/about", "accessibility"]' [state]='fromMenu'>נגישות</a>
+    <a [routerLink]='["/about", "about"]' [state]='fromMenu'>אודות מפת הטף</a>
+</div>
+
+<ng-template #pill let-item>
+    @if (item.routerLink) {
+        <a class='pill' [routerLink]='item.routerLink' [queryParams]='item.queryParams' [state]='fromMenu'>{{ item.title }}</a>
+    } @else {
+        <a class='pill' [class.whatsapp]='item.whatsapp' [href]='item.href' target='_blank' rel='noopener'>{{ item.title }}</a>
+    }
+</ng-template>

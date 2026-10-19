@@ -1,11 +1,141 @@
 @import '../../../common.less';
 
+// Page typography for the rendered markdown; measurements follow the design's 430px frame.
 .content {
-    padding: 16px;
+    font-size: 16px;
+    line-height: 1.35;
+    color: @color-black;
+
     ::ng-deep {
+        h1 {
+            max-width: 300px;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.08;
+            color: @color-night;
+            text-align: center;
+        }
+
+        h2 {
+            margin: 24px 0 8px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        h3 {
+            margin: 33px 0 10px;
+            font-size: 16px;
+            font-weight: 700;
+
+            // A category's coloured badge, as in the results list: the box is ::before,
+            // the icon is ::after, laid over it.
+            &.category {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                min-height: 32px;
+
+                &::before {
+                    content: '';
+                    flex: none;
+                    width: 35px;
+                    height: 32px;
+                    box-sizing: border-box;
+                    border: 1px solid;
+                    border-radius: 10px;
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    right: 9.5px;
+                    width: 16px;
+                    height: 16px;
+                    margin-top: -8px;
+                    color: @color-night;
+                }
+
+                &.section-education {
+                    &::before { background-color: @color-fk-education; border-color: @color-fk-education-border; }
+                    &::after { .masked-icon('/icon-section-education.svg'; 16px); }
+                }
+                &.section-health {
+                    &::before { background-color: @color-fk-health; border-color: @color-fk-health-border; }
+                    &::after { .masked-icon('/icon-section-health.svg'; 16px); }
+                }
+                &.section-community {
+                    &::before { background-color: @color-fk-community; border-color: @color-fk-community-border; }
+                    &::after { .masked-icon('/icon-section-community.svg'; 16px); }
+                }
+            }
+        }
+
+        p {
+            margin: 0 0 8px;
+        }
+
+        ul, ol {
+            margin: 0 0 8px;
+            padding-inline-start: 24px;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
         a {
-            color: @color-medium-orange;
+            color: @color-night;
             text-decoration: underline;
+        }
+
+        // The accordion (see render.ts)
+        details {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            padding: 11px 0;
+
+            summary {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                min-height: 40px;
+                padding: 0 13px;
+                list-style: none;
+                cursor: pointer;
+
+                &::-webkit-details-marker {
+                    display: none;
+                }
+
+                &::before {
+                    content: '';
+                    flex: none;
+                    width: 24px;
+                    height: 24px;
+                    color: @color-night;
+                    .masked-icon('/icon-mi-keyboard-arrow-down.svg'; 24px);
+                    transition: transform @ease;
+                }
+            }
+
+            &[open] summary {
+                font-weight: 700;
+
+                &::before {
+                    transform: rotate(180deg);
+                }
+            }
+
+            // Indented on the start side to line up with the summary's text, past the chevron
+            .details-body {
+                padding: 11px 45px 0 13px;
+
+                > :first-child {
+                    margin-top: 0;
+                }
+            }
         }
     }
 }

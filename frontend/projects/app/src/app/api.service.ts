@@ -101,13 +101,18 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  fetchWorkspace(workspaceId: string): Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}/${workspaceId}`).pipe(
+      tap((data) => this.workspace.set(data)),
+    );
+  }
+
   fetchData(workspaceId: string): Observable<any[]> {
     const params = {
       page_size: 100000,
     };
-    return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}`).pipe(
+    return this.fetchWorkspace(workspaceId).pipe(
       switchMap((data) => {
-        this.workspace.set(data);
         console.log('WORKSPACE:', data);
         return this.http.get<any[]>(`${this.BASE_URL}/${workspaceId}/items`, {params})
       }),

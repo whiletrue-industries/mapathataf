@@ -1,22 +1,28 @@
-<div class='bar'>
-    <app-menu></app-menu>
-    <a class='logo' [routerLink]="['/', state.workspaceId()]"></a>
-</div>
+<app-page-header (close)='close()'></app-page-header>
 <div class='content'>
     @switch (section()) {
-        @case ("how-to-choose") {
-            <app-markdown src='choosing-an-educational-framework'></app-markdown>
+        @case ('how-to-choose') {
+            <app-markdown src='choosing-an-educational-framework' [accordion]='true'></app-markdown>
         }
-        @case ("custom") {
+        @case ('city') {
+            @if (cityPage(); as page) {
+                <h1 class='city-title'>{{ cityPageTitle() }}</h1>
+                @if (page.subtitle) {
+                    <p class='city-subtitle'>{{ page.subtitle }}</p>
+                }
+                <app-markdown [markdown]='page.content!' [categoryIcons]='true'></app-markdown>
+            }
+        }
+        @case ('custom') {
             <app-markdown [src]='href()'></app-markdown>
         }
-        @case ("about") {
+        @case ('about') {
             <app-markdown src='about'></app-markdown>
         }
-        @case ("terms-of-use") {
+        @case ('terms-of-use') {
             <app-markdown src='terms-of-use'></app-markdown>
         }
-        @case ("accessibility") {
+        @case ('accessibility') {
             <app-markdown src='accessibility'></app-markdown>
         }
         @default {
@@ -24,6 +30,3 @@
         }
     }
 </div>
-<div class='close' (click)='goBack()'>&times;</div>
-
-

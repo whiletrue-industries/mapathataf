@@ -1,0 +1,5 @@
+<button class='close' (click)='close.emit()' aria-label='סגירה'></button>
+<span class='kite' role='img' aria-label='מפת הטף'></span>
+@if (api.workspace()?.logo_url && !cityLogoBroken()) {
+    <img class='city-logo' [src]='api.workspace().logo_url' (error)='cityLogoBroken.set(true)' alt='' />
+}
