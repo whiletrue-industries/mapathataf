@@ -19,6 +19,67 @@
         background-image: url(../../../public/icon-menu.svg);
     }
 
+    // Feature discovery shown on arriving from the onboarding: a callout hanging from the
+    // button, its right edge 8px past the button's.
+    .tip {
+        position: absolute;
+        top: 53px;
+        right: -8px;
+        width: 224px;
+        box-sizing: border-box;
+        padding: 10px 10px 16px;
+        border-radius: 8px;
+        background-color: @color-night;
+        color: @color-white;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: -9px;
+            right: 16.5px;
+            width: 23px;
+            height: 12px;
+            background-color: @color-night;
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        }
+
+        .tip-header {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 7px;
+
+            h2 {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 1.35;
+            }
+        }
+
+        .tip-close {
+            .button-image;
+            flex: none;
+            width: 20px;
+            height: 20px;
+            color: @color-white;
+
+            &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 100%;
+                .masked-icon('/icon-close.svg'; 11px);
+            }
+        }
+
+        p {
+            margin-top: 11px;
+            font-size: 16px;
+            line-height: 1.35;
+        }
+    }
+
     // Catches taps anywhere off the panel. Transparent, so the map still reads through.
     .scrim {
         position: fixed;

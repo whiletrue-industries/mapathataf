@@ -1,7 +1,7 @@
 <div class='bg'></div>
-<div class='container'>
+<div class='container' [class.welcome]='screen() === "welcome"'>
     <div class='logos'>
-        <img class='logo-mapathataf' src='/logo-header.svg' alt='מפת הטף' />
+        <img class='logo-mapathataf' src='/logo-wordmark.svg' alt='מפת הטף' />
         @if (api.workspace()?.logo_url && !cityLogoBroken()) {
             <img class='logo-city' [src]='api.workspace().logo_url' (error)='cityLogoBroken.set(true)' alt='' />
         }
@@ -11,29 +11,28 @@
             @case ('welcome') {
                 <h1 class='title'>{{ welcomeTitle() }}</h1>
                 <p class='text'>{{ welcomeIntro() }}<br/><strong>{{ welcomeTagline() }}</strong></p>
-                <p class='text prompt'>{{ welcomePrompt() }}</p>
-                <div class='buttons'>
-                    <button class='button primary' (click)='next()'>מידע על הגיל הרך</button>
-                    <button class='button' (click)='dismiss()'>המשך לאפליקציה</button>
+                <div class='cta'>
+                    @if (consentMissing()) {
+                        <p class='consent-error' role='alert'>יש לאשר תנאי שימוש</p>
+                    }
+                    <button class='button primary' (click)='proceed()'>המשך למפת הטף</button>
                 </div>
+                <label class='consent'>
+                    <input type='checkbox' [checked]='termsAccepted()' (change)='acceptTerms($any($event.target).checked)' />
+                    <a href='/about/terms-of-use' target='_blank'>אישור תנאי שימוש ומדיניות פרטיות</a>
+                </label>
             }
             @case ('age') {
                 <app-onboarding-question title='מה גיל ילדך?' [options]='ageOptions' (selected)='answerAge($event)'></app-onboarding-question>
             }
             @case ('interest') {
-                <app-onboarding-question title='מה מעניין אותך?' [options]='interestOptions' (selected)='answerInterest($event)'></app-onboarding-question>
-            }
-            @case ('final') {
-                <h1 class='title'>{{ finalTitle() }}</h1>
-                <p class='text'>{{ disclaimerText() }}</p>
-                <div class='buttons'>
-                    <button class='button' (click)='complete()'>לאישור והמשך שימוש</button>
-                </div>
+                <app-onboarding-question title='מה מעניין אותך?' [options]='interestOptions' [wide]='true' (selected)='answerInterest($event)'></app-onboarding-question>
             }
         }
     </div>
-    <div class='footer'>
-        <p>מידע מוגש כשירות לציבור ואינו מהווה המלצה</p>
-        <a href='/about/terms-of-use' target='_blank'>תנאי שימוש</a>
-    </div>
+    @if (screen() === 'welcome') {
+        <div class='footer'>
+            <p>המידע מוגש כשירות לציבור ואינו מהווה המלצה</p>
+        </div>
+    }
 </div>

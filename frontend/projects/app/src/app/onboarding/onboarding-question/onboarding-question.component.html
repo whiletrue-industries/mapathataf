@@ -1,7 +1,7 @@
 <h2 class='title'>{{ title() }}</h2>
-<div class='options'>
+<div class='options' [class.wide]='wide()'>
     @for (option of options(); track option.value) {
         <button class='option' [class.selected]='picked() === option.value' (click)='pick(option.value)'>{{ option.label }}</button>
     }
 </div>
-<a class='skip' (click)='skip()'>דלג</a>
+<a class='skip' (click)='skip()'>דלג למפה</a>

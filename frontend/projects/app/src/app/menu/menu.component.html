@@ -1,4 +1,13 @@
-<div class='menu-button' (click)='active = true' title='תפריט'></div>
+<div class='menu-button' (click)='active = true; onboarding.menuTipVisible.set(false)' title='תפריט'></div>
+@if (onboarding.menuTipVisible()) {
+    <div class='tip' role='dialog'>
+        <div class='tip-header'>
+            <h2>תפריט הגיל הרך</h2>
+            <button class='tip-close' (click)='onboarding.menuTipVisible.set(false)' aria-label='סגירה'></button>
+        </div>
+        <p>מידע חשוב להורים, צ'קליסט לבחירת מעון, קישורים שימושיים, יצירת קשר ועוד.</p>
+    </div>
+}
 @if (active) {
     <div class='scrim' (click)='active = false'></div>
 }

@@ -1,5 +1,10 @@
 @import '../../common.less';
 
+// Measurements follow the design's 430px frame. The welcome screen and the questions have
+// different backdrops.
+@bg-welcome: linear-gradient(180deg, #F4F9F4 0%, #D4EDF9 50%, #E5D8F5 100%);
+@bg-questions: linear-gradient(180deg, #CBE2F6 0%, #E3EEF6 32%, #EFF0F0 64%, #F0E0CF 100%);
+
 :host {
     position: fixed;
     top: 0;
@@ -27,14 +32,18 @@
         flex-flow: column nowrap;
         align-items: center;
         box-sizing: border-box;
-        padding: 32px 24px;
+        padding: 56px 0 60px;
         overflow-y: auto;
         .no-scrollbars;
-        background: linear-gradient(200deg, #F2F8F4 0%, #D6EEF8 45%, #E9DEF2 100%);
+        background: @bg-questions;
+
+        &.welcome {
+            background: @bg-welcome;
+        }
 
         .desktop({
             width: 430px;
-            max-height: ~'min(932px, 90vh)';
+            height: ~'min(932px, 90vh)';
             border-radius: 16px;
         });
         .mobile({
@@ -43,90 +52,138 @@
         });
 
         .logos {
+            flex: none;
             display: flex;
             flex-flow: row nowrap;
             align-items: center;
             justify-content: space-between;
+            box-sizing: border-box;
             width: 100%;
-            min-height: 68px;
+            min-height: 70px;
+            // Physical on purpose: the design's margins are uneven
+            padding: 0 63px 0 46px;
 
+            // multiply drops a logo's white background into the gradient, as on the landing page
             .logo-city {
-                max-height: 85px;
-                max-width: 100px;
+                max-height: 70px;
+                max-width: 143px;
+                mix-blend-mode: multiply;
             }
             .logo-mapathataf {
-                height: 60px;
+                height: 68px;
             }
         }
 
         .screen {
-            flex: 1 1 auto;
+            flex: none;
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
-            justify-content: center;
-            gap: 24px;
+            box-sizing: border-box;
             width: 100%;
-            padding: 24px 0;
+            padding: 51px 52px 24px;
 
+            // Shared with app-onboarding-question's title: a fixed box, so the content
+            // below starts at the same height whether the title takes one line or three.
             .title {
-                font-size: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                max-width: 280px;
+                min-height: 139px;
+                font-size: 40px;
                 font-weight: 700;
-                line-height: 1.2;
+                line-height: 1.08;
                 color: @color-night;
                 text-align: center;
             }
 
             .text {
+                margin-top: 9px;
                 font-size: 16px;
-                line-height: 1.4;
-                color: @color-night;
+                line-height: 1.35;
+                color: @color-black;
                 text-align: center;
                 white-space: pre-line;
 
-                &.prompt {
-                    font-weight: 600;
-                    margin-top: 24px;
+                // The global `*` reset in styles.less flattens <strong> to 400
+                strong {
+                    font-weight: 700;
                 }
             }
 
-            .buttons {
+            // The error pops up above the button without moving anything below it
+            .cta {
+                position: relative;
+                margin-top: 118px;
+
+                .consent-error {
+                    position: absolute;
+                    bottom: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    margin-bottom: 8px;
+                    white-space: nowrap;
+                    font-size: 14px;
+                    line-height: 1.35;
+                    color: @color-badge-alert;
+                }
+            }
+
+            .button {
+                .font-sans;
+                height: 40px;
+                padding: 0 13px;
+                border: none;
+                border-radius: 360px;
+                background-color: @color-night;
+                box-shadow: @float-shadow;
+                color: @color-white;
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 1.35;
+                cursor: pointer;
+            }
+
+            .consent {
                 display: flex;
-                flex-flow: column nowrap;
-                align-items: center;
-                gap: 16px;
+                flex-flow: row nowrap;
+                align-items: flex-start;
+                gap: 6px;
+                max-width: 300px;
+                margin-top: 18px;
+                font-size: 16px;
+                line-height: 1.35;
+                cursor: pointer;
 
-                .button {
-                    .font-sans;
-                    min-width: 200px;
-                    padding: 10px 24px;
-                    border: none;
-                    border-radius: 24px;
-                    background-color: @color-white;
-                    box-shadow: 0px 2px 8px rgba(5, 56, 86, 0.15);
-                    color: @color-night;
-                    font-size: 16px;
-                    font-weight: 600;
+                a {
+                    color: @color-black;
+                    text-decoration: underline;
+                }
+
+                input {
+                    flex: none;
+                    width: 18px;
+                    height: 18px;
+                    margin: 2px 0 0;
+                    accent-color: @color-night;
                     cursor: pointer;
-
-                    &.primary {
-                        background-color: @color-night;
-                        color: @color-white;
-                    }
                 }
             }
         }
 
         .footer {
+            flex: none;
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
-            gap: 4px;
-            font-size: 13px;
-            color: @color-night;
+            margin-top: auto;
+            font-size: 14px;
+            line-height: 1.35;
+            opacity: 0.6;
 
-            a {
-                color: @color-night;
+            p {
+                color: @color-black;
             }
         }
     }

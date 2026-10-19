@@ -15,6 +15,8 @@ export class OnboardingQuestionComponent {
 
   title = input.required<string>();
   options = input.required<OnboardingOption[]>();
+  // Full-width options for long labels; otherwise every option is as wide as the widest short one
+  wide = input<boolean>(false);
   selected = output<string | null>();
 
   picked = signal<string | null>(null);

@@ -6,7 +6,7 @@ import { OnboardingOption, OnboardingQuestionComponent } from './onboarding-ques
 import { isConcreteSection } from '../sections';
 import { AGE_GROUPS } from '../age-groups';
 
-type OnboardingScreen = 'welcome' | OnboardingQuestionKind | 'final';
+type OnboardingScreen = 'welcome' | OnboardingQuestionKind;
 
 const ONBOARDING_AGE_GROUP_IDS = ['birth_to_1', '1_to_2', '2_to_3'];
 
@@ -24,8 +24,12 @@ export class OnboardingComponent {
 
   screen = signal<OnboardingScreen>('welcome');
   cityLogoBroken = signal<boolean>(false);
+  // The welcome screen's continue button won't advance until the terms are accepted;
+  // trying anyway raises consentMissing, which shows an error above the button.
+  termsAccepted = signal<boolean>(false);
+  consentMissing = signal<boolean>(false);
 
-  screens = computed<OnboardingScreen[]>(() => ['welcome', ...this.onboarding.questions(), 'final']);
+  screens = computed<OnboardingScreen[]>(() => ['welcome', ...this.onboarding.questions()]);
 
   welcomeTitle = computed(() => this.onboarding.config()?.welcome?.title ||
     `ברוכים הבאים למפת הטף של ${this.api.workspace()?.city || ''}`);
@@ -33,15 +37,6 @@ export class OnboardingComponent {
     'ריכזנו עבורכם את כל מה שצריך לדעת על הגיל הרך (לידה עד 3). מעונות מפוקחים, שירותי בריאות, פנאי וקהילה.');
   welcomeTagline = computed(() => this.onboarding.config()?.welcome?.tagline ||
     'כי אצלנו החינוך הוא מלידה!');
-  welcomePrompt = computed(() => this.onboarding.config()?.welcome?.prompt ||
-    'אספנו הרבה מידע ויש המון מה לדעת, מאיפה נתחיל?');
-  // "מעולה!" if the user answered anything, "אנחנו על זה!" otherwise
-  finalTitle = computed(() => {
-    const answered = this.onboarding.answerAge() || this.onboarding.answerInterest();
-    return answered ? 'מעולה!' : 'אנחנו על זה!';
-  });
-  disclaimerText = computed(() => this.onboarding.config()?.disclaimer?.text ||
-    'רגע לפני שמעבירים אותך לאפליקציה חשוב לנו להדגיש כי המידע מוגש כשירות לציבור ואינו מהווה המלצה');
 
   ageOptions: OnboardingOption[] = [
     ...AGE_GROUPS
@@ -52,14 +47,32 @@ export class OnboardingComponent {
   interestOptions: OnboardingOption[] = [
     {value: 'education', label: 'מסגרות חינוך'},
     {value: 'health', label: 'בריאות והתפתחות הילד'},
-    {value: 'community', label: 'פנאי וקהילה'},
+    {value: 'community', label: 'אחה"צ'},
   ];
+
+  acceptTerms(accepted: boolean) {
+    this.termsAccepted.set(accepted);
+    if (accepted) {
+      this.consentMissing.set(false);
+    }
+  }
+
+  proceed() {
+    if (this.termsAccepted()) {
+      this.next();
+    } else {
+      this.consentMissing.set(true);
+    }
+  }
 
   next() {
     const screens = this.screens();
     const idx = screens.indexOf(this.screen());
     if (idx >= 0 && idx < screens.length - 1) {
       this.screen.set(screens[idx + 1]);
+    } else {
+      // Past the last question: straight to the map
+      this.onboarding.complete();
     }
   }
 
@@ -72,13 +85,5 @@ export class OnboardingComponent {
     // The skip option carries no value, which is what leaves the map on הכל.
     this.onboarding.answerInterest.set(isConcreteSection(value) ? value : null);
     this.next();
-  }
-
-  dismiss() {
-    this.onboarding.dismiss();
-  }
-
-  complete() {
-    this.onboarding.complete();
   }
 }

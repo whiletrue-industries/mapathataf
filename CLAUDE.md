@@ -210,9 +210,14 @@ constructor — it runs before the first effect flush, so the parse can't be clo
 
 ## Onboarding overlay (app project, Aug 2026)
 
-- `app/src/app/onboarding/` — wizard overlay (welcome → questions → final screen; the
-  final screen carries the disclaimer + approval button, titled "מעולה!" if anything was
-  answered, "אנחנו על זה!" otherwise). Shows whenever `?onboarding` is present at load
+- `app/src/app/onboarding/` — wizard overlay (Oct 2026 design: welcome → questions → map).
+  Welcome has an (unchecked) consent checkbox linking to the terms; "המשך למפת הטף" stays
+  clickable but won't advance without it, popping a red "יש לאשר תנאי שימוש" above itself
+  instead. No privacy-policy page exists yet, so the link goes to `/about/terms-of-use`.
+  There is no final/disclaimer screen and no way out but through. Completing sets
+  `OnboardingService.menuTipVisible`, which `menu/` renders as a feature-discovery callout
+  under the menu button (fixed copy in the template, deliberately not per-city). Shows whenever
+  `?onboarding` is present at load
   AND the URL has no hash AND the workspace doc has `onboarding.enabled: true` — there is
   deliberately no once-per-browser localStorage gate. Trigger hooks the
   first-fragment `take(1)` in `main.component.ts` (the hash is populated a tick later by
@@ -221,7 +226,7 @@ constructor — it runs before the first effect flush, so the parse can't be clo
 - Per-city content comes from Firestore `c/<slug>.metadata.onboarding` — `GET /{workspaceId}`
   returns the metadata map verbatim (no server code change needed, responses are no-cache).
   Schema: `{enabled, questions: ['age'|'interest'], welcome: {title, intro,
-  tagline, prompt}, disclaimer: {text}}` (unknown kinds — e.g. the removed `address`
+  tagline}}` (older docs may still carry the now-unused `welcome.prompt`/`disclaimer`) (unknown kinds — e.g. the removed `address`
   question — are filtered out client-side); all texts optional with frontend defaults
   (title defaults to `ברוכים הבאים למפת הטף של <city>`). Live on `dymonh` + `khyph`
   since Aug 2026. The nightly pipeline never overwrites existing workspace metadata, but

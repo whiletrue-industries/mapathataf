@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../api.service';
 import { RouterLink } from '@angular/router';
+import { OnboardingService } from '../onboarding/onboarding.service';
 
 @Component({
   selector: 'app-menu',
@@ -23,5 +24,5 @@ export class MenuComponent {
     },
   ]
 
-  constructor(public api: ApiService) {}
+  constructor(public api: ApiService, public onboarding: OnboardingService) {}
 }

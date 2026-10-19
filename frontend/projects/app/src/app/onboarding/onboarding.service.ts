@@ -14,10 +14,6 @@ export type OnboardingConfig = {
     title?: string;
     intro?: string;
     tagline?: string;
-    prompt?: string;
-  };
-  disclaimer?: {
-    text?: string;
   };
 };
 
@@ -32,6 +28,8 @@ export class OnboardingService {
   triggerArmed = signal<boolean>(false);
   answerAge = signal<string | null>(null);
   answerInterest = signal<ConcreteSection | null>(null);
+  // Feature discovery for the menu, shown once on arriving at the map from the onboarding
+  menuTipVisible = signal<boolean>(false);
 
   config = computed<OnboardingConfig | null>(() => this.api.workspace()?.onboarding || null);
   visible = computed(() => this.triggerArmed() && !!this.config()?.enabled);
@@ -57,12 +55,9 @@ export class OnboardingService {
     }
   }
 
-  dismiss() {
-    this.close();
-  }
-
   complete() {
     this.close();
+    this.menuTipVisible.set(true);
     const age = this.answerAge();
     if (age) {
       this.state.filterAgeGroup.set([age]);

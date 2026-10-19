@@ -28,22 +28,44 @@ describe('OnboardingComponent', () => {
     return fixture.componentInstance;
   }
 
-  it('walks welcome, all questions and the final screen by default', () => {
+  it('walks welcome and all questions by default', () => {
     const component = create();
-    expect(component.screens()).toEqual(['welcome', 'age', 'interest', 'final']);
+    expect(component.screens()).toEqual(['welcome', 'age', 'interest']);
   });
 
-  it('only shows the configured questions', () => {
+  it('only shows the configured questions, then completes', () => {
     api.workspace.set({city: 'דימונה', onboarding: {enabled: true, questions: ['interest']}});
     const component = create();
-    expect(component.screens()).toEqual(['welcome', 'interest', 'final']);
+    const onboarding = TestBed.inject(OnboardingService);
+    const complete = spyOn(onboarding, 'complete');
+    expect(component.screens()).toEqual(['welcome', 'interest']);
     expect(component.screen()).toEqual('welcome');
     component.next();
     expect(component.screen()).toEqual('interest');
+    expect(complete).not.toHaveBeenCalled();
     component.next();
-    expect(component.screen()).toEqual('final');
-    component.next();
-    expect(component.screen()).toEqual('final');
+    expect(complete).toHaveBeenCalled();
+  });
+
+  it('will not continue until the terms are accepted, and says so', () => {
+    const fixture = TestBed.createComponent(OnboardingComponent);
+    fixture.detectChanges();
+    const component = fixture.componentInstance;
+    const el: HTMLElement = fixture.nativeElement;
+    const checkbox = el.querySelector<HTMLInputElement>('.consent input')!;
+    expect(checkbox.checked).toBeFalse();
+    expect(el.querySelector('.consent-error')).toBeNull();
+
+    el.querySelector<HTMLButtonElement>('.button.primary')!.click();
+    fixture.detectChanges();
+    expect(component.screen()).toEqual('welcome');
+    expect(el.querySelector('.consent-error')).not.toBeNull();
+
+    checkbox.click();
+    fixture.detectChanges();
+    expect(el.querySelector('.consent-error')).toBeNull();
+    el.querySelector<HTMLButtonElement>('.button.primary')!.click();
+    expect(component.screen()).toEqual('age');
   });
 
   it('uses the configured welcome texts when present', () => {
@@ -82,13 +104,5 @@ describe('OnboardingComponent', () => {
     component.answerAge(null);
     expect(onboarding.answerAge()).toBeNull();
     expect(component.screen()).toEqual('interest');
-  });
-
-  it('titles the final screen by whether anything was answered', () => {
-    const component = create();
-    const onboarding = TestBed.inject(OnboardingService);
-    expect(component.finalTitle()).toEqual('אנחנו על זה!');
-    onboarding.answerInterest.set('health');
-    expect(component.finalTitle()).toEqual('מעולה!');
   });
 });

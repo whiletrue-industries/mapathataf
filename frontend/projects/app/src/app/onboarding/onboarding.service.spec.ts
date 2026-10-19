@@ -77,7 +77,7 @@ describe('OnboardingService', () => {
     it('shows again on a repeat visit with the param', () => {
       setup();
       service.considerTrigger(null, '1', route);
-      service.dismiss();
+      service.complete();
       expect(service.visible()).toBeFalse();
       service.considerTrigger(null, '1', route);
       expect(service.visible()).toBeTrue();
@@ -103,17 +103,16 @@ describe('OnboardingService', () => {
     });
   });
 
-  describe('dismiss and complete', () => {
+  describe('complete', () => {
     beforeEach(() => {
       setup();
       service.considerTrigger(null, '1', route);
     });
 
-    it('dismiss hides without touching filters', () => {
-      service.dismiss();
-      expect(service.visible()).toBeFalse();
-      expect(state.filterAgeGroup()).toBeNull();
-      expect(state.section()).toEqual('all');
+    it('complete shows the menu tip', () => {
+      expect(service.menuTipVisible()).toBeFalse();
+      service.complete();
+      expect(service.menuTipVisible()).toBeTrue();
     });
 
     it('complete applies the collected answers', () => {
