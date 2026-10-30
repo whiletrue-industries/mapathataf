@@ -198,7 +198,7 @@ constructor — it runs before the first effect flush, so the parse can't be clo
 - Real data to keep in mind: official capacity and all vacancy data exist only in
   `official[source=mol]` (`total/available_places_{babies,toddlers,adults}`; "adults" = בוגרים,
   the oldest daycare class) — the מעונות מסובסדים section. Owners also enter a free-text
-  `user.children_count` (מספר ילדים); the neighbourhood table's מקומות takes it first, then
+  `user.children_count` (מספר ילדים); the neighbourhood table (education frameworks only, client's call Oct 2026) takes it first for מקומות, then
   `admin.children_count`, then the MoL total (designer's call, Oct 2026). `admin.app_publication` absent means published (`prepare()` defaults it);
   `info.updated_at` is a nightly heartbeat, not a change date; there is no population,
   enrolment or history data, so no per-capita or trend KPIs without server work.
