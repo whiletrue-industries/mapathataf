@@ -2,7 +2,7 @@ import { cityMenuItems, cityPage, cityPageTitle, GENERAL_MENU_ITEMS } from './me
 
 describe('menu items', () => {
   it('lists the shared pages and the missing-facility report above the divider', () => {
-    expect(GENERAL_MENU_ITEMS.map((item) => item.title)).toEqual(['איך לבחור מסגרת חינוכית?', 'דווחו לנו על מסגרת חסרה']);
+    expect(GENERAL_MENU_ITEMS.map((item) => item.title)).toEqual(['איך לבחור מסגרת חינוכית?', 'קישורים שימושיים', 'דווחו לנו על מסגרת חסרה']);
   });
 
   it('lists nothing for a city without a page or links', () => {

@@ -22,6 +22,8 @@ export function headingCategory(text: string): ConcreteSection | null {
 
 export function renderMarkdown(markdown: string, options: RenderOptions = {}): string {
   let html = options.accordion ? renderAccordion(markdown) : marked.parse(markdown);
+  // Links out open in a new tab, like the menu's, so the map is still there to come back to
+  html = html.replace(/<a href="(https?:)/g, '<a target="_blank" rel="noopener" href="$1');
   if (options.categoryIcons) {
     html = html.replace(/<h3([^>]*)>([\s\S]*?)<\/h3>/g, (heading, attrs, inner) => {
       const category = headingCategory(inner.replace(/<[^>]*>/g, ''));

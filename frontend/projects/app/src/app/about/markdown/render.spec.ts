@@ -23,6 +23,12 @@ describe('renderMarkdown', () => {
     expect(html).toContain('href="https://example.org"');
   });
 
+  it('opens links out in a new tab, and in-app links in place', () => {
+    const html = renderMarkdown('[out](https://example.org) [in](/about/about)');
+    expect(html).toContain('<a target="_blank" rel="noopener" href="https://example.org"');
+    expect(html).toContain('<a href="/about/about"');
+  });
+
   it('marks ### headings that name a category', () => {
     const html = renderMarkdown('### חינוך וטיפול בגיל הרך\n\n### צור קשר', {categoryIcons: true});
     expect(html).toContain('<h3 class="category section-education"');

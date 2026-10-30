@@ -224,7 +224,8 @@ constructor — it runs before the first effect flush, so the parse can't be clo
   param makes reloads/shared links work). It renders through Angular's sanitizer; files
   under `public/content/` are trusted. `about/markdown/render.ts`: `accordion` turns `##`
   sections into `<details>` (איך לבחור), `categoryIcons` badges `###` headings that name a
-  category.
+  category. On an accordion page an intro `###` is the 20px lead-in line; `http(s)`
+  links get `target=_blank` (the sanitizer keeps it on city pages).
 
 ## Onboarding overlay (app project, Aug 2026)
 
