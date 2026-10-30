@@ -1,6 +1,6 @@
 <app-page-header (close)='close.emit()'></app-page-header>
-<h1 class='title'>תפריט הגיל הרך</h1>
-<p class='subtitle'>מידע שיעזור לכם לחפש טוב יותר במפת הטף ולקבל מידע ושירות ממקורות נוספים</p>
+<h1 class='title'>תפריט מפת הטף</h1>
+<p class='subtitle'>הכל במקום אחד עבורכם</p>
 <nav class='items'>
     @for (item of generalItems; track item.title) {
         <ng-container *ngTemplateOutlet='pill; context: {$implicit: item}'></ng-container>
