@@ -27,6 +27,7 @@ export const REPORT_MISSING_LINK = 'https://form.jotform.com/252952688671472';
 
 export const GENERAL_MENU_ITEMS: MenuItem[] = [
   {title: 'איך לבחור מסגרת חינוכית?', routerLink: ['/about', 'how-to-choose']},
+  {title: 'קישורים שימושיים', routerLink: ['/about', 'useful-links']},
   {title: 'דווחו לנו על מסגרת חסרה', href: REPORT_MISSING_LINK},
 ];
 

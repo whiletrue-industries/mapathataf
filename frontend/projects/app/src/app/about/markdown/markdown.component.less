@@ -6,6 +6,14 @@
     line-height: 1.35;
     color: @color-black;
 
+    // On an accordion page the intro's ### is the lead-in line above the sections
+    // (headings inside a section are left alone)
+    &.accordion ::ng-deep > h3 {
+        margin: 22px 0 27px;
+        font-size: 20px;
+        line-height: 1.35;
+    }
+
     ::ng-deep {
         h1 {
             max-width: 300px;
