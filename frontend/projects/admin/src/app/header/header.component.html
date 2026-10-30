@@ -13,7 +13,7 @@
         <a [routerLink]="['/', api.workspaceId()]" queryParamsHandling="preserve"
            routerLinkActive='active' #dashboard='routerLinkActive' [routerLinkActiveOptions]='EXACT_PATH'>תמונת מצב</a>
         <a [routerLink]="['/', api.workspaceId(), 'items']" queryParamsHandling="preserve"
-           [class.active]='!dashboard.isActive'>עריכת המסגרות</a>
+           [class.active]='!dashboard.isActive'>עריכת מענים</a>
     </nav>
 }
 <div class='menu' [class.active]='active' (click)='active=false; true'>

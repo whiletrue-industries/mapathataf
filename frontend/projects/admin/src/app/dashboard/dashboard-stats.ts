@@ -160,12 +160,17 @@ export function computeStats(items: any[], workspace: any, scope: Scope): Dashbo
     return null;
   };
 
+  // The neighbourhood table is about education frameworks only (client's call, Oct 2026).
+  const educationIds = new Set(select({ ...base, ...EDUCATION }).map(item => item.id));
   const rows: { [name: string]: { places: number } } = {};
   let placesTotal = 0, placesAvailable = 0;
   for (const item of inScope) {
     const places = placesOf(item);
     placesTotal += places.total;
     placesAvailable += places.available;
+    if (!educationIds.has(item.id)) {
+      continue;
+    }
     const name = neighborhoodOf(item);
     rows[name] = rows[name] || { places: 0 };
     rows[name].places += ownCount(item) ?? places.total;
@@ -176,7 +181,7 @@ export function computeStats(items: any[], workspace: any, scope: Scope): Dashbo
   } : null;
 
   const byNeighborhood = (name: string, label: string): NeighborhoodRow => {
-    const filter: Partial<ItemFilters> = { extra: { field: 'neighborhood', value: name, label: `שכונה: ${label}` } };
+    const filter: Partial<ItemFilters> = { ...EDUCATION, extra: { field: 'neighborhood', value: name, label: `שכונה: ${label}` } };
     return {
       ...figure(name, label, filter),
       places: rows[name]?.places || 0,
@@ -186,11 +191,10 @@ export function computeStats(items: any[], workspace: any, scope: Scope): Dashbo
   const neighborhoods = Object.keys(rows).filter(name => name !== UNSET)
     .map(name => byNeighborhood(name, name))
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
-  const noNeighborhood = hasNeighborhoods && rows[UNSET] ? figure(UNSET, 'ללא שכונה', { missing: 'neighborhood' }) : null;
+  const noNeighborhood = hasNeighborhoods && rows[UNSET] ? figure(UNSET, 'ללא שכונה', { ...EDUCATION, missing: 'neighborhood' }) : null;
 
   const recent = inScope.filter(item => item.user?.updated_at)
     .sort((a, b) => b.user.updated_at.localeCompare(a.user.updated_at))
-    .slice(0, 5)
     .map(item => ({ id: item.id, name: item.resolved?.name || '', updatedAt: item.user.updated_at }));
 
   // Tones follow the option's fixed position, not its rank, so a colour keeps meaning the same sub-kind.

@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { ApiService } from '../api.service';
 import { StateService } from '../state.service';
@@ -10,17 +10,18 @@ import { StatTileComponent } from './stat-tile/stat-tile.component';
 import { BarBreakdownComponent } from './bar-breakdown/bar-breakdown.component';
 import { AttentionListComponent } from './attention-list/attention-list.component';
 import { NeighborhoodTableComponent } from './neighborhood-table/neighborhood-table.component';
+import { RecentUpdatesComponent } from './recent-updates/recent-updates.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     DecimalPipe,
-    RouterLink,
     ItemEditSectionComponent,
     StatTileComponent,
     BarBreakdownComponent,
     AttentionListComponent,
     NeighborhoodTableComponent,
+    RecentUpdatesComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.less'
