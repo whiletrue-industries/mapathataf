@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DestroyRef, ElementRef, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, effect, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlatformService } from '../platform.service';
@@ -21,6 +21,23 @@ export class ResultsDrawerComponent implements AfterViewInit {
   private destroyRef = inject(DestroyRef);
 
   expanded = signal(false);
+
+  constructor() {
+    // Open filters always come with an open list; collapsing the list (toggle) closes them.
+    effect(() => {
+      if (this.state.filtersExpanded()) {
+        this.expanded.set(true);
+      }
+    });
+  }
+
+  toggle() {
+    const expanded = !this.expanded();
+    this.expanded.set(expanded);
+    if (!expanded) {
+      this.state.filtersExpanded.set(false);
+    }
+  }
 
   // Picking a category while scoped to the map area opens the list (city scope leaves it).
   onSectionSelected() {
