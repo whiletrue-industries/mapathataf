@@ -1,0 +1,13 @@
+<ul>
+    @for (update of shown(); track update.id) {
+        <li>
+            <a [routerLink]="['/', workspaceId(), update.id]" queryParamsHandling='preserve'>{{ update.name }}</a>
+            <span>{{ date(update.updatedAt) }}</span>
+        </li>
+    }
+</ul>
+@if (hidden()) {
+    <button type='button' (click)='all.set(!all())'>
+        {{ all() ? 'הצגת פחות עדכונים' : 'הצגת כל העדכונים (' + updates().length + ')' }}
+    </button>
+}

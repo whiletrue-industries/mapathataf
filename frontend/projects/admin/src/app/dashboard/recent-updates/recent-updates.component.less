@@ -1,0 +1,39 @@
+@import '../../common.less';
+
+@track: fade(@color-gray-2, 25%);
+
+:host {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    li {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 6px 0;
+        font-size: 14px;
+        border-bottom: 1px solid @track;
+
+        a { font-weight: 600; color: @color-night; &:hover { text-decoration: underline; } }
+        span { flex: 0 0 auto; font-weight: 300; }
+    }
+}
+
+button {
+    .button-image;
+    font-size: 14px;
+    font-weight: 500;
+    color: @color-night;
+    text-decoration: underline;
+}

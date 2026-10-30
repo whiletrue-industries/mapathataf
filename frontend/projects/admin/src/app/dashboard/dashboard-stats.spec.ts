@@ -80,6 +80,26 @@ describe('computeStats', () => {
     expect(computeStats(items, workspace, 'active').capacity?.total).toBe(36);
   });
 
+  it('lays out only education frameworks by neighbourhood', () => {
+    const mixed = [
+      makeItem('e', { info: education, admin: { neighborhood: 'צפון', children_count: '10' } }),
+      makeItem('h', { info: { facility_kind: 'health', ...located }, admin: { neighborhood: 'צפון', children_count: '50' } }),
+      makeItem('c', { info: { facility_kind: 'community', ...located }, admin: { neighborhood: 'דרום' } }),
+      makeItem('n', { info: education }),
+      makeItem('m', { info: { facility_kind: 'health', ...located } }),
+    ];
+    const stats = computeStats(mixed, workspace, 'published');
+    expect(stats.neighborhoods.map(row => [row.label, row.count, row.places])).toEqual([['צפון', 1, 10]]);
+    expect(stats.noNeighborhood?.count).toBe(1);
+  });
+
+  it('hands over every owner update, not just the latest few', () => {
+    const many = Array.from({ length: 8 }, (_, i) =>
+      makeItem(`u${i}`, { info: education, user: { updated_at: `2026-0${i + 1}-01` } }));
+    expect(computeStats(many, {}, 'published').owners.recent.map(r => r.id))
+      .toEqual(['u7', 'u6', 'u5', 'u4', 'u3', 'u2', 'u1', 'u0']);
+  });
+
   it('folds both spellings of not-mentored into one segment', () => {
     const mentoring = computeStats(items, workspace, 'published').breakdowns.find(b => b.title === 'הדרכה פדגוגית');
     expect(mentoring?.segments.map(s => [s.key, s.count])).toEqual([['municipal', 1], ['not-mentored', 1]]);

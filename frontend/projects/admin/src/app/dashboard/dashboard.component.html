@@ -21,7 +21,7 @@
                 [hint]='percent(s.licensed, s.education.count) + "% מהן ברישיון, בתהליך רישוי או פטורות"'></app-stat-tile>
         }
         @if (s.capacity; as capacity) {
-            <app-stat-tile [value]='capacity.total' label='מקומות במסגרות מפוקחות'
+            <app-stat-tile [value]='capacity.total' label='מקומות במסגרות מסובסדות'
                 [hint]='(capacity.available | number) + " מהם פנויים (" + percent(capacity.available, capacity.total) + "%)"'></app-stat-tile>
         }
         <app-stat-tile class='clickable' [value]='s.owners.updated.count' label='מענים שבעליהם עדכנו פרטים' (click)='open(s.owners.updated)'
@@ -77,45 +77,36 @@
     </div>
 
     @if (s.neighborhoods.length) {
-        <app-item-edit-section header='פריסה לפי שכונות'>
+        <app-item-edit-section header='מסגרות חינוך לפי שכונות'>
             <app-neighborhood-table [rows]='s.neighborhoods' [unassigned]='s.noNeighborhood' (pick)='open($event)'></app-neighborhood-table>
         </app-item-edit-section>
     }
 
-    <div class='pair'>
-        <app-item-edit-section header='עדכונים אחרונים של בעלי מסגרות'>
-            @if (s.owners.recent.length) {
-                <ul class='recent'>
-                    @for (update of s.owners.recent; track update.id) {
-                        <li>
-                            <a [routerLink]="['/', api.workspaceId(), update.id]" queryParamsHandling='preserve'>{{ update.name }}</a>
-                            <span>{{ date(update.updatedAt) }}</span>
-                        </li>
-                    }
-                </ul>
-                <p class='note'>
-                    עדכוני בעלים מתפרסמים במפה מיד, ללא אישור – כדאי לעבור עליהם.
-                    @if (s.owners.withPhoto) { {{ s.owners.withPhoto | number }} מענים כוללים תמונה. }
-                </p>
-            } @else {
-                <p class='note'>אף בעל מסגרת עוד לא עדכן פרטים. אפשר לשלוח לכל מסגרת קישור עריכה אישי מתוך עמוד המסגרת.</p>
-            }
+    @if (s.subKinds.length) {
+        <app-item-edit-section header='בריאות, פנאי וקהילה'>
+            <div class='breakdowns'>
+                @for (breakdown of s.subKinds; track breakdown.title) {
+                    <app-bar-breakdown [breakdown]='breakdown' unit='מענים' (pick)='open($event)'></app-bar-breakdown>
+                }
+            </div>
         </app-item-edit-section>
-        @if (s.subKinds.length) {
-            <app-item-edit-section header='בריאות, פנאי וקהילה'>
-                <div class='breakdowns'>
-                    @for (breakdown of s.subKinds; track breakdown.title) {
-                        <app-bar-breakdown [breakdown]='breakdown' unit='מענים' (pick)='open($event)'></app-bar-breakdown>
-                    }
-                </div>
-            </app-item-edit-section>
-        }
-    </div>
+    }
 
-    <p class='footnote'>
-        כל מספר מוביל לרשימת המענים שמאחוריו.
-        @if (s.syncedAt) { המידע הרשמי ממשרדי הממשלה סונכרן לאחרונה ב־{{ date(s.syncedAt) }}. }
-    </p>
+    <app-item-edit-section header='עדכונים אחרונים של בעלי מסגרות'>
+        @if (s.owners.recent.length) {
+            <app-recent-updates [updates]='s.owners.recent' [workspaceId]='api.workspaceId()'></app-recent-updates>
+            <p class='note'>
+                עדכוני בעלים מתפרסמים במפה מיד, ללא אישור – כדאי לעבור עליהם.
+                @if (s.owners.withPhoto) { בסך הכל, ל־{{ s.owners.withPhoto | number }} מענים יש תמונות שהעלו בעליהם. }
+            </p>
+        } @else {
+            <p class='note'>אף בעל מסגרת עוד לא עדכן פרטים. אפשר לשלוח לכל מסגרת קישור עריכה אישי מתוך עמוד המסגרת.</p>
+        }
+    </app-item-edit-section>
+
+    @if (s.syncedAt) {
+        <p class='footnote'>המידע הרשמי ממשרדי הממשלה סונכרן לאחרונה ב־{{ date(s.syncedAt) }}.</p>
+    }
 } @else if (loaded()) {
     <div class='message'>אין לכם הרשאות לצפות בעמוד זה</div>
 }
