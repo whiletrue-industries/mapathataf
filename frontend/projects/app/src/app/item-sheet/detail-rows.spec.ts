@@ -23,7 +23,7 @@ describe('item sheet detail rows', () => {
   it('shows every field in the fixed order', () => {
     expect(labels(fullEducation())).toEqual([
       'רישוי (תשפ״ז)', 'סמל מעון', 'הדרכת צוות', 'כתובת', 'גיל', 'שעות פעילות', 'פרטים נוספים',
-      'כתובת אתר', 'שם מנהל.ת', 'טלפון', 'דוא"ל',
+      'אתר אינטרנט', 'שם מנהל.ת', 'טלפון', 'דוא"ל',
     ]);
   });
 
@@ -62,7 +62,7 @@ describe('item sheet detail rows', () => {
     resolveItem(item);
     const hrefs = Object.fromEntries(detailRows(item).filter((row) => row.href).map((row) => [row.label, row.href]));
     expect(hrefs).toEqual({
-      'כתובת אתר': 'https://example.com', 'טלפון': 'tel:08-1234567', 'דוא"ל': 'mailto:gan@example.com',
+      'אתר אינטרנט': 'https://example.com', 'טלפון': 'tel:08-1234567', 'דוא"ל': 'mailto:gan@example.com',
     });
   });
 
