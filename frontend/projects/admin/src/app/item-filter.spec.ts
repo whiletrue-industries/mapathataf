@@ -1,5 +1,5 @@
 import { resolveItem } from '../../../app/src/app/api.service';
-import { DEFAULT_FILTERS, filterItems, ItemFilters, locationNeedsReview } from './item-filter';
+import { DEFAULT_FILTERS, filterItems, hasInvalidContact, ItemFilters, locationNeedsReview } from './item-filter';
 
 // Mirrors what ApiService.prepare() does to an item before anything reads it.
 export function makeItem(id: string, parts: any = {}): any {
@@ -12,9 +12,9 @@ const located = { lat: 31.9, lng: 34.8 };
 
 describe('filterItems', () => {
   const items = [
-    makeItem('edu-valid', { info: { facility_kind: 'education', ...located }, official: [{ source: 'moe', license_status: 'רישיון בתוקף', phone: '08-1' }] }),
+    makeItem('edu-valid', { info: { facility_kind: 'education', ...located }, official: [{ source: 'moe', license_status: 'רישיון בתוקף', phone: '08-9123456' }] }),
     makeItem('edu-hidden', { info: { facility_kind: 'education', ...located }, admin: { app_publication: false, mentoring_type: 'not_mentored' } }),
-    makeItem('health', { info: { facility_kind: 'health', ...located }, admin: { neighborhood: 'מרכז', phone: '08-2' }, user: { updated_at: '2026-01-01' } }),
+    makeItem('health', { info: { facility_kind: 'health', ...located }, admin: { neighborhood: 'מרכז', phone: '08-9234567' }, user: { updated_at: '2026-01-01' } }),
     makeItem('deleted', { info: { facility_kind: 'education' }, admin: { _private_deleted: true } }),
   ];
   const ids = (filters: Partial<ItemFilters>) => filterItems(items, { ...DEFAULT_FILTERS, ...filters }).map(item => item.id);
@@ -66,5 +66,23 @@ describe('locationNeedsReview', () => {
   it('flags a suspicious pipeline pin until the admin places their own', () => {
     expect(locationNeedsReview(makeItem('a', { info: { ...located, geocode_suspicious: 'city' } }))).toBeTrue();
     expect(locationNeedsReview(makeItem('a', { info: located }))).toBeFalse();
+  });
+});
+
+describe('hasInvalidContact', () => {
+  it('flags a website, phone or email in the admin or owner layer the app will not show', () => {
+    expect(hasInvalidContact(makeItem('a', { admin: { url: '0528747043' } }))).toBeTrue();
+    expect(hasInvalidContact(makeItem('b', { user: { phone: '0544482298/ 0525525449' } }))).toBeTrue();
+    expect(hasInvalidContact(makeItem('c', { admin: { email: 'gilrach@rehovot' } }))).toBeTrue();
+  });
+
+  it('leaves valid and empty values alone, and does not judge official data', () => {
+    expect(hasInvalidContact(makeItem('d', { admin: { url: 'www.example.org', phone: '08-9123456', email: '' } }))).toBeFalse();
+    expect(hasInvalidContact(makeItem('e', { official: [{ phone: '00' }] }))).toBeFalse();
+  });
+
+  it('is offered by the list as a missing-data filter', () => {
+    const items = [makeItem('bad', { admin: { url: '0528747043' } }), makeItem('good', { admin: { url: 'https://example.org' } })];
+    expect(filterItems(items, { ...DEFAULT_FILTERS, missing: 'invalid_contact' }).map(item => item.id)).toEqual(['bad']);
   });
 });

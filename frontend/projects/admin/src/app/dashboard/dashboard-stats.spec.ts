@@ -17,7 +17,7 @@ const items = [
   makeItem('b', { info: education, official: [{ source: 'moe', license_status: 'בתהליך רישוי' }],
     admin: { neighborhood: 'צפון', mentoring_type: 'not_mentored', age_group: ['1_to_2'] }, user: { updated_at: '2026-05-01', name: 'גן ב' } }),
   makeItem('c', { info: education, official: [mol(6, 6)], admin: { app_publication: false } }),
-  makeItem('d', { info: { facility_kind: 'health', facility_sub_kind: 'טיפת חלב', updated_at: '2026-09-18T00:00:00' }, user: { updated_at: '2026-06-01' } }),
+  makeItem('d', { info: { facility_kind: 'health', facility_sub_kind: 'טיפת חלב', updated_at: '2026-09-18T00:00:00' }, user: { updated_at: '2026-06-01', url: '0528747043' } }),
   makeItem('gone', { info: education, admin: { _private_deleted: true }, official: [mol(100, 100)] }),
 ];
 const workspace = { neighborhoods: ['צפון', 'דרום'] };
@@ -32,6 +32,12 @@ function figures(stats: DashboardStats): Figure[] {
 }
 
 describe('computeStats', () => {
+  it('lists items whose contact details the map will not show', () => {
+    const invalid = computeStats(items, workspace, 'published').attention.find(f => f.key === 'invalid_contact');
+    expect(invalid?.count).toBe(1);
+    expect(invalid?.filter).toEqual({ appPublication: 'published', missing: 'invalid_contact' });
+  });
+
   it('counts only published items by default, and never deleted ones', () => {
     expect(computeStats(items, workspace, 'published').total.count).toBe(3);
     expect(computeStats(items, workspace, 'active').total.count).toBe(4);

@@ -117,6 +117,7 @@ export function computeStats(items: any[], workspace: any, scope: Scope): Dashbo
     // Hidden items are a to-do whatever the scope, so this one ignores `base`.
     figure('hidden', 'מענים מוסתרים מהמפה – כדאי לבדוק מדוע', { appPublication: 'hidden' }, undefined, false),
     figure('phone', 'מענים ללא מספר טלפון', { missing: 'phone' }),
+    figure('invalid_contact', 'מענים עם אתר, טלפון או דוא"ל לא תקינים (לא מוצגים במפה)', { missing: 'invalid_contact' }),
     figure('location', 'מענים שמיקומם במפה חסר או דורש בדיקה', { missing: 'location' }),
     figure('age_group', 'מענים שלא הוגדרו להם גילאים', { missing: 'age_group' }),
     ...(workspace?.neighborhoods?.length ? [figure('neighborhood', 'מענים שלא שויכו לשכונה', { missing: 'neighborhood' })] : []),

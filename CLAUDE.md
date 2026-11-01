@@ -39,6 +39,11 @@ Map of services for ages 0-3, per municipality. Python data pipelines in the rep
   `display_address` → `formatted_address` → raw `address`; coords via layer precedence
   user → admin → info → official. Admin geocode-status text lives in
   `admin/src/app/item-edit/location-status.ts`. Server counterpart: mapathataf-server.
+- Contact fields (Nov 2026): `app/src/app/contact.ts` decides whether a url/phone/email
+  value is a usable link (real data has phones in `url`, two numbers in `phone`, `00`
+  placeholders). `resolveItem` skips invalid layers, so `resolved.phone/url/email` are
+  always valid (admin's "missing phone" counts follow). The admin editor shows a warning
+  next to an invalid value but still saves it (`Field.validate`, `contactWarning` in `admin/src/app/fields.ts`).
 - Photos (Sep 2026): up to 5, **owner layer only**, stored as JPEG data-URIs inside the
   item doc (`user.photos`; legacy single `user.photo` still read, nulled on first edit).
   The server is untouched — it merges whatever keys it is sent. The model is

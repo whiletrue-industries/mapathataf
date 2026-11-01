@@ -39,7 +39,8 @@ export class ItemEditSectionComponent implements OnChanges{
               label: field.label,
               value: field.type === 'readonly' && field.value !== undefined ? field.value : fieldValue(this.data, field),
               options: field.options,
-              internal: field.internal || false
+              internal: field.internal || false,
+              validate: field.validate,
             });
           }
         });
@@ -51,7 +52,8 @@ export class ItemEditSectionComponent implements OnChanges{
               type: field.type,
               label: field.label,
               value: fieldValue(this.data, field),
-              options: field.options
+              options: field.options,
+              validate: field.validate,
             });
           }
         });

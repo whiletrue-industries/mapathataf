@@ -69,5 +69,8 @@
                 }
             }
         }
+        @if (warning(); as warning) {
+            <span class='warning' role='status'>{{ warning }}</span>
+        }
     </div>
 }

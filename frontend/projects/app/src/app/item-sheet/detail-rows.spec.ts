@@ -62,8 +62,13 @@ describe('item sheet detail rows', () => {
     resolveItem(item);
     const hrefs = Object.fromEntries(detailRows(item).filter((row) => row.href).map((row) => [row.label, row.href]));
     expect(hrefs).toEqual({
-      'אתר אינטרנט': 'https://example.com', 'טלפון': 'tel:08-1234567', 'דוא"ל': 'mailto:gan@example.com',
+      'אתר אינטרנט': 'https://example.com', 'טלפון': 'tel:081234567', 'דוא"ל': 'mailto:gan@example.com',
     });
+  });
+
+  it('leaves out contact rows whose value is not a working link', () => {
+    const item = { info: { facility_kind: 'education' }, admin: { url: '0528747043', phone: '00', email: 'לא ידוע' }, official: [] };
+    expect(labels(item)).toEqual([]);
   });
 
   it('is empty without an item', () => {

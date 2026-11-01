@@ -43,7 +43,7 @@
             </select>
         </div>
         <div class='filter'>
-            <label>לפי מידע חסר</label>
+            <label>לפי מידע חסר או שגוי</label>
             <select [(ngModel)]='state.missing'>
                 <option value='all'>הכל</option>
                 @for (option of MISSING_OPTIONS; track option.id) {
