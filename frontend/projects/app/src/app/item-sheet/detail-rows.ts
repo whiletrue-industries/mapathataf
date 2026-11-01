@@ -7,6 +7,8 @@ export type DetailRow = {
   label: string;
   value: string;
   href?: string;
+  /** The link leaves the app: the value gets an outward-arrow icon after it. */
+  external?: boolean;
 };
 
 type FieldDef = {
@@ -47,7 +49,7 @@ const FIELDS: FieldDef[] = [
   { row: (r) => ({ icon: 'person', label: 'גיל', value: ageGroupLabel(r.age_group) || undefined }) },
   { row: (r) => ({ icon: 'access-time', label: 'שעות פעילות', value: r.activity_hours }) },
   { row: (r) => ({ icon: 'library-books', label: 'פרטים נוספים', value: r.more_details }) },
-  { row: (r) => ({ icon: 'link', label: 'כתובת אתר', value: r.url ? 'קישור למידע נוסף' : undefined, href: r.url }) },
+  { row: (r) => ({ icon: 'link', label: 'אתר אינטרנט', value: r.url ? 'מעבר לאתר' : undefined, href: r.url, external: true }) },
   { row: (r) => ({ icon: 'person', label: 'שם מנהל.ת', value: r.manager_name }) },
   { row: (r) => ({ icon: 'perm-phone-msg', label: 'טלפון', value: r.phone, href: `tel:${r.phone}` }) },
   { row: (r) => ({ icon: 'email', label: 'דוא"ל', value: r.email, href: `mailto:${r.email}` }) },

@@ -10,7 +10,7 @@
                 <span class='capsule' [class]='"icon-" + row.icon'></span>
                 <span class='text'><span class='label'>{{ row.label }}: </span>
                     @if (row.href) {
-                        <a [href]='row.href' target='_blank'>{{ row.value }}</a>
+                        <a [href]='row.href' target='_blank'>{{ row.value }}@if (row.external) {<span class='external'></span>}</a>
                     } @else {
                         {{ row.value }}
                     }
