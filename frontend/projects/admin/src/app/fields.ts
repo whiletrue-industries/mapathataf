@@ -1,4 +1,5 @@
 import { layerPhotos } from '../../../app/src/app/photos';
+import { ContactKind, contactHref } from '../../../app/src/app/contact';
 
 export type Option = {
   id: string;
@@ -13,7 +14,23 @@ export type Field = {
   hide?: boolean;
   value?: any;
   internal?: boolean;
+  /** A contact field: an entered value the map app cannot link to gets a warning. */
+  validate?: ContactKind;
 };
+
+const CONTACT_WARNINGS: Record<ContactKind, string> = {
+  url: 'כתובת אתר לא תקינה, לא תוצג במפה',
+  phone: 'מספר טלפון לא תקין, לא יוצג במפה',
+  email: 'כתובת דוא"ל לא תקינה, לא תוצג במפה',
+};
+
+/** The warning for a contact field's value, or null when it is empty or valid. */
+export function contactWarning(field: Field | undefined, value: any): string | null {
+  if (!field?.validate || value === null || value === undefined || String(value).trim() === '') {
+    return null;
+  }
+  return contactHref(field.validate, value) ? null : CONTACT_WARNINGS[field.validate];
+}
 
 export function fieldValue(data: any, field: Field): any {
     if (data && field) {

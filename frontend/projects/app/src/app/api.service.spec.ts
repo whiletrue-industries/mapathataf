@@ -169,3 +169,24 @@ describe('resolveItem symbol_text', () => {
     expect(resolved({ source: 'moe', symbol: '10393' }).symbol_text).toBe('10393');
   });
 });
+
+describe('resolveItem contact resolution', () => {
+  it('passes over a layer whose value is not a usable link', () => {
+    // Real Rehovot data: a phone number in the admin website field, an address in the owner's
+    const item: any = {
+      user: { url: 'הר ציון 2, רחובות', phone: '050-5145929 (וואטסאפ)' },
+      admin: { url: '0528747043', phone: '088691278', email: 'not an email' },
+      official: [{ email: 'gan@example.com' }],
+    };
+    resolveItem(item);
+    expect(item.resolved.url).toBeUndefined();
+    expect(item.resolved.phone).toBe('088691278');
+    expect(item.resolved.email).toBe('gan@example.com');
+  });
+
+  it('still prefers the higher layer when its value is valid', () => {
+    const item: any = { user: { url: 'https://owner.example' }, admin: { url: 'https://admin.example' }, official: [] };
+    resolveItem(item);
+    expect(item.resolved.url).toBe('https://owner.example');
+  });
+});

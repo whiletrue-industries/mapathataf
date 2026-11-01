@@ -50,6 +50,29 @@ describe('ItemEditFieldComponent', () => {
     });
   });
 
+  describe('contact warning', () => {
+    const warningText = () => fixture.nativeElement.querySelector('.warning')?.textContent.trim();
+
+    it('warns about an invalid value but still saves it', () => {
+      const data: any = { url: 'https://example.org' };
+      setup(data, { name: 'url', type: 'text', validate: 'url', value: data.url });
+      expect(warningText()).toBeUndefined();
+
+      component.value.set('0528747043');
+      component.save();
+      fixture.detectChanges();
+      expect(updates).toEqual([{ url: '0528747043' }]);
+      expect(warningText()).toBe('כתובת אתר לא תקינה, לא תוצג במפה');
+    });
+
+    it('says nothing about an empty field or a field without validation', () => {
+      setup({ phone: '' }, { name: 'phone', type: 'text', validate: 'phone' });
+      expect(warningText()).toBeUndefined();
+      setup({ name: '0528747043' }, { name: 'name', type: 'text' });
+      expect(warningText()).toBeUndefined();
+    });
+  });
+
   describe('multi-enum', () => {
     it('normalizes a legacy scalar value into an array', () => {
       setup({ age_group: '1_to_2' }, { name: 'age_group', type: 'multi-enum', options: OPTIONS });

@@ -1,3 +1,5 @@
+import { CONTACT_KINDS, contactHref } from '../../../app/src/app/contact';
+
 // The single predicate behind the item list. The dashboard counts with it too, so a figure
 // there always equals the length of the list its click leads to.
 
@@ -39,6 +41,7 @@ export const MISSING_OPTIONS = [
   { id: 'neighborhood', display: 'שכונה' },
   { id: 'age_group', display: 'גילאים' },
   { id: 'location', display: 'מיקום לבדיקה' },
+  { id: 'invalid_contact', display: 'פרטי קשר לא תקינים' },
 ];
 
 export function isDeleted(item: any): boolean {
@@ -69,11 +72,22 @@ export function locationNeedsReview(item: any): boolean {
   return !!item.info?.geocode_suspicious && !item.admin?.lat;
 }
 
+// A website, phone or email in the admin or owner layer that the map app will not show (see
+// contact.ts) - the same values the editor puts a warning next to. Official values are left
+// out: nobody here can fix them, and a missing one already counts under "no phone".
+export function hasInvalidContact(item: any): boolean {
+  return [item.admin, item.user].some((layer) => CONTACT_KINDS.some((kind) => {
+    const value = layer?.[kind];
+    return value !== undefined && value !== null && String(value).trim() !== '' && !contactHref(kind, value);
+  }));
+}
+
 const MISSING: { [key: string]: (item: any) => boolean } = {
   phone: (item) => !item.resolved?.phone,
   neighborhood: (item) => neighborhoodOf(item) === UNSET,
   age_group: (item) => !item.resolved?.age_group?.length,
   location: locationNeedsReview,
+  invalid_contact: hasInvalidContact,
 };
 
 const EXTRA: { [key in ExtraField]: (item: any, value: string) => boolean } = {

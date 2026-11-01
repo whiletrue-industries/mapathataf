@@ -3,19 +3,26 @@ import { computed, Injectable, NgZone, signal } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { map, Observable, switchMap, tap } from 'rxjs';
 import { normalizeAgeGroups } from './age-groups';
+import { ContactKind, contactHref } from './contact';
 
 export type DiscussResult = {
   complete: boolean;
   message: string;
 };
 
-function resolve(item: any, field: string): any {
+function resolve(item: any, field: string, accept: (value: any) => boolean = () => true): any {
   const tries = [item.user, item.admin, item.info, ...(item.official || [])];
   for (const tryItem of tries) {
-    if (tryItem && tryItem[field] && !(Array.isArray(tryItem[field]) && tryItem[field].length === 0)) {
+    if (tryItem && tryItem[field] && !(Array.isArray(tryItem[field]) && tryItem[field].length === 0) && accept(tryItem[field])) {
       return tryItem[field];
     }
   }
+}
+
+// A contact value that is not a usable link (a phone number in the website field, say) is
+// passed over, so a valid value in a lower layer still shows.
+function resolveContact(item: any, kind: ContactKind): any {
+  return resolve(item, kind, (value) => !!contactHref(kind, value));
 }
 
 function originalAddress(item: any): any {
@@ -30,9 +37,9 @@ function originalAddress(item: any): any {
 export function resolveItem(item: any): any {
   item.resolved = {
     name: resolve(item, 'name'),
-    phone: resolve(item, 'phone'),
-    url: resolve(item, 'url'),
-    email: resolve(item, 'email'),
+    phone: resolveContact(item, 'phone'),
+    url: resolveContact(item, 'url'),
+    email: resolveContact(item, 'email'),
     manager_name: resolve(item, 'manager_name'),
     owner_kind: resolve(item, 'owner_kind'),
     // Display address: explicit admin override, then geocoded address, then raw source address

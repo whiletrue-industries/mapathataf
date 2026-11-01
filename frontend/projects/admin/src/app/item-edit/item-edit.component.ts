@@ -78,9 +78,9 @@ export class ItemEditComponent {
 
       {  name: 'פרטי קשר', type: 'section' },
         {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת' },
-        {  name: 'url',   type: 'text',    label: 'כתובת אתר'  },
-        {  name: 'phone', type: 'text', label: 'טלפון' },
-        {  name: 'email', type: 'text', label: 'דוא"ל' },
+        {  name: 'url',   type: 'text',    label: 'כתובת אתר', validate: 'url'  },
+        {  name: 'phone', type: 'text', label: 'טלפון', validate: 'phone' },
+        {  name: 'email', type: 'text', label: 'דוא"ל', validate: 'email' },
 
       {  name: 'תמונות המסגרת', type: 'section' },
         {  name: 'photos',   type: 'images',    label: `תמונות של המסגרת (עד ${MAX_PHOTOS})` },
@@ -138,9 +138,9 @@ export class ItemEditComponent {
 
       {  name: 'פרטי קשר', type: 'section' },
         {  name: 'manager_name',   type: 'text',    label: 'שם מנהל.ת' },
-        {  name: 'url',   type: 'text',    label: 'כתובת אתר אינטרנט'  },
-        {  name: 'phone', type: 'text', label: 'טלפון' },
-        {  name: 'email', type: 'text', label: 'דוא"ל' },
+        {  name: 'url',   type: 'text',    label: 'כתובת אתר אינטרנט', validate: 'url'  },
+        {  name: 'phone', type: 'text', label: 'טלפון', validate: 'phone' },
+        {  name: 'email', type: 'text', label: 'דוא"ל', validate: 'email' },
         {  name: '_private_contact_details', type: 'text', label: 'פרטי קשר נוספים' },
 
     ];
@@ -170,10 +170,10 @@ export class ItemEditComponent {
     {  name: 'owner',        type: 'text',    label: 'ארגון מפעיל'     },
     {  name: 'org_name',        type: 'text',    label: 'ארגון מפעיל'     },
     {  name: 'org',        type: 'text',    label: 'ארגון מפעיל'     },
-    {  name: 'phone',       type: 'text',    label: 'טלפון'  },
+    {  name: 'phone',       type: 'text',    label: 'טלפון', validate: 'phone'  },
     {  name: 'phone_numbers', type: 'text',  label: 'כל הטלפונים'  },
     {  name: 'fax',         type: 'text',    label: 'פקס'  },
-    {  name: 'email',       type: 'text',    label: 'דוא"ל'  },
+    {  name: 'email',       type: 'text',    label: 'דוא"ל', validate: 'email'  },
     {  name: 'activity_hours', type: 'text', label: 'שעות פעילות'  },
     {  name: 'more_details', type: 'text',   label: 'פרטים נוספים'  },
     {  name: 'address_comments', type: 'text', label: 'הערות לכתובת'  },

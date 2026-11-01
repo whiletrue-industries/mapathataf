@@ -1,4 +1,5 @@
 import { ageGroupLabel } from '../age-groups';
+import { emailHref, phoneHref, webHref } from '../contact';
 import { FILTER_DEFS } from '../filter-defs';
 
 export type DetailRow = {
@@ -11,10 +12,12 @@ export type DetailRow = {
   external?: boolean;
 };
 
+type FieldRow = Partial<DetailRow> & Pick<DetailRow, 'icon' | 'label'>;
+
 type FieldDef = {
   /** Facility kinds the field belongs to; a field without it belongs to all of them. */
   kinds?: string[];
-  row: (resolved: any) => Partial<DetailRow> & Pick<DetailRow, 'icon' | 'label'>;
+  row: (resolved: any) => FieldRow;
 };
 
 const EDUCATION = ['education'];
@@ -25,6 +28,11 @@ function mentoringLabel(value: string): string | undefined {
     return undefined;
   }
   return FILTER_DEFS.mentoring.options.find((option) => option.value === value)?.label;
+}
+
+// Contact rows exist only when the value makes a working link (see contact.ts)
+function linkRow(icon: string, label: string, href: string | null, text: string, external = false): FieldRow {
+  return href ? { icon, label, value: text, href, external } : { icon, label };
 }
 
 /**
@@ -49,10 +57,10 @@ const FIELDS: FieldDef[] = [
   { row: (r) => ({ icon: 'person', label: 'גיל', value: ageGroupLabel(r.age_group) || undefined }) },
   { row: (r) => ({ icon: 'access-time', label: 'שעות פעילות', value: r.activity_hours }) },
   { row: (r) => ({ icon: 'library-books', label: 'פרטים נוספים', value: r.more_details }) },
-  { row: (r) => ({ icon: 'link', label: 'אתר אינטרנט', value: r.url ? 'מעבר לאתר' : undefined, href: r.url, external: true }) },
+  { row: (r) => linkRow('link', 'אתר אינטרנט', webHref(r.url), 'מעבר לאתר', true) },
   { row: (r) => ({ icon: 'person', label: 'שם מנהל.ת', value: r.manager_name }) },
-  { row: (r) => ({ icon: 'perm-phone-msg', label: 'טלפון', value: r.phone, href: `tel:${r.phone}` }) },
-  { row: (r) => ({ icon: 'email', label: 'דוא"ל', value: r.email, href: `mailto:${r.email}` }) },
+  { row: (r) => linkRow('perm-phone-msg', 'טלפון', phoneHref(r.phone), String(r.phone ?? '').trim()) },
+  { row: (r) => linkRow('email', 'דוא"ל', emailHref(r.email), String(r.email ?? '').trim()) },
 ];
 
 export function detailRows(item: any): DetailRow[] {

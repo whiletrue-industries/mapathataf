@@ -1,5 +1,5 @@
 import { Component, computed, effect, ElementRef, EventEmitter, input, Output, signal, ViewChild } from '@angular/core';
-import { Field, fieldValue } from '../fields';
+import { contactWarning, Field, fieldValue } from '../fields';
 import { FormsModule } from '@angular/forms';
 import { timer } from 'rxjs';
 import { ImageUploadComponent } from "../image-upload/image-upload.component";
@@ -34,6 +34,9 @@ export class ItemEditFieldComponent {
     const field = this.field();
     return field && (field.name.startsWith('_private_') || field.internal);
   });
+
+  // Follows the input as it is typed; the value is saved either way
+  warning = computed(() => contactWarning(this.field(), this.value()));
 
   @ViewChild('textInput', { static: false }) textInput: ElementRef;
 
